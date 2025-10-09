@@ -1,6 +1,6 @@
 import { Contract } from './contract';
 import { baseGroupFactoryAbi } from '../abi';
-import type { Address, TransactionRequest, Hex } from '../types';
+import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**
  * BaseGroupFactory Contract Wrapper

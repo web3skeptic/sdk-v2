@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { FindPathParams, PathResponse } from '../types';
+import type { FindPathParams, PathResponse } from '@circles-sdk/types';
 import { normalizeFindPathParams, parseStringsToBigInt } from '../utils';
 
 /**

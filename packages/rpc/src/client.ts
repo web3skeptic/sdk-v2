@@ -1,4 +1,4 @@
-import type { JsonRpcRequest, JsonRpcResponse } from './types';
+import type { JsonRpcRequest, JsonRpcResponse } from '@circles-sdk/types';
 
 /**
  * Base RPC client for making JSON-RPC calls to Circles RPC endpoints

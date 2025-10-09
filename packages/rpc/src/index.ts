@@ -18,31 +18,3 @@ export {
 
 // Utils
 export { normalizeAddress, normalizeAddresses, normalizeFindPathParams, parseStringsToBigInt } from './utils';
-
-// Types
-export type {
-  Address,
-  Hex,
-  JsonRpcRequest,
-  JsonRpcResponse,
-  FilterType,
-  ConjunctionType,
-  FilterPredicate,
-  Conjunction,
-  Filter,
-  SortOrder,
-  OrderBy,
-  QueryParams,
-  SimulatedBalance,
-  FindPathParams,
-  PathStep,
-  PathResponse,
-  TokenBalance,
-  AvatarInfo,
-  Profile,
-  TrustRelation,
-  EventType,
-  NetworkSnapshot,
-  TableInfo,
-  TokenInfo,
-} from './types';

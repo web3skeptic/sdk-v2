@@ -1,6 +1,6 @@
 import { Contract } from './contract';
 import { liftERC20Abi } from '../abi';
-import type { Address, TransactionRequest, Hex } from '../types';
+import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**
  * CirclesType enum

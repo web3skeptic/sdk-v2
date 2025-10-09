@@ -1,7 +1,56 @@
+import type { Abi } from 'abitype';
 import type { Address as ViemAddress } from 'viem';
 
+/**
+ * Base types for EVM interaction
+ */
 export type Address = ViemAddress;
 export type Hex = `0x${string}`;
+export type Hash = `0x${string}`;
+
+/**
+ * Generic contract configuration
+ */
+export interface ContractConfig<TAbi extends Abi = Abi> {
+  address: Address;
+  abi: TAbi;
+}
+
+/**
+ * Transaction request object
+ * Contains all data needed to send a transaction
+ */
+export interface TransactionRequest {
+  from?: Address;
+  to: Address;
+  data: Hex;
+  value?: bigint;
+  gas?: bigint;
+  gasPrice?: bigint;
+  nonce?: number;
+}
+
+/**
+ * Transaction response
+ */
+export interface TransactionResponse {
+  hash: Hash;
+  from: Address;
+  to?: Address;
+  data: Hex;
+  value: bigint;
+  blockNumber?: number;
+  blockHash?: Hash;
+}
+
+/**
+ * Call result
+ */
+export interface CallResult<T = unknown> {
+  success: boolean;
+  data?: T;
+  error?: Error;
+}
 
 /**
  * JSON-RPC request structure
@@ -287,4 +336,38 @@ export interface TableInfo {
     Name: string;
     Type: string;
   }[];
+}
+
+/**
+ * Pathfinding types
+ */
+
+/**
+ * A single transfer step in a pathfinding result
+ */
+export interface TransferStep {
+  from: string;
+  to: string;
+  tokenOwner: string;
+  value: string;
+}
+
+/**
+ * Result of pathfinding computation
+ */
+export interface PathfindingResult {
+  maxFlow: string;
+  transfers: TransferStep[];
+}
+
+/**
+ * Flow matrix for ABI encoding
+ * Uses FlowEdgeStruct and StreamStruct from @circles-sdk/abi-v2
+ */
+export interface FlowMatrix {
+  flowVertices: string[]; // address[]
+  flowEdges: any[]; // FlowEdgeStruct[] - tuple(uint16,uint192)[]
+  streams: any[]; // StreamStruct[] - tuple(uint16,uint16[],bytes)[]
+  packedCoordinates: string; // hex bytes
+  sourceCoordinate: number; // convenience, not part of ABI
 }

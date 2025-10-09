@@ -1,4 +1,4 @@
-import type { Address, FindPathParams, SimulatedBalance } from './types';
+import type { Address, FindPathParams, SimulatedBalance } from '@circles-sdk/types';
 
 /**
  * Normalize an address to lowercase (required by the indexer)

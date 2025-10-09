@@ -1,4 +1,4 @@
-import type { Address } from './types';
+import type { Address } from '@circles-sdk/types';
 
 /**
  * Circles protocol configuration for a specific chain

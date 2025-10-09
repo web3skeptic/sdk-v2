@@ -1,0 +1,35 @@
+{
+  "name": "@circles-sdk/types",
+  "version": "0.1.0",
+  "description": "TypeScript type definitions for Circles SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "types",
+    "typescript"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "abitype": "^1.1.1",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

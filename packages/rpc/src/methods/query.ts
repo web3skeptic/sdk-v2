@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { QueryParams, TableInfo, EventType } from '../types';
+import type { QueryParams, TableInfo, EventType } from '@circles-sdk/types';
 
 /**
  * Query and table RPC methods

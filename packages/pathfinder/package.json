@@ -1,0 +1,37 @@
+{
+  "name": "@circles-sdk/pathfinder",
+  "version": "0.1.0",
+  "description": "Pathfinding utilities for Circles SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "pathfinding"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@circles-sdk/abi-v2": "workspace:*",
+    "@circles-sdk/data": "workspace:*",
+    "@circles-sdk/types": "workspace:*",
+    "@circles-sdk/utils": "workspace:*",
+    "ethers": "^6.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

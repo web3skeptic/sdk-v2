@@ -1,6 +1,6 @@
 import type { Abi } from 'abitype';
 import { encodeFunctionData, http, createPublicClient } from 'viem';
-import type { Address, Hex } from '../types';
+import type { Address, Hex } from '@circles-sdk/types';
 
 /**
  * Generic Contract class for type-safe contract interactions
