@@ -1,0 +1,21 @@
+{
+  "name": "@circles-sdk/core",
+  "version": "0.1.0",
+  "description": "Circles Contracts wrapper",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "abitype": "^1.1.1",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "@esbuild-kit/esm-loader": "^2.6.5",
+    "@types/bun": "^1.2.23",
+    "esbuild": "^0.25.10",
+    "typescript": "^5.0.4"
+  }
+}
