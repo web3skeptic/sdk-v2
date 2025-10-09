@@ -1,6 +1,6 @@
 import { RpcClient } from './client';
 import {
-  CirclesV2Methods,
+  PathfinderMethods,
   QueryMethods,
   TrustMethods,
   BalanceMethods,
@@ -46,7 +46,7 @@ import {
  */
 export class CirclesRpc {
   public readonly client: RpcClient;
-  public readonly circlesV2: CirclesV2Methods;
+  public readonly circlesV2: PathfinderMethods;
   public readonly query: QueryMethods;
   public readonly trust: TrustMethods;
   public readonly balance: BalanceMethods;
@@ -63,7 +63,7 @@ export class CirclesRpc {
   constructor(rpcUrl: string = 'https://rpc.circlesubi.network/') {
     this.client = new RpcClient(rpcUrl);
 
-    this.circlesV2 = new CirclesV2Methods(this.client);
+    this.circlesV2 = new PathfinderMethods(this.client);
     this.query = new QueryMethods(this.client);
     this.trust = new TrustMethods(this.client);
     this.balance = new BalanceMethods(this.client);

@@ -25,6 +25,7 @@
       "name": "@circles-sdk/rpc",
       "version": "0.1.0",
       "dependencies": {
+        "@circles-sdk/utils": "workspace:*",
         "viem": "^2.38.0",
       },
       "devDependencies": {
@@ -34,6 +35,10 @@
         "typescript": "^5.0.4",
       },
     },
+    "packages/utils": {
+      "name": "@circles-sdk/utils",
+      "version": "0.1.0",
+    },
   },
   "packages": {
     "@adraffy/ens-normalize": ["@adraffy/ens-normalize@1.11.1", "", {}, "sha512-nhCBV3quEgesuf7c7KYfperqSS14T8bYuvJ8PcLJp6znkZpFc0AuW4qBtr8eKVyPPe/8RSr7sglCWPU5eaxwKQ=="],
@@ -41,6 +46,8 @@
     "@circles-sdk/core": ["@circles-sdk/core@workspace:packages/core"],
 
     "@circles-sdk/rpc": ["@circles-sdk/rpc@workspace:packages/rpc"],
+
+    "@circles-sdk/utils": ["@circles-sdk/utils@workspace:packages/utils"],
 
     "@esbuild-kit/core-utils": ["@esbuild-kit/core-utils@3.3.2", "", { "dependencies": { "esbuild": "~0.18.20", "source-map-support": "^0.5.21" } }, "sha512-sPRAnw9CdSsRmEtnsl2WXWdyquogVpB3yZ3dgwJfe8zrOzTsV7cJvmwrKVa+0ma5BoiGJ+BoqkMvawbayKUsqQ=="],
 

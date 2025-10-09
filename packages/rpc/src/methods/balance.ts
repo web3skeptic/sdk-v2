@@ -1,12 +1,34 @@
 import type { RpcClient } from '../client';
 import type { Address, TokenBalance } from '../types';
 import { normalizeAddress, parseStringsToBigInt } from '../utils';
+import { CirclesConverter } from '@circles-sdk/utils';
 
 /**
  * Balance query RPC methods
  */
 export class BalanceMethods {
   constructor(private client: RpcClient) {}
+
+  /**
+   * Get the total v2 Circles balance of an account
+   *
+   * @param address - The avatar address to query
+   * @param asTimeCircles - Whether to return balance as TimeCircles (default: true)
+   * @returns The total v2 balance in attoCircles (10^18 per Circle) as bigint
+   *
+   * @example
+   * ```typescript
+   * const balance = await rpc.circlesV2.getTotalBalance('0xcadd4ea3bcc361fc4af2387937d7417be8d7dfc2');
+   * console.log(balance); // 1000000000000000000n (1 Circle in attoCircles)
+   * ```
+   */
+  async getTotalBalance(address: Address, asTimeCircles: boolean = true): Promise<bigint> {
+    const result = await this.client.call<[Address, boolean], number>('circlesV2_getTotalBalance', [
+      normalizeAddress(address),
+      asTimeCircles,
+    ]);
+    return CirclesConverter.circlesToAttoCircles(result);
+  }
 
   /**
    * Query the balance breakdown of a specific avatar address

@@ -1,4 +1,4 @@
-export { CirclesV2Methods } from './circlesV2';
+export { PathfinderMethods } from './pathfinder';
 export { QueryMethods } from './query';
 export { TrustMethods } from './trust';
 export { BalanceMethods } from './balance';

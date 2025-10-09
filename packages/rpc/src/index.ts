@@ -6,7 +6,7 @@ export { RpcClient } from './client';
 
 // Method classes
 export {
-  CirclesV2Methods,
+  PathfinderMethods,
   QueryMethods,
   TrustMethods,
   BalanceMethods,

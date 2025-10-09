@@ -9,6 +9,7 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@circles-sdk/utils": "workspace:*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

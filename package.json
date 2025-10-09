@@ -2,16 +2,22 @@
   "private": true,
   "workspaces": [
     "packages/core",
-    "packages/rpc"
+    "packages/rpc",
+    "packages/utils"
   ],
   "scripts": {
-    "build": "bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
+    "build": "bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
     "build:core": "bun run --filter '@circles-sdk/core' build",
     "build:rpc": "bun run --filter '@circles-sdk/rpc' build",
-    "dev": "bun run --filter '@circles-sdk/core' dev & bun run --filter '@circles-sdk/rpc' dev",
+    "build:utils": "bun run --filter '@circles-sdk/utils' build",
+    "dev": "bun run --filter '@circles-sdk/utils' dev & bun run --filter '@circles-sdk/core' dev & bun run --filter '@circles-sdk/rpc' dev",
     "dev:core": "bun run --filter '@circles-sdk/core' dev",
     "dev:rpc": "bun run --filter '@circles-sdk/rpc' dev",
-    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
+    "dev:utils": "bun run --filter '@circles-sdk/utils' dev",
+    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules",
+    "examples": "bun run example:core && bun run example:rpc",
+    "example:core": "for file in examples/core/*.ts; do echo \"\\n=== Running $file ===\\n\" && bun run \"$file\"; done",
+    "example:rpc": "for file in examples/rpc/*.ts; do echo \"\\n=== Running $file ===\\n\" && bun run \"$file\"; done"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",
