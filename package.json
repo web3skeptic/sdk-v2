@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/core",
+    "packages/rpc"
+  ],
+  "scripts": {
+    "build": "bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
+    "build:core": "bun run --filter '@circles-sdk/core' build",
+    "build:rpc": "bun run --filter '@circles-sdk/rpc' build",
+    "dev": "bun run --filter '@circles-sdk/core' dev & bun run --filter '@circles-sdk/rpc' dev",
+    "dev:core": "bun run --filter '@circles-sdk/core' dev",
+    "dev:rpc": "bun run --filter '@circles-sdk/rpc' dev",
+    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.0.4"
+  },
+  "license": "MIT"
+}
