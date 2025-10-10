@@ -1,13 +1,11 @@
-import { narrow } from 'abitype';
-
-export const liftERC20Abi = narrow([
+export const liftERC20Abi = [
   {
     "type": "constructor",
     "inputs": [
-      { "name": "_hub", "type": "address", "internalType": "contract IHubV2" },
-      { "name": "_nameRegistry", "type": "address", "internalType": "contract INameRegistry" },
-      { "name": "_masterCopyERC20Demurrage", "type": "address", "internalType": "address" },
-      { "name": "_masterCopyERC20Inflation", "type": "address", "internalType": "address" }
+      { "name": "_hub", "type": "address" },
+      { "name": "_nameRegistry", "type": "address" },
+      { "name": "_masterCopyERC20Demurrage", "type": "address" },
+      { "name": "_masterCopyERC20Inflation", "type": "address" }
     ],
     "stateMutability": "nonpayable"
   },
@@ -15,79 +13,79 @@ export const liftERC20Abi = narrow([
     "type": "function",
     "name": "ERC20_WRAPPER_SETUP_CALLPREFIX",
     "inputs": [],
-    "outputs": [{ "name": "", "type": "bytes4", "internalType": "bytes4" }],
+    "outputs": [{ "name": "", "type": "bytes4" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
     "name": "hub",
     "inputs": [],
-    "outputs": [{ "name": "", "type": "address", "internalType": "contract IHubV2" }],
+    "outputs": [{ "name": "", "type": "address" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
     "name": "nameRegistry",
     "inputs": [],
-    "outputs": [{ "name": "", "type": "address", "internalType": "contract INameRegistry" }],
+    "outputs": [{ "name": "", "type": "address" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
     "name": "masterCopyERC20Wrapper",
-    "inputs": [{ "name": "", "type": "uint256", "internalType": "uint256" }],
-    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "inputs": [{ "name": "", "type": "uint256" }],
+    "outputs": [{ "name": "", "type": "address" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
     "name": "erc20Circles",
     "inputs": [
-      { "name": "", "type": "uint8", "internalType": "enum CirclesType" },
-      { "name": "", "type": "address", "internalType": "address" }
+      { "name": "", "type": "uint8" },
+      { "name": "", "type": "address" }
     ],
-    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "address" }],
     "stateMutability": "view"
   },
   {
     "type": "function",
     "name": "ensureERC20",
     "inputs": [
-      { "name": "_avatar", "type": "address", "internalType": "address" },
-      { "name": "_circlesType", "type": "uint8", "internalType": "enum CirclesType" }
+      { "name": "_avatar", "type": "address" },
+      { "name": "_circlesType", "type": "uint8" }
     ],
-    "outputs": [{ "name": "", "type": "address", "internalType": "address" }],
+    "outputs": [{ "name": "", "type": "address" }],
     "stateMutability": "nonpayable"
   },
   {
     "type": "event",
     "name": "ERC20WrapperDeployed",
     "inputs": [
-      { "name": "avatar", "type": "address", "indexed": true, "internalType": "address" },
-      { "name": "erc20Wrapper", "type": "address", "indexed": true, "internalType": "address" },
-      { "name": "circlesType", "type": "uint8", "indexed": false, "internalType": "enum CirclesType" }
+      { "name": "avatar", "type": "address", "indexed": true },
+      { "name": "erc20Wrapper", "type": "address", "indexed": true },
+      { "name": "circlesType", "type": "uint8", "indexed": false }
     ],
     "anonymous": false
   },
   {
     "type": "error",
     "name": "CirclesErrorNoArgs",
-    "inputs": [{ "name": "", "type": "uint8", "internalType": "uint8" }]
+    "inputs": [{ "name": "", "type": "uint8" }]
   },
   {
     "type": "error",
     "name": "CirclesErrorOneAddressArg",
     "inputs": [
-      { "name": "", "type": "address", "internalType": "address" },
-      { "name": "", "type": "uint8", "internalType": "uint8" }
+      { "name": "", "type": "address" },
+      { "name": "", "type": "uint8" }
     ]
   },
   {
     "type": "error",
     "name": "CirclesInvalidParameter",
     "inputs": [
-      { "name": "parameter", "type": "uint256", "internalType": "uint256" },
-      { "name": "code", "type": "uint8", "internalType": "uint8" }
+      { "name": "parameter", "type": "uint256" },
+      { "name": "code", "type": "uint8" }
     ]
   }
-]);
+] as const;
