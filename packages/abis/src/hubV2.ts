@@ -1,7 +1,9 @@
+import { narrow } from 'abitype';
+
 /**
  * HubV2 Contract ABI
  */
-export const hubV2Abi = [
+export const hubV2Abi = narrow([
     {
         "type": "constructor",
         "inputs": [
@@ -702,4 +704,4 @@ export const hubV2Abi = [
             { "name": "owner", "type": "address", "internalType": "address" }
         ]
     }
-] as const;
+]);

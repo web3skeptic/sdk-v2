@@ -1,4 +1,6 @@
-export const demurrageCirclesAbi = [
+import { narrow } from 'abitype';
+
+export const demurrageCirclesAbi = narrow([
     { "type": "constructor", "inputs": [], "stateMutability": "nonpayable" },
     {
         "type": "function",
@@ -494,4 +496,4 @@ export const demurrageCirclesAbi = [
         "name": "StringTooLong",
         "inputs": [{ "name": "str", "type": "string", "internalType": "string" }]
     }
-] as const;
+]);

@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { bytesToHex } from 'viem';
 import type { TransferStep } from '@circles-sdk/types';
 
 /**
@@ -13,7 +13,7 @@ export function packCoordinates(coords: number[]): string {
     bytes[offset] = hi;
     bytes[offset + 1] = lo;
   });
-  return ethers.hexlify(bytes);
+  return bytesToHex(bytes);
 }
 
 /**

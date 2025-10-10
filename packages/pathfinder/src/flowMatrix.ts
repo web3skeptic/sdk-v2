@@ -1,8 +1,5 @@
-import type { FlowMatrix, TransferStep, Address } from '@circles-sdk/types';
+import type { FlowMatrix, TransferStep, Address, FlowEdgeStruct, StreamStruct } from '@circles-sdk/types';
 import { packCoordinates, transformToFlowVertices } from './packing';
-import { TypeDefinitions } from '@circles-sdk/abi-v2/dist/hub/Hub';
-import FlowEdgeStruct = TypeDefinitions.FlowEdgeStruct;
-import StreamStruct = TypeDefinitions.StreamStruct;
 
 /**
  * Create an ABI‑ready FlowMatrix object from a list of TransferSteps.
@@ -10,7 +7,7 @@ import StreamStruct = TypeDefinitions.StreamStruct;
 export function createFlowMatrix(
   from: Address,
   to: Address,
-  value: string,
+  value: bigint,
   transfers: TransferStep[]
 ): FlowMatrix {
   const sender = from.toLowerCase();
@@ -26,7 +23,7 @@ export function createFlowMatrix(
     const isTerminal = t.to.toLowerCase() === receiver;
     return {
       streamSinkId: isTerminal ? 1 : 0,
-      amount: t.value // keep as string – ethers will convert
+      amount: t.value // keep as string – will be converted by ABI encoder
     };
   });
 

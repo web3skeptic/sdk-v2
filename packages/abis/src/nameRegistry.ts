@@ -1,4 +1,6 @@
-export const nameRegistryAbi = [
+import { narrow } from 'abitype';
+
+export const nameRegistryAbi = narrow([
     {
         "type": "constructor",
         "inputs": [{ "name": "_hub", "type": "address", "internalType": "contract IHubV2" }],
@@ -299,4 +301,4 @@ export const nameRegistryAbi = [
         "name": "CirclesReentrancyGuard",
         "inputs": [{ "name": "code", "type": "uint8", "internalType": "uint8" }]
     }
-] as const;
+]);

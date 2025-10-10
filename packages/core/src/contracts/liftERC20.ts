@@ -1,5 +1,5 @@
 import { Contract } from './contract';
-import { liftERC20Abi } from '../abi';
+import { liftERC20Abi } from '@circles-sdk/abis';
 import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**

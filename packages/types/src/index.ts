@@ -145,21 +145,6 @@ export interface FindPathParams {
 }
 
 /**
- * Path finding response
- */
-export interface PathStep {
-  from: Address;
-  to: Address;
-  token: Address;
-  amount: bigint;
-}
-
-export interface PathResponse {
-  flow: bigint;
-  transfers: PathStep[];
-}
-
-/**
  * Token balance information
  */
 export interface TokenBalance {
@@ -346,28 +331,47 @@ export interface TableInfo {
  * A single transfer step in a pathfinding result
  */
 export interface TransferStep {
-  from: string;
-  to: string;
+  from: Address;
+  to: Address;
   tokenOwner: string;
-  value: string;
+  value: bigint;
 }
 
 /**
  * Result of pathfinding computation
  */
 export interface PathfindingResult {
-  maxFlow: string;
+  maxFlow: bigint;
   transfers: TransferStep[];
 }
 
 /**
+ * Flow edge structure for operateFlowMatrix
+ * Corresponds to TypeDefinitions.FlowEdge in the Hub V2 contract
+ */
+export interface FlowEdgeStruct {
+  streamSinkId: number; // uint16
+  amount: bigint; // uint192
+}
+
+/**
+ * Stream structure for operateFlowMatrix
+ * Corresponds to TypeDefinitions.Stream in the Hub V2 contract
+ */
+export interface StreamStruct {
+  sourceCoordinate: number; // uint16
+  flowEdgeIds: number[]; // uint16[]
+  data: Uint8Array | Hex; // bytes
+}
+
+/**
  * Flow matrix for ABI encoding
- * Uses FlowEdgeStruct and StreamStruct from @circles-sdk/abi-v2
+ * Used with the operateFlowMatrix function in Hub V2
  */
 export interface FlowMatrix {
   flowVertices: string[]; // address[]
-  flowEdges: any[]; // FlowEdgeStruct[] - tuple(uint16,uint192)[]
-  streams: any[]; // StreamStruct[] - tuple(uint16,uint16[],bytes)[]
+  flowEdges: FlowEdgeStruct[]; // tuple(uint16,uint192)[]
+  streams: StreamStruct[]; // tuple(uint16,uint16[],bytes)[]
   packedCoordinates: string; // hex bytes
   sourceCoordinate: number; // convenience, not part of ABI
 }

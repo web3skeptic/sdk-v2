@@ -25,11 +25,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk/abi-v2": "workspace:*",
-    "@circles-sdk/data": "workspace:*",
+    "@circles-sdk/rpc": "workspace:*",
     "@circles-sdk/types": "workspace:*",
     "@circles-sdk/utils": "workspace:*",
-    "ethers": "^6.0.0"
+    "viem": "^2.38.0"
   },
   "devDependencies": {
     "typescript": "^5.0.4"

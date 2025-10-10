@@ -1,4 +1,6 @@
-export const liftERC20Abi = [
+import { narrow } from 'abitype';
+
+export const liftERC20Abi = narrow([
   {
     "type": "constructor",
     "inputs": [
@@ -88,4 +90,4 @@ export const liftERC20Abi = [
       { "name": "code", "type": "uint8", "internalType": "uint8" }
     ]
   }
-] as const;
+]);

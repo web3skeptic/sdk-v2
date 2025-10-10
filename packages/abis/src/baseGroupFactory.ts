@@ -1,7 +1,9 @@
+import { narrow } from 'abitype';
+
 /**
  * BaseGroupFactory Contract ABI
  */
-export const baseGroupFactoryAbi = [
+export const baseGroupFactoryAbi = narrow([
     {
         "type": "function",
         "name": "createBaseGroup",
@@ -44,4 +46,4 @@ export const baseGroupFactoryAbi = [
         "name": "MaxNameLength19",
         "inputs": []
     }
-] as const;
+]);

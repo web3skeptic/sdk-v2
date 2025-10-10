@@ -21,11 +21,8 @@ import {
  * // Use custom RPC endpoint
  * const rpc = new CirclesRpc('https://rpc.circlesubi.network/');
  *
- * // Get total balance
- * const balance = await rpc.circlesV2.getTotalBalance('0xcadd4ea3bcc361fc4af2387937d7417be8d7dfc2');
- *
  * // Find a path
- * const path = await rpc.circlesV2.findPath({
+ * const path = await rpc.pathfinder.findPath({
  *   Source: '0x749c930256b47049cb65adcd7c25e72d5de44b3b',
  *   Sink: '0xde374ece6fa50e781e81aac78e811b33d16912c7',
  *   TargetFlow: '99999999999999999999999999999999999'
@@ -46,7 +43,7 @@ import {
  */
 export class CirclesRpc {
   public readonly client: RpcClient;
-  public readonly circlesV2: PathfinderMethods;
+  public readonly pathfinder: PathfinderMethods;
   public readonly query: QueryMethods;
   public readonly trust: TrustMethods;
   public readonly balance: BalanceMethods;
@@ -63,7 +60,7 @@ export class CirclesRpc {
   constructor(rpcUrl: string = 'https://rpc.circlesubi.network/') {
     this.client = new RpcClient(rpcUrl);
 
-    this.circlesV2 = new PathfinderMethods(this.client);
+    this.pathfinder = new PathfinderMethods(this.client);
     this.query = new QueryMethods(this.client);
     this.trust = new TrustMethods(this.client);
     this.balance = new BalanceMethods(this.client);

@@ -28,7 +28,7 @@ async function exampleFindPath() {
   if (path) {
     console.log('\nPath details:');
     console.log('- Transfers required:', path.transfers?.length || 0);
-    console.log('- Maximum flow:', path.flow);
+    console.log('- Maximum flow:', path.maxFlow);
   }
 }
 
@@ -59,7 +59,7 @@ async function exampleCircularPath() {
   if (path) {
     console.log('\nSwap details:');
     console.log('- Transfers required:', path.transfers?.length || 0);
-    console.log('- Actual flow:', path.flow);
+    console.log('- Actual flow:', path.maxFlow);
   }
 }
 

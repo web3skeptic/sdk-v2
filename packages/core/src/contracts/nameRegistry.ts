@@ -1,5 +1,5 @@
 import { Contract } from './contract';
-import { nameRegistryAbi } from '../abi';
+import { nameRegistryAbi } from '@circles-sdk/abis';
 import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**

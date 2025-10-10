@@ -18,7 +18,7 @@ export class BalanceMethods {
    *
    * @example
    * ```typescript
-   * const balance = await rpc.circlesV2.getTotalBalance('0xcadd4ea3bcc361fc4af2387937d7417be8d7dfc2');
+   * const balance = await rpc.balance.getTotalBalance('0xcadd4ea3bcc361fc4af2387937d7417be8d7dfc2');
    * console.log(balance); // 1000000000000000000n (1 Circle in attoCircles)
    * ```
    */

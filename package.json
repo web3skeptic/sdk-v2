@@ -1,15 +1,26 @@
 {
   "private": true,
   "workspaces": [
+    "packages/types",
+    "packages/utils",
+    "packages/abis",
     "packages/core",
     "packages/rpc",
-    "packages/utils"
+    "packages/pathfinder"
   ],
   "scripts": {
-    "build": "bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
+    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
+    "build:abis": "bun run --filter '@circles-sdk/abis' build",
     "build:core": "bun run --filter '@circles-sdk/core' build",
     "build:rpc": "bun run --filter '@circles-sdk/rpc' build",
     "build:utils": "bun run --filter '@circles-sdk/utils' build",
+    "build:pathfinder": "bun run --filter '@circles-sdk/pathfinder' build",
+    "build:analyze": "bun run build:analyze:abis && bun run build:analyze:utils && bun run build:analyze:core && bun run build:analyze:pathfinder && bun run build:analyze:rpc",
+    "build:analyze:abis": "bun build ./packages/abis/src/index.ts --outdir ./packages/abis/dist --minify --analyze",
+    "build:analyze:core": "bun build ./packages/core/src/index.ts --outdir ./packages/core/dist --minify --analyze",
+    "build:analyze:pathfinder": "bun build ./packages/pathfinder/src/index.ts --outdir ./packages/pathfinder/dist --minify --analyze",
+    "build:analyze:rpc": "bun build ./packages/rpc/src/index.ts --outdir ./packages/rpc/dist --minify --analyze",
+    "build:analyze:utils": "bun build ./packages/utils/src/index.ts --outdir ./packages/utils/dist --minify --analyze",
     "dev": "bun run --filter '@circles-sdk/utils' dev & bun run --filter '@circles-sdk/core' dev & bun run --filter '@circles-sdk/rpc' dev",
     "dev:core": "bun run --filter '@circles-sdk/core' dev",
     "dev:rpc": "bun run --filter '@circles-sdk/rpc' dev",

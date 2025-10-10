@@ -1,20 +1,20 @@
-import type { PathfindingResult, TransferStep, Address } from '@circles-sdk/types';
-import { CirclesData, TokenInfoRow } from '@circles-sdk/data';
+import type { PathfindingResult, TransferStep, Address, TokenInfo } from '@circles-sdk/types';
+import { CirclesRpc } from '@circles-sdk/rpc';
 import { CirclesConverter } from '@circles-sdk/utils';
 
 export async function getTokenInfoMapFromPath(
   rpcUrl: string,
   transferPath: PathfindingResult
-): Promise<Map<string, TokenInfoRow>> {
-  const tokenInfoMap = new Map<string, TokenInfoRow>();
+): Promise<Map<string, TokenInfo>> {
+  const tokenInfoMap = new Map<string, TokenInfo>();
   const uniqueAddresses = new Set<string>();
 
   transferPath.transfers.forEach((t) => {
     uniqueAddresses.add(t.tokenOwner.toLowerCase());
   });
 
-  const circlesData = new CirclesData(rpcUrl);
-  const batch = await circlesData.getTokenInfoBatch(
+  const rpc = new CirclesRpc(rpcUrl);
+  const batch = await rpc.token.getTokenInfoBatch(
     Array.from(uniqueAddresses) as Address[]
   );
   batch.forEach((info) => {
@@ -25,7 +25,7 @@ export async function getTokenInfoMapFromPath(
 
 export function getWrappedTokenTotalsFromPath(
   transferPath: PathfindingResult,
-  tokenInfoMap: Map<string, TokenInfoRow>
+  tokenInfoMap: Map<string, TokenInfo>
 ): Record<string, [bigint, string]> {
   const wrappedEdgeTotals: Record<string, [bigint, string]> = {};
 
@@ -46,7 +46,7 @@ export function getWrappedTokenTotalsFromPath(
 
 export function getExpectedUnwrappedTokenTotals(
   wrappedTotals: Record<string, [bigint, string]>,
-  tokenInfoMap: Map<string, TokenInfoRow>
+  tokenInfoMap: Map<string, TokenInfo>
 ): Record<string, [bigint, string]> {
   const unwrapped: Record<string, [bigint, string]> = {};
 

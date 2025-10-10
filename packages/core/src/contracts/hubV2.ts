@@ -1,5 +1,5 @@
 import { Contract } from './contract';
-import { hubV2Abi } from '../abi';
+import { hubV2Abi } from '@circles-sdk/abis';
 import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**
@@ -89,6 +89,15 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    */
   async inflationDayZero(): Promise<bigint> {
     return this.read('inflationDayZero') as Promise<bigint>;
+  }
+
+  /**
+   * Check if a human has stopped their Circles minting
+   * @param human - The address to check
+   * @param options - Optional call options (e.g., { from: Address })
+   */
+  async stopped(human: Address, options?: { from?: Address }): Promise<boolean> {
+    return this.read('stopped', [human], options) as Promise<boolean>;
   }
 
   /**

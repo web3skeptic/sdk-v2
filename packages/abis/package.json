@@ -1,0 +1,17 @@
+{
+  "name": "@circles-sdk/abis",
+  "version": "0.1.0",
+  "description": "Circles Contract ABIs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "abitype": "^1.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

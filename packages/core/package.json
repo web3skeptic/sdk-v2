@@ -6,9 +6,11 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "build:bundle": "bun build ./src/index.ts --outdir ./dist --minify --external viem --external abitype",
     "dev": "tsc --watch"
   },
   "dependencies": {
+    "@circles-sdk/abis": "workspace:*",
     "@circles-sdk/types": "workspace:*",
     "abitype": "^1.1.1",
     "viem": "^2.38.0"

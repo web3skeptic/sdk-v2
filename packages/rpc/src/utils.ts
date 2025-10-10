@@ -1,4 +1,5 @@
 import type { Address, FindPathParams, SimulatedBalance } from '@circles-sdk/types';
+import { CirclesConverter } from '@circles-sdk/utils';
 
 /**
  * Normalize an address to lowercase (required by the indexer)
@@ -16,7 +17,7 @@ export function normalizeAddresses(addresses: Address[]): Address[] {
 
 /**
  * Normalize and convert FindPathParams for RPC call
- * Converts camelCase to PascalCase and bigint to string
+ * Converts camelCase to PascalCase and bigint to human-readable numbers
  */
 export function normalizeFindPathParams(params: FindPathParams): Record<string, unknown> {
   return {

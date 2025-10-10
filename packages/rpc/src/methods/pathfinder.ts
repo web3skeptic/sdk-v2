@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { FindPathParams, PathResponse } from '@circles-sdk/types';
+import type { FindPathParams, PathfindingResult } from '@circles-sdk/types';
 import { normalizeFindPathParams, parseStringsToBigInt } from '../utils';
 
 /**
@@ -16,19 +16,44 @@ export class PathfinderMethods {
    *
    * @example
    * ```typescript
-   * const path = await rpc.circlesV2.findPath({
+   * const path = await rpc.pathfinder.findPath({
    *   from: '0x749c930256b47049cb65adcd7c25e72d5de44b3b',
    *   to: '0xde374ece6fa50e781e81aac78e811b33d16912c7',
    *   targetFlow: 99999999999999999999999999999999999n
    * });
    * ```
    */
-  async findPath(params: FindPathParams): Promise<PathResponse> {
+  async findPath(params: FindPathParams): Promise<PathfindingResult> {
     const normalizedParams = normalizeFindPathParams(params);
+
     const result = await this.client.call<[Record<string, unknown>], Record<string, unknown>>(
       'circlesV2_findPath',
       [normalizedParams]
     );
-    return parseStringsToBigInt(result) as unknown as PathResponse;
+
+    return parseStringsToBigInt(result) as unknown as PathfindingResult;
+  }
+
+  /**
+   * Find the maximum flow between two addresses
+   *
+   * @param params - Path finding parameters (without targetFlow)
+   * @returns The maximum flow as bigint
+   *
+   * @example
+   * ```typescript
+   * const maxFlow = await rpc.pathfinder.findMaxFlow({
+   *   from: '0x749c930256b47049cb65adcd7c25e72d5de44b3b',
+   *   to: '0xde374ece6fa50e781e81aac78e811b33d16912c7'
+   * });
+   * ```
+   */
+  async findMaxFlow(params: Omit<FindPathParams, 'targetFlow'>): Promise<bigint> {
+    const targetFlow = 9999999999999999999999999999999999999n;
+    const path = await this.findPath({
+      ...params,
+      targetFlow
+    });
+    return BigInt(path.maxFlow);
   }
 }

@@ -17,4 +17,4 @@ export {
 } from './methods';
 
 // Utils
-export { normalizeAddress, normalizeAddresses, normalizeFindPathParams, parseStringsToBigInt } from './utils';
+export { normalizeAddress, normalizeAddresses, parseStringsToBigInt } from './utils';

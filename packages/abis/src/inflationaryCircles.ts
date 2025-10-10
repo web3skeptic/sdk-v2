@@ -1,4 +1,6 @@
-export const inflationaryCirclesAbi = [
+import { narrow } from 'abitype';
+
+export const inflationaryCirclesAbi = narrow([
     { "type": "constructor", "inputs": [], "stateMutability": "nonpayable" },
     {
         "type": "function",
@@ -462,4 +464,4 @@ export const inflationaryCirclesAbi = [
         "name": "StringTooLong",
         "inputs": [{ "name": "str", "type": "string", "internalType": "string" }]
     }
-] as const;
+]);

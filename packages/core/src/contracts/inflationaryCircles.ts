@@ -1,5 +1,5 @@
 import { Contract } from './contract';
-import { inflationaryCirclesAbi } from '../abi';
+import { inflationaryCirclesAbi } from '@circles-sdk/abis';
 import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
 
 /**
