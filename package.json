@@ -6,10 +6,11 @@
     "packages/abis",
     "packages/core",
     "packages/rpc",
+    "packages/runner",
     "packages/pathfinder"
   ],
   "scripts": {
-    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build",
+    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/runner' build",
     "build:abis": "bun run --filter '@circles-sdk/abis' build",
     "build:core": "bun run --filter '@circles-sdk/core' build",
     "build:rpc": "bun run --filter '@circles-sdk/rpc' build",

@@ -97,14 +97,14 @@ export function shrinkPathValues(
       return; // drop sub‑unit flows
     }
 
-    scaled.push({ ...edge, value: scaledValue.toString() });
+    scaled.push({ ...edge, value: scaledValue });
     incomingToSink.set(edge.to, (incomingToSink.get(edge.to) ?? BigInt(0)) + scaledValue);
   });
 
   const maxFlow = sink ? incomingToSink.get(sink.toLowerCase()) ?? BigInt(0) : BigInt(0);
 
   return {
-    maxFlow: maxFlow.toString(),
+    maxFlow: maxFlow,
     transfers: scaled
   };
 }

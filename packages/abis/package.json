@@ -2,10 +2,11 @@
   "name": "@circles-sdk/abis",
   "version": "0.1.0",
   "description": "Circles Contract ABIs",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external abitype && tsc --emitDeclarationOnly",
     "dev": "tsc --watch"
   },
   "dependencies": {

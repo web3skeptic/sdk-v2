@@ -1,7 +1,7 @@
 {
-  "name": "@circles-sdk/pathfinder",
+  "name": "@circles-sdk/runner",
   "version": "0.1.0",
-  "description": "Pathfinding utilities for Circles SDK",
+  "description": "Contract runner implementations for Circles SDK",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external viem --external @circles-sdk/types --external @circles-sdk/rpc --external @circles-sdk/utils && tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external viem --external @circles-sdk/types && tsc --emitDeclarationOnly",
     "dev": "tsc --build --watch",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
@@ -21,13 +21,13 @@
   ],
   "keywords": [
     "circles",
-    "pathfinding"
+    "runner",
+    "ethereum",
+    "viem"
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk/rpc": "workspace:*",
     "@circles-sdk/types": "workspace:*",
-    "@circles-sdk/utils": "workspace:*",
     "viem": "^2.38.0"
   },
   "devDependencies": {
