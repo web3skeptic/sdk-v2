@@ -1,5 +1,6 @@
 import { HubV2Contract, BaseGroupFactoryContract, NameRegistryContract, LiftERC20Contract } from './contracts';
-import { circlesConfig, type CirclesConfig } from './config';
+import type { CirclesConfig } from '@circles-sdk/types';
+import { circlesConfig } from './config';
 
 /**
  * Core SDK class for managing Circles protocol contract interactions
@@ -48,14 +49,12 @@ export class Core {
    * Create a new Core SDK instance
    *
    * @param config Circles configuration (defaults to Gnosis Chain mainnet)
-   * @param rpcUrl RPC URL to use (defaults to config.circlesRpcUrl)
    */
   constructor(
-    config: CirclesConfig = circlesConfig[100],
-    rpcUrl?: string
+    config: CirclesConfig = circlesConfig[100]
   ) {
     this.config = config;
-    this.rpcUrl = rpcUrl || config.circlesRpcUrl;
+    this.rpcUrl = config.circlesRpcUrl;
 
     this.hubV2 = new HubV2Contract({
       address: config.v2HubAddress,

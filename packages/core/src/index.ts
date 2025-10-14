@@ -1,3 +1,4 @@
 export * from './core';
 export * from './contracts';
-export * from './config';
+export type { CirclesConfig } from '@circles-sdk/types';
+export { circlesConfig } from './config';

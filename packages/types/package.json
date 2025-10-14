@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external abitype --external viem && tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
     "dev": "tsc --build --watch",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
@@ -26,8 +26,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "abitype": "^1.1.1",
-    "viem": "^2.38.0"
+    "abitype": "^1.1.1"
   },
   "devDependencies": {
     "typescript": "^5.0.4"

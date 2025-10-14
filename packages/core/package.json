@@ -3,11 +3,21 @@
   "version": "0.1.0",
   "description": "Circles Contracts wrapper",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external viem --external abitype --external @circles-sdk/abis --external @circles-sdk/types && tsc --emitDeclarationOnly",
-    "build:bundle": "bun build ./src/index.ts --outdir ./dist --minify --external viem --external abitype",
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --minify && tsc --emitDeclarationOnly",
     "dev": "tsc --watch"
   },
   "dependencies": {
@@ -20,7 +30,6 @@
     "@esbuild-kit/esm-loader": "^2.6.5",
     "@types/bun": "^1.2.23",
     "esbuild": "^0.25.10",
-    "fix-esm-import-path": "^1.10.3",
     "typescript": "^5.0.4"
   }
 }

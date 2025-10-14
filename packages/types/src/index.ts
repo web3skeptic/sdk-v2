@@ -1,5 +1,4 @@
-import type { Abi } from 'abitype';
-import type { Address as ViemAddress } from 'viem';
+import type { Abi, Address as ViemAddress } from 'abitype';
 
 /**
  * Base types for EVM interaction
@@ -374,4 +373,32 @@ export interface FlowMatrix {
   streams: StreamStruct[]; // tuple(uint16,uint16[],bytes)[]
   packedCoordinates: string; // hex bytes
   sourceCoordinate: number; // convenience, not part of ABI
+}
+
+/**
+ * Circles protocol configuration for a specific chain
+ */
+export interface CirclesConfig {
+  /** RPC URL for Circles-specific endpoints */
+  circlesRpcUrl: string;
+  /** Pathfinder service URL for computing transfer paths */
+  pathfinderUrl: string;
+  /** Profile service URL for user profiles and metadata */
+  profileServiceUrl: string;
+  /** Circles V1 Hub contract address */
+  v1HubAddress: Address;
+  /** Circles V2 Hub contract address */
+  v2HubAddress: Address;
+  /** Name Registry contract address */
+  nameRegistryAddress: Address;
+  /** Base Group Mint Policy contract address */
+  baseGroupMintPolicy: Address;
+  /** Standard Treasury contract address */
+  standardTreasury: Address;
+  /** Core Members Group Deployer contract address */
+  coreMembersGroupDeployer: Address;
+  /** Base Group Factory contract address */
+  baseGroupFactoryAddress: Address;
+  /** Lift ERC20 contract address */
+  liftERC20Address: Address;
 }

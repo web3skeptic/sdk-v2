@@ -3,16 +3,25 @@
   "version": "0.1.0",
   "description": "Circles RPC wrapper",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external viem --external @circles-sdk/types --external @circles-sdk/utils && tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
     "dev": "tsc --watch"
   },
   "dependencies": {
     "@circles-sdk/types": "workspace:*",
-    "@circles-sdk/utils": "workspace:*",
-    "viem": "^2.38.0"
+    "@circles-sdk/utils": "workspace:*"
   },
   "devDependencies": {
     "@esbuild-kit/esm-loader": "^2.6.5",

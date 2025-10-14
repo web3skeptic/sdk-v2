@@ -8,3 +8,4 @@ export { NameRegistryContract } from './nameRegistry';
 export { InflationaryCirclesContract } from './inflationaryCircles';
 export { DemurrageCirclesContract } from './demurrageCircles';
 export { LiftERC20Contract, CirclesType } from './liftERC20';
+export { Contract } from './contract';

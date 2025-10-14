@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --target node --format esm --splitting --external viem --external @circles-sdk/types --external @circles-sdk/rpc --external @circles-sdk/utils && tsc --emitDeclarationOnly",
+    "build": "bun build ./src/index.ts --outdir ./dist && tsc --emitDeclarationOnly",
     "dev": "tsc --build --watch",
     "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
