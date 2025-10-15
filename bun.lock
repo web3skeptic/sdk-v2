@@ -23,8 +23,8 @@
       "dependencies": {
         "@circles-sdk/abis": "workspace:*",
         "@circles-sdk/types": "workspace:*",
+        "@circles-sdk/utils": "workspace:*",
         "abitype": "^1.1.1",
-        "viem": "^2.38.0",
       },
       "devDependencies": {
         "@esbuild-kit/esm-loader": "^2.6.5",

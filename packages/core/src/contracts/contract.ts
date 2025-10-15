@@ -1,5 +1,5 @@
 import type { Abi } from 'abitype';
-import { encodeFunctionData, decodeFunctionResult } from 'viem/utils';
+import { encodeFunctionData, decodeFunctionResult } from '@circles-sdk/utils';
 import type { Address, Hex } from '@circles-sdk/types';
 
 /**
