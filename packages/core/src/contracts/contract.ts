@@ -19,7 +19,7 @@ export class Contract<TAbi extends readonly unknown[] = Abi> {
     this.abi = config.abi;
     this.rpcUrl = config.rpcUrl;
   }
-
+  // @todo add encode read
   /**
    * Read from contract (view/pure functions) using direct JSON-RPC call
    * @param functionName - The contract function to call

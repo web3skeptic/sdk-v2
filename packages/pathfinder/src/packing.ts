@@ -1,4 +1,4 @@
-import { bytesToHex } from 'viem';
+import { bytesToHex } from '@circles-sdk/utils';
 import type { TransferStep } from '@circles-sdk/types';
 
 /**

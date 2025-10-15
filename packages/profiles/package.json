@@ -1,0 +1,36 @@
+{
+  "name": "@circles-sdk/profiles",
+  "version": "0.1.0",
+  "description": "Minimal IPFS/CID pinning service for Circles profiles",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "ipfs",
+    "cid",
+    "profiles",
+    "pinning"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@circles-sdk/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

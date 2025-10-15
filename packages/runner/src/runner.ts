@@ -40,4 +40,5 @@ export interface ContractRunner {
    * Send a transaction
    */
   sendTransaction?(tx: TransactionRequest): Promise<TransactionResponse>;
+  //@todo add sign function
 }

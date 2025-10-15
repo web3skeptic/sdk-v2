@@ -46,13 +46,22 @@
         "typescript": "^5.0.4",
       },
     },
+    "packages/profiles": {
+      "name": "@circles-sdk/profiles",
+      "version": "0.1.0",
+      "dependencies": {
+        "@circles-sdk/types": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "^5.0.4",
+      },
+    },
     "packages/rpc": {
       "name": "@circles-sdk/rpc",
       "version": "0.1.0",
       "dependencies": {
         "@circles-sdk/types": "workspace:*",
         "@circles-sdk/utils": "workspace:*",
-        "viem": "^2.38.0",
       },
       "devDependencies": {
         "@esbuild-kit/esm-loader": "^2.6.5",
@@ -72,12 +81,26 @@
         "typescript": "^5.0.4",
       },
     },
+    "packages/sdk": {
+      "name": "@circles-sdk/sdk",
+      "version": "0.1.0",
+      "dependencies": {
+        "@circles-sdk/core": "workspace:*",
+        "@circles-sdk/profiles": "workspace:*",
+        "@circles-sdk/rpc": "workspace:*",
+        "@circles-sdk/runner": "workspace:*",
+        "@circles-sdk/types": "workspace:*",
+        "@circles-sdk/utils": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "^5.0.4",
+      },
+    },
     "packages/types": {
       "name": "@circles-sdk/types",
       "version": "0.1.0",
       "dependencies": {
         "abitype": "^1.1.1",
-        "viem": "^2.38.0",
       },
       "devDependencies": {
         "typescript": "^5.0.4",
@@ -97,9 +120,13 @@
 
     "@circles-sdk/pathfinder": ["@circles-sdk/pathfinder@workspace:packages/pathfinder"],
 
+    "@circles-sdk/profiles": ["@circles-sdk/profiles@workspace:packages/profiles"],
+
     "@circles-sdk/rpc": ["@circles-sdk/rpc@workspace:packages/rpc"],
 
     "@circles-sdk/runner": ["@circles-sdk/runner@workspace:packages/runner"],
+
+    "@circles-sdk/sdk": ["@circles-sdk/sdk@workspace:packages/sdk"],
 
     "@circles-sdk/types": ["@circles-sdk/types@workspace:packages/types"],
 
@@ -187,8 +214,6 @@
 
     "csstype": ["csstype@3.1.3", "", {}, "sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw=="],
 
-    "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
-
     "esbuild": ["esbuild@0.25.10", "", { "optionalDependencies": { "@esbuild/aix-ppc64": "0.25.10", "@esbuild/android-arm": "0.25.10", "@esbuild/android-arm64": "0.25.10", "@esbuild/android-x64": "0.25.10", "@esbuild/darwin-arm64": "0.25.10", "@esbuild/darwin-x64": "0.25.10", "@esbuild/freebsd-arm64": "0.25.10", "@esbuild/freebsd-x64": "0.25.10", "@esbuild/linux-arm": "0.25.10", "@esbuild/linux-arm64": "0.25.10", "@esbuild/linux-ia32": "0.25.10", "@esbuild/linux-loong64": "0.25.10", "@esbuild/linux-mips64el": "0.25.10", "@esbuild/linux-ppc64": "0.25.10", "@esbuild/linux-riscv64": "0.25.10", "@esbuild/linux-s390x": "0.25.10", "@esbuild/linux-x64": "0.25.10", "@esbuild/netbsd-arm64": "0.25.10", "@esbuild/netbsd-x64": "0.25.10", "@esbuild/openbsd-arm64": "0.25.10", "@esbuild/openbsd-x64": "0.25.10", "@esbuild/openharmony-arm64": "0.25.10", "@esbuild/sunos-x64": "0.25.10", "@esbuild/win32-arm64": "0.25.10", "@esbuild/win32-ia32": "0.25.10", "@esbuild/win32-x64": "0.25.10" }, "bin": { "esbuild": "bin/esbuild" } }, "sha512-9RiGKvCwaqxO2owP61uQ4BgNborAQskMR6QusfWzQqv7AZOg5oGehdY2pRJMTKuwxd1IDBP4rSbI5lHzU7SMsQ=="],
 
     "eventemitter3": ["eventemitter3@5.0.1", "", {}, "sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA=="],
@@ -196,8 +221,6 @@
     "get-tsconfig": ["get-tsconfig@4.12.0", "", { "dependencies": { "resolve-pkg-maps": "^1.0.0" } }, "sha512-LScr2aNr2FbjAjZh2C6X6BxRx1/x+aTDExct/xyq2XKbYOiG5c0aK7pMsSuyc0brz3ibr/lbQiHD9jzt4lccJw=="],
 
     "isows": ["isows@1.0.7", "", { "peerDependencies": { "ws": "*" } }, "sha512-I1fSfDCZL5P0v33sVqeTDSpcstAg/N+wF5HS033mogOVIp4B+oHC7oOCsA3axAbBSGTJ8QubbNmnIRN/h8U7hg=="],
-
-    "ms": ["ms@2.1.3", "", {}, "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA=="],
 
     "ox": ["ox@0.9.6", "", { "dependencies": { "@adraffy/ens-normalize": "^1.11.0", "@noble/ciphers": "^1.3.0", "@noble/curves": "1.9.1", "@noble/hashes": "^1.8.0", "@scure/bip32": "^1.7.0", "@scure/bip39": "^1.6.0", "abitype": "^1.0.9", "eventemitter3": "5.0.1" }, "peerDependencies": { "typescript": ">=5.4.0" }, "optionalPeers": ["typescript"] }, "sha512-8SuCbHPvv2eZLYXrNmC0EC12rdzXQLdhnOMlHDW2wiCPLxBrOOJwX5L5E61by+UjTPOryqQiRSnjIKCI+GykKg=="],
 

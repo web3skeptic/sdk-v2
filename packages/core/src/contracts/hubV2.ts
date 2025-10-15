@@ -244,4 +244,17 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
       value,
     };
   }
+
+  /**
+   * Create a stop transaction
+   * Permanently stops the ability to mint new personal tokens
+   * WARNING: This action is irreversible!
+   */
+  stop(value: bigint = BigInt(0)): TransactionRequest {
+    return {
+      to: this.address,
+      data: this.encodeWrite('stop', []),
+      value,
+    };
+  }
 }

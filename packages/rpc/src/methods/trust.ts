@@ -7,7 +7,7 @@ import { normalizeAddress } from '../utils';
  */
 export class TrustMethods {
   constructor(private client: RpcClient) {}
-
+  // @todo get incoming and outgoing trust relations
   /**
    * Query the common trust relations of two addresses
    * (only common outgoing trust relations are considered)

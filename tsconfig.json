@@ -16,6 +16,8 @@
   "files": [],
   "references": [
     { "path": "./packages/core" },
-    { "path": "./packages/rpc" }
+    { "path": "./packages/rpc" },
+    { "path": "./packages/profiles" },
+    { "path": "./packages/sdk" }
   ]
 }

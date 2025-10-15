@@ -263,12 +263,20 @@ export interface TokenInfo {
  * Profile information
  */
 export interface Profile {
-  name?: string;
+  name: string;
   description?: string;
-  imageUrl?: string;
   previewImageUrl?: string;
-  avatarCid?: string;
-  [key: string]: unknown;
+  imageUrl?: string;
+  location?: string;
+  geoLocation?: [number, number];
+  extensions?: Record<string, any>;
+}
+
+/**
+ * Group profile with additional symbol field
+ */
+export interface GroupProfile extends Profile {
+  symbol: string;
 }
 
 /**
