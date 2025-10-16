@@ -14,7 +14,12 @@ export {
   ProfileMethods,
   TokenMethods,
   InvitationMethods,
+  TransactionMethods,
+  GroupMethods,
 } from './methods';
+
+// Types
+export type { TrustRelationType, AggregatedTrustRelation } from './methods';
 
 // Utils
 export { normalizeAddress, normalizeAddresses, parseStringsToBigInt } from './utils';

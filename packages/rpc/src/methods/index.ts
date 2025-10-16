@@ -1,8 +1,10 @@
 export { PathfinderMethods } from './pathfinder';
 export { QueryMethods } from './query';
-export { TrustMethods } from './trust';
+export { TrustMethods, type TrustRelationType, type AggregatedTrustRelation } from './trust';
 export { BalanceMethods } from './balance';
 export { AvatarMethods } from './avatar';
 export { ProfileMethods } from './profile';
 export { TokenMethods } from './token';
 export { InvitationMethods } from './invitation';
+export { TransactionMethods } from './transaction';
+export { GroupMethods } from './group';

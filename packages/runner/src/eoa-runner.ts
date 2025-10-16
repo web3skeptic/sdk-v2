@@ -12,10 +12,10 @@ import {
 import { privateKeyToAccount } from 'viem/accounts';
 
 /**
- * Contract runner implementation using a private key
+ * EOA (Externally Owned Account) contract runner implementation using a private key
  * Uses viem's wallet client to sign and send transactions
  */
-export class PrivateKeyContractRunner implements ContractRunner {
+export class EoaContractRunner implements ContractRunner {
   public address?: Address;
   public publicClient: PublicClient;
 
@@ -25,7 +25,7 @@ export class PrivateKeyContractRunner implements ContractRunner {
   private _account?: Account;
 
   /**
-   * Creates a new PrivateKeyContractRunner
+   * Creates a new EoaContractRunner
    * @param publicClient - The viem public client for reading blockchain state
    * @param privateKey - The private key to use for signing transactions (must start with 0x)
    * @param rpcUrl - The RPC URL to use for the wallet client
@@ -62,7 +62,7 @@ export class PrivateKeyContractRunner implements ContractRunner {
    */
   private ensureWalletClient(): WalletClient<Transport, Chain, Account> {
     if (!this._walletClient) {
-      throw new Error('PrivateKeyContractRunner not initialized. Call init() first.');
+      throw new Error('EoaContractRunner not initialized. Call init() first.');
     }
     return this._walletClient;
   }
@@ -74,8 +74,9 @@ export class PrivateKeyContractRunner implements ContractRunner {
     this.ensureWalletClient(); // Ensure initialized
 
     const estimate = await this.publicClient.estimateGas({
-      account: this._account!.address,
-      to: tx.to,
+      account: this._account!,
+      // @ts-expect-error - Address type is compatible with viem's 0x${string}
+      to: tx.to!,
       data: tx.data,
       value: tx.value,
     });
@@ -88,7 +89,9 @@ export class PrivateKeyContractRunner implements ContractRunner {
    */
   call = async (tx: TransactionRequest): Promise<string> => {
     const result = await this.publicClient.call({
-      account: tx.from || this.address,
+      // @ts-expect-error - Address type is compatible with viem's 0x${string}
+      account: tx.from || this._account,
+      // @ts-expect-error - Address type is compatible with viem's 0x${string}
       to: tx.to,
       data: tx.data,
       value: tx.value,
@@ -123,7 +126,8 @@ export class PrivateKeyContractRunner implements ContractRunner {
     // Send the transaction
     const hash = await walletClient.sendTransaction({
       account: this._account!,
-      to: tx.to,
+      // @ts-expect-error - Address type is compatible with viem's 0x${string}
+      to: tx.to!,
       data: tx.data,
       value: tx.value,
       gas: tx.gas,
@@ -156,3 +160,6 @@ export class PrivateKeyContractRunner implements ContractRunner {
     return response;
   };
 }
+
+// Legacy export for backwards compatibility
+export { EoaContractRunner as PrivateKeyContractRunner };

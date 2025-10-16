@@ -64,11 +64,16 @@ export class HumanAvatar implements AvatarInterface {
   }
 
   /**
-   * Execute a batch of transaction requests sequentially
-   * For EOA (Externally Owned Accounts), this sends transactions one after another
+   * Execute a batch of transaction requests
+   *
+   * For runners that support batch transactions (e.g., Safe), all transactions are executed
+   * atomically in a single on-chain transaction, returning a single receipt.
+   *
+   * For runners without batch support (e.g., EOA), transactions are sent sequentially,
+   * returning multiple receipts.
    *
    * @param transactions Array of transaction requests to execute
-   * @returns Array of transaction responses
+   * @returns Single transaction response (for batch-capable runners) or array of responses (for EOA)
    *
    * @example
    * ```typescript
@@ -76,21 +81,37 @@ export class HumanAvatar implements AvatarInterface {
    *   core.hubV2.trust(avatar1, expiry),
    *   core.hubV2.trust(avatar2, expiry),
    * ];
-   * const receipts = await avatar.executeBatch(txs);
+   * const receipt = await avatar.executeBatch(txs); // Single receipt if using Safe
    * ```
    */
-  async executeBatch(transactions: TransactionRequest[]): Promise<TransactionResponse[]> {
+  async executeBatch(
+    transactions: TransactionRequest[]
+  ): Promise<TransactionResponse | TransactionResponse[]> {
     const runner = this.ensureContractRunner();
 
+    if (transactions.length === 0) {
+      throw new Error('No transactions provided');
+    }
+
+    // Check if runner supports batch transactions (e.g., Safe)
+    if (runner.sendBatchTransaction) {
+      const batchRun = runner.sendBatchTransaction();
+
+      // Add all transactions to the batch
+      for (const tx of transactions) {
+        batchRun.addTransaction(tx);
+      }
+
+      // Execute as a single atomic transaction
+      return await batchRun.run();
+    }
+
+    // Fallback: Execute transactions sequentially for EOA
     if (!runner.sendTransaction) {
       throw new Error('Contract runner does not support sendTransaction');
     }
 
     const receipts: TransactionResponse[] = [];
-
-    // Execute transactions sequentially
-    // For EOA, this is the standard approach
-    // Future: Could be optimized with multicall or meta-transactions
     for (const tx of transactions) {
       const receipt = await runner.sendTransaction(tx);
       receipts.push(receipt);
@@ -108,17 +129,22 @@ export class HumanAvatar implements AvatarInterface {
 
   /**
    * Execute a batch of transactions
+   * For batch-capable runners (Safe), returns a single response for the atomic batch.
+   * For sequential runners (EOA), returns an array of responses.
+   *
    * @param transactions Array of transaction requests
-   * @returns Array of transaction responses
+   * @returns Single response (batch) or array of responses (sequential)
    */
-  async executeTransaction(transactions: TransactionRequest[]): Promise<TransactionResponse[]>;
+  async executeTransaction(
+    transactions: TransactionRequest[]
+  ): Promise<TransactionResponse | TransactionResponse[]>;
 
   /**
    * Execute a single transaction or batch of transactions
    * Type overloads ensure correct return type based on input
    *
    * @param transactions Single transaction or array of transactions
-   * @returns Single response or array of responses
+   * @returns Single response or array of responses (or single response for batched execution)
    */
   async executeTransaction(
     transactions: TransactionRequest | TransactionRequest[]
@@ -192,11 +218,16 @@ export class HumanAvatar implements AvatarInterface {
   public readonly trust = {
     /**
      * Trust another avatar or multiple avatars
-     * Uses batch execution for multiple avatars (sequential transactions for EOA)
+     *
+     * When using a batch-capable runner (Safe), all trust operations are executed atomically
+     * in a single transaction, returning one receipt.
+     *
+     * When using a sequential runner (EOA), operations are executed one by one, returning
+     * the last receipt for backwards compatibility.
      *
      * @param avatar Single avatar address or array of avatar addresses
      * @param expiry Trust expiry timestamp (in seconds since epoch). Defaults to max uint96 for indefinite trust
-     * @returns Transaction response (last transaction if multiple avatars)
+     * @returns Transaction response (single receipt for batch execution or last receipt for sequential)
      *
      * @example
      * ```typescript
@@ -207,7 +238,7 @@ export class HumanAvatar implements AvatarInterface {
      * const oneYear = BigInt(Date.now() / 1000 + 31536000);
      * await avatar.trust.add('0x123...', oneYear);
      *
-     * // Trust multiple avatars
+     * // Trust multiple avatars (single tx with Safe, multiple txs with EOA)
      * await avatar.trust.add(['0x123...', '0x456...', '0x789...']);
      * ```
      */
@@ -230,9 +261,12 @@ export class HumanAvatar implements AvatarInterface {
         this.core.hubV2.trust(trustee, trustExpiry)
       );
 
-      // Execute using batch helper - returns last receipt for API compatibility
-      const receipts = await this.executeTransaction(transactions);
-      return receipts[receipts.length - 1];
+      // Execute transactions
+      const result = await this.executeTransaction(transactions);
+
+      // If batch execution (Safe), return the single receipt
+      // If sequential execution (EOA), return the last receipt for backwards compatibility
+      return Array.isArray(result) ? result[result.length - 1] : result;
     },
 
     /**
@@ -270,9 +304,12 @@ export class HumanAvatar implements AvatarInterface {
         this.core.hubV2.trust(trustee, untrustExpiry)
       );
 
-      // Execute using batch helper - returns last receipt for API compatibility
-      const receipts = await this.executeTransaction(transactions);
-      return receipts[receipts.length - 1];
+      // Execute transactions
+      const result = await this.executeTransaction(transactions);
+
+      // If batch execution (Safe), return the single receipt
+      // If sequential execution (EOA), return the last receipt for backwards compatibility
+      return Array.isArray(result) ? result[result.length - 1] : result;
     },
 
     /**

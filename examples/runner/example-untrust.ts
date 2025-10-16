@@ -1,28 +1,33 @@
 /**
- * Example: Untrust Operation using Circles SDK
+ * Example: Untrust Operation using Circles SDK with Safe
  *
  * This example demonstrates how to:
  * 1. Initialize the Core SDK
- * 2. Create a ContractRunner with a private key
- * 3. Execute an untrust operation (by setting trust expiry to 0)
+ * 2. Create a SafeContractRunner
+ * 3. Execute an untrust operation through a Safe multisig
  *
  * To untrust an address in Circles, you call the trust function
  * with an expiry time of 0, which removes the trust relationship.
  */
 
 import { Core } from '@circles-sdk/core';
-import { PrivateKeyContractRunner } from '@circles-sdk/runner';
+import { SafeContractRunner } from '@circles-sdk/runner';
 import { createPublicClient, http } from 'viem';
 import { gnosis } from 'viem/chains';
 
 async function main() {
   // Configuration
   const PRIVATE_KEY = process.env.PRIVATE_KEY as `0x${string}`;
+  const SAFE_ADDRESS = process.env.SAFE_ADDRESS as `0x${string}`;
   const ADDRESS_TO_UNTRUST = process.env.ADDRESS_TO_UNTRUST as `0x${string}`;
   const RPC_URL = 'https://rpc.aboutcircles.com/';
 
   if (!PRIVATE_KEY) {
     throw new Error('PRIVATE_KEY environment variable is required');
+  }
+
+  if (!SAFE_ADDRESS) {
+    throw new Error('SAFE_ADDRESS environment variable is required');
   }
 
   if (!ADDRESS_TO_UNTRUST) {
@@ -42,17 +47,18 @@ async function main() {
     transport: http(RPC_URL),
   });
 
-  // Step 3: Create the contract runner with private key
-  const runner = new PrivateKeyContractRunner(
+  // Step 3: Create the Safe contract runner
+  const runner = new SafeContractRunner(
     publicClient,
     PRIVATE_KEY,
-    RPC_URL
+    RPC_URL,
+    SAFE_ADDRESS
   );
 
   // Initialize the runner
   await runner.init();
-  console.log('✅ Contract runner initialized');
-  console.log(`   Signer Address: ${runner.address}\n`);
+  console.log('✅ Safe contract runner initialized');
+  console.log(`   Safe Address: ${runner.address}\n`);
 
   // Step 4: Check current trust status
   console.log('🔍 Checking current trust status...');

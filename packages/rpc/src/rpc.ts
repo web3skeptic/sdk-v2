@@ -8,6 +8,8 @@ import {
   ProfileMethods,
   TokenMethods,
   InvitationMethods,
+  TransactionMethods,
+  GroupMethods,
 } from './methods';
 
 /**
@@ -51,6 +53,8 @@ export class CirclesRpc {
   public readonly profile: ProfileMethods;
   public readonly token: TokenMethods;
   public readonly invitation: InvitationMethods;
+  public readonly transaction: TransactionMethods;
+  public readonly group: GroupMethods;
 
   /**
    * Create a new CirclesRpc instance
@@ -68,6 +72,8 @@ export class CirclesRpc {
     this.profile = new ProfileMethods(this.client);
     this.token = new TokenMethods(this.client);
     this.invitation = new InvitationMethods(this.client);
+    this.transaction = new TransactionMethods(this.client);
+    this.group = new GroupMethods(this.client);
   }
 
   /**

@@ -2,8 +2,13 @@
  * @circles-sdk/runner
  *
  * Contract runner implementations for executing blockchain operations.
- * Provides adapters for different signing methods (private key, etc.)
+ * Provides adapters for different signing methods (EOA, Safe multisig, etc.)
  */
 
-export type { ContractRunner } from './runner';
-export { PrivateKeyContractRunner } from './private-key-runner';
+export type { ContractRunner, BatchRun } from './runner';
+
+// EOA (Externally Owned Account) Runner
+export { EoaContractRunner, PrivateKeyContractRunner } from './eoa-runner';
+
+// Safe Multisig Runner
+export { SafeContractRunner, SafeBatchRun } from './safe-runner';
