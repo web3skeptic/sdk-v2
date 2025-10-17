@@ -1,8 +1,14 @@
 import type { Address, Hex, TransactionRequest, TransactionResponse } from '@circles-sdk/types';
 import type { ContractRunner, BatchRun } from './runner';
 import type { PublicClient } from 'viem';
-import Safe from '@safe-global/protocol-kit';
+import type { SafeTransaction } from '@safe-global/types-kit';
 import { type MetaTransactionData, OperationType } from '@safe-global/safe-core-sdk-types';
+
+// Use require for Safe to ensure compatibility with bun's CJS/ESM interop
+// Safe Protocol Kit v5 uses CommonJS exports, so we use require() for proper interop
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const SafeModule = require('@safe-global/protocol-kit');
+const Safe = SafeModule.default || SafeModule;
 
 /**
  * Batch transaction runner for Safe
@@ -11,7 +17,7 @@ import { type MetaTransactionData, OperationType } from '@safe-global/safe-core-
 export class SafeBatchRun implements BatchRun {
   private readonly transactions: TransactionRequest[] = [];
 
-  constructor(private readonly safe: Safe) {}
+  constructor(private readonly safe: any) {}
 
   /**
    * Add a transaction to the batch
@@ -75,7 +81,7 @@ export class SafeContractRunner implements ContractRunner {
   private privateKey: Hex;
   private rpcUrl: string;
   private safeAddress?: Address;
-  private safe?: Safe;
+  private safe?: any;
 
   /**
    * Creates a new SafeContractRunner
@@ -84,6 +90,7 @@ export class SafeContractRunner implements ContractRunner {
    * @param rpcUrl - The RPC URL to use for Safe operations
    * @param safeAddress - The address of the Safe wallet (optional, can be set in init)
    */
+  // @todo rpc might be taken from public client
   constructor(
     publicClient: PublicClient,
     privateKey: Hex,
@@ -122,7 +129,7 @@ export class SafeContractRunner implements ContractRunner {
   /**
    * Ensures the Safe is initialized
    */
-  private ensureSafe(): Safe {
+  private ensureSafe(): any {
     if (!this.safe) {
       throw new Error('SafeContractRunner not initialized. Call init() first.');
     }
@@ -179,24 +186,33 @@ export class SafeContractRunner implements ContractRunner {
   };
 
   /**
-   * Send a transaction through the Safe
+   * Send one or more transactions through the Safe
+   * All transactions are batched and executed atomically
    */
-  sendTransaction = async (tx: TransactionRequest): Promise<TransactionResponse> => {
+  sendTransaction = async (txs: TransactionRequest[]): Promise<TransactionResponse> => {
     const safe = this.ensureSafe();
 
-    // Create Safe transaction
+    if (txs.length === 0) {
+      throw new Error('No transactions provided');
+    }
+
+    const metaTransactions: MetaTransactionData[] = txs.map((tx) => ({
+      operation: OperationType.Call,
+      to: tx.to!,
+      value: (tx.value?.toString() ?? '0'),
+      data: tx.data ?? '0x',
+    }));
+
+    // Create Safe transaction with all transactions
     const safeTransaction = await safe.createTransaction({
-      transactions: [
-        {
-          to: tx.to!,
-          value: (tx.value?.toString() ?? '0'),
-          data: tx.data ?? '0x',
-        },
-      ],
+      transactions: metaTransactions,
     });
 
-    // Execute the transaction
-    const txResult = await safe.executeTransaction(safeTransaction);
+    // Execute the batched transaction with explicit gas limit to avoid estimation errors
+    // This prevents "wrong transaction nonce" errors during gas estimation
+    const txResult = await safe.executeTransaction(safeTransaction, {
+      gasLimit: 10000000, // 10M gas - sufficient for most Safe transactions
+    });
 
     if (!txResult.hash) {
       throw new Error('Transaction execution failed: no transaction hash');
@@ -206,9 +222,9 @@ export class SafeContractRunner implements ContractRunner {
     const response: TransactionResponse = {
       hash: txResult.hash as Hex,
       from: (await safe.getAddress()) as Address,
-      to: tx.to,
-      data: tx.data,
-      value: tx.value ?? BigInt(0),
+      to: undefined,
+      data: '0x' as Hex,
+      value: BigInt(0),
       blockNumber: 0,
       blockHash: '0x' as Hex,
     };

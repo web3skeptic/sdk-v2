@@ -8,8 +8,14 @@
  *
  * To untrust an address in Circles, you call the trust function
  * with an expiry time of 0, which removes the trust relationship.
+ *
+ * Environment variables required (see .env.example):
+ * - PRIVATE_KEY: Private key of one of the Safe signers
+ * - SAFE_ADDRESS: Address of the Safe multisig wallet
+ * - ADDRESS_TO_UNTRUST: Address to remove trust from
  */
 
+import 'dotenv/config';
 import { Core } from '@circles-sdk/core';
 import { SafeContractRunner } from '@circles-sdk/runner';
 import { createPublicClient, http } from 'viem';
@@ -90,7 +96,7 @@ async function main() {
 
   // Step 7: Send the transaction
   console.log('🚀 Sending untrust transaction...');
-  const txResponse = await runner.sendTransaction!(untrustTx);
+  const txResponse = await runner.sendTransaction!([untrustTx]);
   console.log('✅ Transaction sent!');
   console.log(`   Transaction hash: ${txResponse.hash}`);
   console.log(`   Block number: ${txResponse.blockNumber}`);

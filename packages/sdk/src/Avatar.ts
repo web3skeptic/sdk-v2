@@ -1,4 +1,4 @@
-import type { Address, Profile, TransactionResponse, TransactionRequest } from '@circles-sdk/types';
+import type { Address, Profile, TransactionResponse } from '@circles-sdk/types';
 import type { Core } from '@circles-sdk/core';
 import type {
   Observable,
@@ -30,6 +30,7 @@ export class HumanAvatar implements AvatarInterface {
   public readonly core: Core;
   public readonly contractRunner?: ContractRunner;
   public readonly events: Observable<CirclesEvent>;
+  private readonly runner: ContractRunner;
 
   constructor(
     address: Address,
@@ -42,126 +43,25 @@ export class HumanAvatar implements AvatarInterface {
     this.contractRunner = contractRunner;
     this.avatarInfo = avatarInfo;
 
+    // Validate contract runner is available
+    if (!contractRunner) {
+      throw new Error(
+        'Contract runner not available. Please provide a ContractRunner when creating the SDK instance.'
+      );
+    }
+
+    if (!contractRunner.sendTransaction) {
+      throw new Error('Contract runner does not support sendTransaction');
+    }
+
+    this.runner = contractRunner;
+
     // TODO: Implement event streaming
     this.events = {
       subscribe: () => {
         throw new Error('Event streaming not yet implemented');
       },
     };
-  }
-
-  /**
-   * Helper method to ensure contract runner is available
-   * @throws Error if contract runner is not available
-   */
-  private ensureContractRunner(): ContractRunner {
-    if (!this.contractRunner) {
-      throw new Error(
-        'Contract runner not available. Please provide a ContractRunner when creating the SDK instance.'
-      );
-    }
-    return this.contractRunner;
-  }
-
-  /**
-   * Execute a batch of transaction requests
-   *
-   * For runners that support batch transactions (e.g., Safe), all transactions are executed
-   * atomically in a single on-chain transaction, returning a single receipt.
-   *
-   * For runners without batch support (e.g., EOA), transactions are sent sequentially,
-   * returning multiple receipts.
-   *
-   * @param transactions Array of transaction requests to execute
-   * @returns Single transaction response (for batch-capable runners) or array of responses (for EOA)
-   *
-   * @example
-   * ```typescript
-   * const txs = [
-   *   core.hubV2.trust(avatar1, expiry),
-   *   core.hubV2.trust(avatar2, expiry),
-   * ];
-   * const receipt = await avatar.executeBatch(txs); // Single receipt if using Safe
-   * ```
-   */
-  async executeBatch(
-    transactions: TransactionRequest[]
-  ): Promise<TransactionResponse | TransactionResponse[]> {
-    const runner = this.ensureContractRunner();
-
-    if (transactions.length === 0) {
-      throw new Error('No transactions provided');
-    }
-
-    // Check if runner supports batch transactions (e.g., Safe)
-    if (runner.sendBatchTransaction) {
-      const batchRun = runner.sendBatchTransaction();
-
-      // Add all transactions to the batch
-      for (const tx of transactions) {
-        batchRun.addTransaction(tx);
-      }
-
-      // Execute as a single atomic transaction
-      return await batchRun.run();
-    }
-
-    // Fallback: Execute transactions sequentially for EOA
-    if (!runner.sendTransaction) {
-      throw new Error('Contract runner does not support sendTransaction');
-    }
-
-    const receipts: TransactionResponse[] = [];
-    for (const tx of transactions) {
-      const receipt = await runner.sendTransaction(tx);
-      receipts.push(receipt);
-    }
-
-    return receipts;
-  }
-
-  /**
-   * Execute a single transaction
-   * @param transaction Single transaction request
-   * @returns Transaction response
-   */
-  async executeTransaction(transaction: TransactionRequest): Promise<TransactionResponse>;
-
-  /**
-   * Execute a batch of transactions
-   * For batch-capable runners (Safe), returns a single response for the atomic batch.
-   * For sequential runners (EOA), returns an array of responses.
-   *
-   * @param transactions Array of transaction requests
-   * @returns Single response (batch) or array of responses (sequential)
-   */
-  async executeTransaction(
-    transactions: TransactionRequest[]
-  ): Promise<TransactionResponse | TransactionResponse[]>;
-
-  /**
-   * Execute a single transaction or batch of transactions
-   * Type overloads ensure correct return type based on input
-   *
-   * @param transactions Single transaction or array of transactions
-   * @returns Single response or array of responses (or single response for batched execution)
-   */
-  async executeTransaction(
-    transactions: TransactionRequest | TransactionRequest[]
-  ): Promise<TransactionResponse | TransactionResponse[]> {
-    if (Array.isArray(transactions)) {
-      if (transactions.length === 0) {
-        throw new Error('No transactions provided');
-      }
-      return await this.executeBatch(transactions);
-    }
-
-    // Single transaction
-    const runner = this.ensureContractRunner();
-    if (!runner.sendTransaction) {
-      throw new Error('Contract runner does not support sendTransaction');
-    }
-    return await runner.sendTransaction(transactions);
   }
 
   // Balance methods
@@ -219,15 +119,12 @@ export class HumanAvatar implements AvatarInterface {
     /**
      * Trust another avatar or multiple avatars
      *
-     * When using a batch-capable runner (Safe), all trust operations are executed atomically
-     * in a single transaction, returning one receipt.
-     *
-     * When using a sequential runner (EOA), operations are executed one by one, returning
-     * the last receipt for backwards compatibility.
+     * When using Safe runner, all trust operations are executed atomically in a single transaction.
+     * When using EOA runner, only single avatars are supported (pass array length 1).
      *
      * @param avatar Single avatar address or array of avatar addresses
      * @param expiry Trust expiry timestamp (in seconds since epoch). Defaults to max uint96 for indefinite trust
-     * @returns Transaction response (single receipt for batch execution or last receipt for sequential)
+     * @returns Transaction response
      *
      * @example
      * ```typescript
@@ -238,7 +135,7 @@ export class HumanAvatar implements AvatarInterface {
      * const oneYear = BigInt(Date.now() / 1000 + 31536000);
      * await avatar.trust.add('0x123...', oneYear);
      *
-     * // Trust multiple avatars (single tx with Safe, multiple txs with EOA)
+     * // Trust multiple avatars (Safe only - throws error with EOA)
      * await avatar.trust.add(['0x123...', '0x456...', '0x789...']);
      * ```
      */
@@ -261,33 +158,29 @@ export class HumanAvatar implements AvatarInterface {
         this.core.hubV2.trust(trustee, trustExpiry)
       );
 
-      // Execute transactions
-      const result = await this.executeTransaction(transactions);
-
-      // If batch execution (Safe), return the single receipt
-      // If sequential execution (EOA), return the last receipt for backwards compatibility
-      return Array.isArray(result) ? result[result.length - 1] : result;
+      // Send transactions to runner
+      return await this.runner.sendTransaction!(transactions);
     },
 
     /**
      * Remove trust from another avatar or multiple avatars
      * This is done by setting the trust expiry to 0
-     * Uses batch execution for multiple avatars (sequential transactions for EOA)
+     *
+     * When using Safe runner, all operations are batched atomically.
+     * When using EOA runner, only single avatars are supported (pass array length 1).
      *
      * @param avatar Single avatar address or array of avatar addresses
-     * @returns Transaction response (last transaction if multiple avatars)
+     * @returns Transaction response
      *
      * @example
      * ```typescript
      * // Remove trust from single avatar
      * await avatar.trust.remove('0x123...');
      *
-     * // Remove trust from multiple avatars
+     * // Remove trust from multiple avatars (Safe only)
      * await avatar.trust.remove(['0x123...', '0x456...', '0x789...']);
      * ```
      */
-    // @todo return list of transaction receipts
-    // @todo safe runner, remove eoa support
     remove: async (avatar: Address | Address[]): Promise<TransactionReceipt> => {
       // Untrust by setting expiry to 0
       const untrustExpiry = BigInt(0);
@@ -304,12 +197,8 @@ export class HumanAvatar implements AvatarInterface {
         this.core.hubV2.trust(trustee, untrustExpiry)
       );
 
-      // Execute transactions
-      const result = await this.executeTransaction(transactions);
-
-      // If batch execution (Safe), return the single receipt
-      // If sequential execution (EOA), return the last receipt for backwards compatibility
-      return Array.isArray(result) ? result[result.length - 1] : result;
+      // Send transactions to runner
+      return await this.runner.sendTransaction!(transactions);
     },
 
     /**
@@ -377,7 +266,7 @@ export class HumanAvatar implements AvatarInterface {
      */
     mint: async (): Promise<ContractTransactionReceipt> => {
       const mintTx = this.core.hubV2.personalMint();
-      return await this.executeTransaction(mintTx);
+      return await this.runner.sendTransaction!([mintTx]);
     },
 
     /**
@@ -397,7 +286,7 @@ export class HumanAvatar implements AvatarInterface {
     stop: async (): Promise<ContractTransactionReceipt> => {
       // Use the stop method from core
       const stopTx = this.core.hubV2.stop();
-      return await this.executeTransaction(stopTx);
+      return await this.runner.sendTransaction!([stopTx]);
     },
   };
 

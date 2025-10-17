@@ -54,9 +54,13 @@ export interface ContractRunner {
   resolveName?(name: string): Promise<string | null>;
 
   /**
-   * Send a transaction
+   * Send one or more transactions
+   * - Safe: batches all transactions atomically and returns single TransactionResponse
+   * - EOA: does not support multiple transactions
    */
-  sendTransaction?(tx: TransactionRequest): Promise<TransactionResponse>;
+  sendTransaction?(
+    txs: TransactionRequest[]
+  ): Promise<TransactionResponse>;
 
   /**
    * Create a batch transaction runner (if supported)

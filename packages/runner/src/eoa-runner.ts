@@ -119,8 +119,17 @@ export class EoaContractRunner implements ContractRunner {
 
   /**
    * Send a transaction
+   * Note: EOA runner only supports single transactions in an array.
+   * Use Safe runner for batched/atomic transaction execution.
    */
-  sendTransaction = async (tx: TransactionRequest): Promise<TransactionResponse> => {
+  sendTransaction = async (txs: TransactionRequest[]): Promise<TransactionResponse> => {
+    if (txs.length !== 1) {
+      throw new Error(
+        'EOA runner only supports single transactions. Use Safe runner for batched execution.'
+      );
+    }
+
+    const tx = txs[0];
     const walletClient = this.ensureWalletClient();
 
     // Send the transaction
