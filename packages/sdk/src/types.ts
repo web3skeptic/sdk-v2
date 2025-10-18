@@ -216,14 +216,14 @@ export interface AvatarInterface {
 
   // Token wrapping methods
   wrap: {
-    asDemurraged(avatarAddress: Address, amount: bigint): Promise<Address>;
-    asInflationary(avatarAddress: Address, amount: bigint): Promise<Address>;
+    asDemurraged(avatarAddress: Address, amount: bigint): Promise<TransactionResponse>;
+    asInflationary(avatarAddress: Address, amount: bigint): Promise<TransactionResponse>;
     unwrapDemurraged(
       tokenAddress: Address,
       amount: bigint
     ): Promise<TransactionResponse>;
     unwrapInflationary(
-      avatarAddress: Address,
+      tokenAddress: Address,
       amount: bigint
     ): Promise<TransactionResponse>;
   };

@@ -13,6 +13,11 @@ import type {
 } from './types';
 import { cidV0ToHex } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
+import {
+  CirclesType,
+  DemurrageCirclesContract,
+  InflationaryCirclesContract
+} from '@circles-sdk/core';
 
 // Type aliases for transaction responses
 export type TransactionReceipt = TransactionResponse;
@@ -537,30 +542,38 @@ export class HumanAvatar implements AvatarInterface {
 
   // Wrap methods
   public readonly wrap = {
-    asDemurraged: async (avatarAddress: Address, amount: bigint): Promise<Address> => {
-      // TODO: Implement demurraged wrapping
-      throw new Error('wrap.asDemurraged() not yet implemented');
+    asDemurraged: async (avatarAddress: Address, amount: bigint): Promise<TransactionReceipt> => {
+      const wrapTx = this.core.hubV2.wrap(avatarAddress, amount, CirclesType.Demurrage);
+      return await this.runner.sendTransaction!([wrapTx]);
     },
 
-    asInflationary: async (avatarAddress: Address, amount: bigint): Promise<Address> => {
-      // TODO: Implement inflationary wrapping
-      throw new Error('wrap.asInflationary() not yet implemented');
+    asInflationary: async (avatarAddress: Address, amount: bigint): Promise<TransactionReceipt> => {
+      const wrapTx = this.core.hubV2.wrap(avatarAddress, amount, CirclesType.Inflation);
+      return await this.runner.sendTransaction!([wrapTx]);
     },
 
     unwrapDemurraged: async (
       tokenAddress: Address,
       amount: bigint
     ): Promise<ContractTransactionReceipt> => {
-      // TODO: Implement demurraged unwrapping
-      throw new Error('wrap.unwrapDemurraged() not yet implemented');
+      const demurrageContract = new DemurrageCirclesContract({
+        address: tokenAddress,
+        rpcUrl: this.core.rpcUrl
+      });
+      const unwrapTx = demurrageContract.unwrap(amount);
+      return await this.runner.sendTransaction!([unwrapTx]);
     },
 
     unwrapInflationary: async (
-      avatarAddress: Address,
+      tokenAddress: Address,
       amount: bigint
     ): Promise<ContractTransactionReceipt> => {
-      // TODO: Implement inflationary unwrapping
-      throw new Error('wrap.unwrapInflationary() not yet implemented');
+      const inflationaryContract = new InflationaryCirclesContract({
+        address: tokenAddress,
+        rpcUrl: this.core.rpcUrl
+      });
+      const unwrapTx = inflationaryContract.unwrap(amount);
+      return await this.runner.sendTransaction!([unwrapTx]);
     },
   };
 

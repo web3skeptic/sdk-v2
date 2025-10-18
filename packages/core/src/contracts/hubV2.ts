@@ -257,4 +257,27 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
       value,
     };
   }
+
+  /**
+   * Create a wrap transaction
+   * Wraps ERC1155 Circles tokens into ERC20 format
+   *
+   * @param avatar - The avatar address whose tokens to wrap
+   * @param amount - The amount to wrap
+   * @param circlesType - The type of wrapper (0 for Demurrage, 1 for Inflationary)
+   * @param value - ETH value to send with transaction (default: 0)
+   * @returns Transaction request that will return the wrapper address when executed
+   */
+  wrap(
+    avatar: Address,
+    amount: bigint,
+    circlesType: number, // @todo implement enum
+    value: bigint = BigInt(0)
+  ): TransactionRequest {
+    return {
+      to: this.address,
+      data: this.encodeWrite('wrap', [avatar, amount, circlesType]),
+      value,
+    };
+  }
 }

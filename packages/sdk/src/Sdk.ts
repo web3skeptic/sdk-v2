@@ -2,7 +2,7 @@ import type { Address, CirclesConfig, Profile, GroupProfile } from '@circles-sdk
 import { circlesConfig, Core } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
-import { HumanAvatar } from './Avatar';
+import { HumanAvatar } from './HumanAvatar';
 import type {
   SdkInterface,
   ContractRunner,

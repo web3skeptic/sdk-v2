@@ -2,11 +2,11 @@
 export { Sdk } from './Sdk';
 
 // Avatar classes
-export { HumanAvatar } from './Avatar';
-export type { TransactionReceipt, ContractTransactionReceipt } from './Avatar';
+export { HumanAvatar } from './HumanAvatar';
+export type { TransactionReceipt, ContractTransactionReceipt } from './HumanAvatar';
 
 // Backwards compatibility - export HumanAvatar as Avatar
-export { HumanAvatar as Avatar } from './Avatar';
+export { HumanAvatar as Avatar } from './HumanAvatar';
 
 // All types (consolidated in types.ts)
 export type {
