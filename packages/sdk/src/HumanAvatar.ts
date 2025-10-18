@@ -1,4 +1,4 @@
-import type { Address, Profile, TransactionResponse } from '@circles-sdk/types';
+import type { Address, Profile, TransactionResponse, FindPathParams } from '@circles-sdk/types';
 import type { Core } from '@circles-sdk/core';
 import type {
   Observable,
@@ -8,11 +8,11 @@ import type {
   TrustRelationRow,
   CirclesEvent,
   CirclesQuery,
-  AvatarInterface,
   ContractRunner,
 } from './types';
 import { cidV0ToHex } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
+import { CirclesRpc } from '@circles-sdk/rpc';
 import {
   CirclesType,
   DemurrageCirclesContract,
@@ -24,14 +24,18 @@ export type TransactionReceipt = TransactionResponse;
 export type ContractTransactionReceipt = TransactionResponse;
 
 /**
+ * Advanced pathfinding options (reuses FindPathParams optional fields)
+ */
+export type PathfindingOptions = Omit<FindPathParams, 'from' | 'to' | 'targetFlow'>;
+
+/**
  * HumanAvatar class implementation
  * Provides a simplified, user-friendly wrapper around Circles protocol for human avatars
  *
  * This class represents a human avatar in the Circles ecosystem and provides
  * methods for managing trust relationships, personal token minting, transfers, and more.
  */
-// @todo get rid of the common interface for groups and humans
-export class HumanAvatar implements AvatarInterface {
+export class HumanAvatar {
   public readonly address: Address;
   public readonly avatarInfo: AvatarRow | undefined;
   public readonly core: Core;
@@ -39,6 +43,7 @@ export class HumanAvatar implements AvatarInterface {
   public readonly events: Observable<CirclesEvent>;
   private readonly runner: ContractRunner;
   private readonly profiles: Profiles;
+  private readonly rpc: CirclesRpc;
   private _cachedProfile?: Profile;
   private _cachedProfileCid?: string;
 
@@ -68,6 +73,9 @@ export class HumanAvatar implements AvatarInterface {
 
     // Initialize profiles client with the profile service URL from config
     this.profiles = new Profiles(core.config.profileServiceUrl);
+
+    // Initialize RPC client for pathfinding
+    this.rpc = new CirclesRpc(core.config.circlesRpcUrl);
 
     // TODO: Implement event streaming
     this.events = {
@@ -116,14 +124,19 @@ export class HumanAvatar implements AvatarInterface {
       throw new Error('transfer.advanced() not yet implemented');
     },
 
-    getMaxAmount: async (to: Address): Promise<number> => {
-      // TODO: Implement max amount calculation
-      throw new Error('transfer.getMaxAmount() not yet implemented');
+    getMaxAmount: async (to: Address): Promise<bigint> => {
+      return await this.rpc.pathfinder.findMaxFlow({
+        from: this.address,
+        to
+      });
     },
 
-    getMaxAmountAdvanced: async (to: Address, options?: any): Promise<number> => {
-      // TODO: Implement advanced max amount calculation
-      throw new Error('transfer.getMaxAmountAdvanced() not yet implemented');
+    getMaxAmountAdvanced: async (to: Address, options?: PathfindingOptions): Promise<bigint> => {
+      return await this.rpc.pathfinder.findMaxFlow({
+        from: this.address,
+        to,
+        ...options
+      });
     },
   };
 
@@ -469,14 +482,6 @@ export class HumanAvatar implements AvatarInterface {
       throw new Error('groupToken.redeem() not yet implemented');
     },
 
-    redeemAuto: async (
-      group: Address,
-      amount: bigint
-    ): Promise<TransactionReceipt> => {
-      // TODO: Implement automatic redemption
-      throw new Error('groupToken.redeemAuto() not yet implemented');
-    },
-
     properties: {
       owner: async (): Promise<Address> => {
         throw new Error('groupToken.properties.owner() not yet implemented');
@@ -580,7 +585,7 @@ export class HumanAvatar implements AvatarInterface {
   // Invite methods
   public readonly invite = {
     human: async (avatar: Address): Promise<TransactionReceipt> => {
-      // TODO: Implement invitation
+      // @todo: Implement invitation with invitation escrow
       throw new Error('invite.human() not yet implemented');
     },
   };

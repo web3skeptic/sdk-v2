@@ -11,7 +11,6 @@ export { HumanAvatar as Avatar } from './HumanAvatar';
 // All types (consolidated in types.ts)
 export type {
   // Avatar types
-  AvatarInterface,
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
@@ -20,7 +19,6 @@ export type {
   CirclesQuery,
   Observable,
   // SDK types
-  SdkInterface,
   ContractRunner,
   CirclesData,
   HubV2,

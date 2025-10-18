@@ -1,10 +1,15 @@
-import type { Address, CirclesConfig, Profile, GroupProfile } from '@circles-sdk/types';
+import type {
+  Address,
+  CirclesConfig,
+  Profile,
+  TransactionResponse,
+  GroupProfile
+} from '@circles-sdk/types';
 import { circlesConfig, Core } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
 import { HumanAvatar } from './HumanAvatar';
 import type {
-  SdkInterface,
   ContractRunner,
   CirclesData,
   HubV2,
@@ -12,8 +17,6 @@ import type {
   GroupType,
 } from './types';
 
-// Type alias for transaction responses
-export type ContractTransactionReceipt = import('@circles-sdk/types').TransactionResponse;
 
 /**
  * Simplified Circles SDK
@@ -39,7 +42,7 @@ export type ContractTransactionReceipt = import('@circles-sdk/types').Transactio
  * await avatar.personalToken.mint();
  * ```
  */
-export class Sdk implements SdkInterface {
+export class Sdk {
   public readonly circlesConfig: CirclesConfig;
   public readonly contractRunner?: ContractRunner;
   public readonly core: Core;
@@ -169,7 +172,7 @@ export class Sdk implements SdkInterface {
      */
     createOrUpdate: async (
       profile: Profile | string
-    ): Promise<ContractTransactionReceipt> => {
+    ): Promise<TransactionResponse> => {
       // TODO: Implement profile creation/update
       throw new Error('profiles.createOrUpdate() not yet implemented');
     },
