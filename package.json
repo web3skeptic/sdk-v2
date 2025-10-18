@@ -1,16 +1,10 @@
 {
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.0.4"
+  },
+  "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/types",
-    "packages/utils",
-    "packages/abis",
-    "packages/core",
-    "packages/rpc",
-    "packages/runner",
-    "packages/pathfinder",
-    "packages/profiles",
-    "packages/sdk"
-  ],
   "scripts": {
     "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/profiles' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/sdk' build && bun run --filter '@circles-sdk/runner' build",
     "build:abis": "bun run --filter '@circles-sdk/abis' build",
@@ -41,9 +35,15 @@
     "example:profiles": "for file in examples/profiles/*.ts; do echo \"\\n=== Running $file ===\\n\" && bun run \"$file\"; done",
     "example:sdk": "for file in examples/sdk/*.ts; do echo \"\\n=== Running $file ===\\n\" && bun run \"$file\"; done"
   },
-  "devDependencies": {
-    "@types/node": "^20.11.19",
-    "typescript": "^5.0.4"
-  },
-  "license": "MIT"
+  "workspaces": [
+    "packages/types",
+    "packages/utils",
+    "packages/abis",
+    "packages/core",
+    "packages/rpc",
+    "packages/runner",
+    "packages/pathfinder",
+    "packages/profiles",
+    "packages/sdk"
+  ]
 }

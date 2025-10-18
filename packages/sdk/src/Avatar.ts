@@ -11,6 +11,8 @@ import type {
   AvatarInterface,
   ContractRunner,
 } from './types';
+import { cidV0ToHex } from '@circles-sdk/utils';
+import { Profiles } from '@circles-sdk/profiles';
 
 // Type aliases for transaction responses
 export type TransactionReceipt = TransactionResponse;
@@ -31,6 +33,9 @@ export class HumanAvatar implements AvatarInterface {
   public readonly contractRunner?: ContractRunner;
   public readonly events: Observable<CirclesEvent>;
   private readonly runner: ContractRunner;
+  private readonly profiles: Profiles;
+  private _cachedProfile?: Profile;
+  private _cachedProfileCid?: string;
 
   constructor(
     address: Address,
@@ -55,6 +60,9 @@ export class HumanAvatar implements AvatarInterface {
     }
 
     this.runner = contractRunner;
+
+    // Initialize profiles client with the profile service URL from config
+    this.profiles = new Profiles(core.config.profileServiceUrl);
 
     // TODO: Implement event streaming
     this.events = {
@@ -292,24 +300,136 @@ export class HumanAvatar implements AvatarInterface {
 
   // Profile methods
   public readonly profile = {
+    /**
+     * Get the profile for this avatar from IPFS
+     * Uses caching to avoid redundant fetches for the same CID
+     *
+     * @returns The profile data, or undefined if no profile is set or fetch fails
+     *
+     * @example
+     * ```typescript
+     * const profile = await avatar.profile.get();
+     * if (profile) {
+     *   console.log('Name:', profile.name);
+     *   console.log('Description:', profile.description);
+     * }
+     * ```
+     */
     get: async (): Promise<Profile | undefined> => {
-      // TODO: Implement profile fetching
-      throw new Error('profile.get() not yet implemented');
+      const profileCid = this.avatarInfo?.cidV0;
+
+      // Return cached profile if CID hasn't changed
+      if (this._cachedProfile && this._cachedProfileCid === profileCid) {
+        return this._cachedProfile;
+      }
+
+      if (!profileCid) {
+        return undefined;
+      }
+
+      try {
+        const profileData = await this.profiles.get(profileCid);
+        if (profileData) {
+          this._cachedProfile = profileData;
+          this._cachedProfileCid = profileCid;
+          return this._cachedProfile;
+        }
+      } catch (e) {
+        console.warn(`Couldn't load profile for CID ${profileCid}`, e);
+      }
+
+      return undefined;
     },
 
+    /**
+     * Update the profile for this avatar
+     * This will:
+     * 1. Pin the new profile data to IPFS via the profile service
+     * 2. Update the metadata digest in the name registry contract
+     *
+     * @param profile The profile data to update
+     * @returns The CID of the newly pinned profile
+     *
+     * @example
+     * ```typescript
+     * const profile = {
+     *   name: 'Alice',
+     *   description: 'Hello, Circles!',
+     *   avatarUrl: 'https://example.com/avatar.png'
+     * };
+     *
+     * const cid = await avatar.profile.update(profile);
+     * console.log('Profile updated with CID:', cid);
+     * ```
+     */
     update: async (profile: Profile): Promise<string> => {
-      // TODO: Implement profile update
-      throw new Error('profile.update() not yet implemented');
+      // Step 1: Pin the profile to IPFS and get CID
+      const cid = await this.profiles.create(profile);
+      if (!cid) {
+        throw new Error('Failed to update profile. The profile service did not return a CID.');
+      }
+
+      // Step 2: Update the metadata digest in the name registry
+      const updateReceipt = await this.profile.updateMetadata(cid);
+      if (!updateReceipt) {
+        throw new Error('Failed to update profile. The CID was not updated in the name registry.');
+      }
+
+      // Update local avatar info if available
+      if (this.avatarInfo) {
+        this.avatarInfo.cidV0 = cid;
+      }
+
+      // Clear cache to force re-fetch
+      this._cachedProfile = undefined;
+      this._cachedProfileCid = undefined;
+
+      return cid;
     },
 
+    /**
+     * Update the metadata digest (CID) in the name registry
+     * This updates the on-chain pointer to the profile data stored on IPFS
+     *
+     * @param cid The IPFS CIDv0 to set as the metadata digest (e.g., "QmXxxx...")
+     * @returns Transaction receipt
+     *
+     * @example
+     * ```typescript
+     * const receipt = await avatar.profile.updateMetadata('QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG');
+     * console.log('Metadata updated, tx hash:', receipt.hash);
+     * ```
+     */
     updateMetadata: async (cid: string): Promise<ContractTransactionReceipt> => {
-      // TODO: Implement metadata update
-      throw new Error('profile.updateMetadata() not yet implemented');
+      // Convert CIDv0 (base58-encoded multihash) to bytes32 hex format
+      // This extracts the 32-byte SHA-256 digest from the CID
+      const cidHex = cidV0ToHex(cid);
+
+      const updateTx = this.core.nameRegistry.updateMetadataDigest(cidHex);
+      return await this.runner.sendTransaction!([updateTx]);
     },
 
+    /**
+     * Register a short name for this avatar using a specific nonce
+     * Short names are numeric identifiers that can be used instead of addresses
+     *
+     * @param nonce The nonce to use for generating the short name
+     * @returns Transaction receipt
+     *
+     * @example
+     * ```typescript
+     * // Find available nonce first
+     * const [shortName, nonce] = await core.nameRegistry.searchShortName(avatar.address);
+     * console.log('Available short name:', shortName.toString());
+     *
+     * // Register it
+     * const receipt = await avatar.profile.registerShortName(Number(nonce));
+     * console.log('Short name registered, tx hash:', receipt.hash);
+     * ```
+     */
     registerShortName: async (nonce: number): Promise<ContractTransactionReceipt> => {
-      // TODO: Implement short name registration
-      throw new Error('profile.registerShortName() not yet implemented');
+      const registerTx = this.core.nameRegistry.registerShortNameWithNonce(BigInt(nonce));
+      return await this.runner.sendTransaction!([registerTx]);
     },
   };
 

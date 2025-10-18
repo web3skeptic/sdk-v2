@@ -22,6 +22,7 @@ export interface AvatarRow {
   address: Address;
   version: number;
   type: string;
+  cidV0?: string; // Profile CID stored in the name registry
   // Additional fields as needed
 }
 

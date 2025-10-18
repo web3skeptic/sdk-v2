@@ -25,5 +25,8 @@
     "converter",
     "utils"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "multiformats": "^13.4.1"
+  }
 }
