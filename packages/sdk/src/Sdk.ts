@@ -165,16 +165,12 @@ export class Sdk {
    * Profile management methods
    */
   public readonly profiles = {
-    //@todo double check
     /**
      * Create and pin a profile to IPFS
      * @param profile Profile data or CID string
      * @returns CID of the pinned profile
      */
     create: async (profile: Profile): Promise<string> => {
-      if (typeof profile === 'string') {
-        return profile;
-      }
       return await this.profilesClient.create(profile);
     },
 
