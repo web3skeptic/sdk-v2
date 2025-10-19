@@ -5,7 +5,7 @@ import type {
   TransactionResponse,
   GroupProfile
 } from '@circles-sdk/types';
-import { circlesConfig, Core } from '@circles-sdk/core';
+import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
 import { HumanAvatar } from './HumanAvatar';
@@ -165,16 +165,17 @@ export class Sdk {
    * Profile management methods
    */
   public readonly profiles = {
+    //@todo double check
     /**
-     * Create or update a profile
+     * Create and pin a profile to IPFS
      * @param profile Profile data or CID string
-     * @returns Transaction receipt
+     * @returns CID of the pinned profile
      */
-    createOrUpdate: async (
-      profile: Profile | string
-    ): Promise<TransactionResponse> => {
-      // TODO: Implement profile creation/update
-      throw new Error('profiles.createOrUpdate() not yet implemented');
+    create: async (profile: Profile): Promise<string> => {
+      if (typeof profile === 'string') {
+        return profile;
+      }
+      return await this.profilesClient.create(profile);
     },
 
     /**
@@ -183,7 +184,7 @@ export class Sdk {
      * @returns Profile data or undefined if not found
      */
     get: async (cid: string): Promise<Profile | undefined> => {
-      return this.profilesClient.get(cid);
+      return await this.profilesClient.get(cid);
     },
   };
 
@@ -193,20 +194,20 @@ export class Sdk {
   public readonly tokens = {
     /**
      * Get an inflationary wrapper for a token
-     * @param address Token address
+     * @param address Avatar address
+     * @returns The ERC20 inflationary wrapper address, or zero address if not deployed
      */
-    getInflationaryWrapper: async (address: Address): Promise<any> => {
-      // TODO: Implement inflationary wrapper
-      throw new Error('tokens.getInflationaryWrapper() not yet implemented');
+    getInflationaryWrapper: async (address: Address): Promise<Address> => {
+      return await this.core.liftERC20.erc20Circles(CirclesType.Inflation, address);
     },
 
     /**
      * Get a demurraged wrapper for a token
-     * @param address Token address
+     * @param address Avatar address
+     * @returns The ERC20 demurraged wrapper address, or zero address if not deployed
      */
-    getDemurragedWrapper: async (address: Address): Promise<any> => {
-      // TODO: Implement demurraged wrapper
-      throw new Error('tokens.getDemurragedWrapper() not yet implemented');
+    getDemurragedWrapper: async (address: Address): Promise<Address> => {
+      return await this.core.liftERC20.erc20Circles(CirclesType.Demurrage, address);
     },
   };
 
