@@ -64,6 +64,13 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
   }
 
   /**
+   * Check if an operator is approved to manage all tokens for an owner
+   */
+  async isApprovedForAll(owner: Address, operator: Address): Promise<boolean> {
+    return this.read('isApprovedForAll', [owner, operator]) as Promise<boolean>;
+  }
+
+  /**
    * Convert token ID to avatar address
    */
   async toTokenId(avatar: Address): Promise<bigint> {
@@ -277,6 +284,30 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
     return {
       to: this.address,
       data: this.encodeWrite('wrap', [avatar, amount, circlesType]),
+      value,
+    };
+  }
+
+  /**
+   * Create an operateFlowMatrix transaction
+   * Executes a batch of token transfers based on the flow matrix
+   *
+   * @param flowVertices - Array of addresses involved in the transfer
+   * @param flowEdges - Array of flow edges with stream sink IDs and amounts
+   * @param streams - Array of streams defining the transfer paths
+   * @param packedCoordinates - Packed coordinate data
+   * @param value - native token value to send with transaction (default: 0)
+   */
+  operateFlowMatrix(
+    flowVertices: readonly Address[],
+    flowEdges: readonly { streamSinkId: number; amount: bigint }[],
+    streams: readonly { sourceCoordinate: number; flowEdgeIds: readonly number[]; data: Uint8Array | Hex }[],
+    packedCoordinates: Hex,
+    value: bigint = BigInt(0)
+  ): TransactionRequest {
+    return {
+      to: this.address,
+      data: this.encodeWrite('operateFlowMatrix', [flowVertices, flowEdges, streams, packedCoordinates]),
       value,
     };
   }

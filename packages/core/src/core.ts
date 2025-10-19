@@ -1,4 +1,4 @@
-import { HubV2Contract, BaseGroupFactoryContract, NameRegistryContract, LiftERC20Contract } from './contracts';
+import { HubV2Contract, BaseGroupFactoryContract, NameRegistryContract, LiftERC20Contract, InvitationEscrowContract } from './contracts';
 import type { CirclesConfig } from '@circles-sdk/types';
 import { circlesConfig } from './config';
 
@@ -44,6 +44,7 @@ export class Core {
   public readonly baseGroupFactory: BaseGroupFactoryContract;
   public readonly nameRegistry: NameRegistryContract;
   public readonly liftERC20: LiftERC20Contract;
+  public readonly invitationEscrow: InvitationEscrowContract;
 
   /**
    * Create a new Core SDK instance
@@ -73,6 +74,11 @@ export class Core {
 
     this.liftERC20 = new LiftERC20Contract({
       address: config.liftERC20Address,
+      rpcUrl: this.rpcUrl,
+    });
+
+    this.invitationEscrow = new InvitationEscrowContract({
+      address: config.invitationEscrowAddress,
       rpcUrl: this.rpcUrl,
     });
   }

@@ -8,3 +8,4 @@ export { nameRegistryAbi } from './nameRegistry';
 export { inflationaryCirclesAbi } from './inflationaryCircles';
 export { demurrageCirclesAbi } from './demurrageCircles';
 export { liftERC20Abi } from './liftERC20';
+export { invitationEscrowAbi } from './invitationEscrow';

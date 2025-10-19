@@ -18,6 +18,7 @@ export const circlesConfig: { [chainId: number]: CirclesConfig } = {
     standardTreasury: "0x08F90aB73A515308f03A718257ff9887ED330C6e",
     coreMembersGroupDeployer: "0xFEca40Eb02FB1f4F5F795fC7a03c1A27819B1Ded",
     baseGroupFactoryAddress: "0xD0B5Bd9962197BEaC4cbA24244ec3587f19Bd06d",
-    liftERC20Address: "0x5F99a795dD2743C36D63511f0D4bc667e6d3cDB5"
+    liftERC20Address: "0x5F99a795dD2743C36D63511f0D4bc667e6d3cDB5",
+    invitationEscrowAddress: "0x8F8B74fa13eaaff4176D061a0F98ad5c8E19c903"
   }
 };
