@@ -1,7 +1,7 @@
 {
-  "name": "@circles-sdk/sdk",
+  "name": "@circles-sdk/transfers",
   "version": "0.1.0",
-  "description": "Simplified Circles SDK for non-crypto users with low entrance barrier",
+  "description": "Transfer data construction for Circles SDK",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,28 +14,25 @@
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
     "dev": "tsc --build --watch",
-    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "test": "bun test"
   },
   "files": [
     "dist"
   ],
   "keywords": [
     "circles",
-    "sdk",
-    "simplified",
-    "web3",
-    "ubi"
+    "transfers",
+    "pathfinding",
+    "web3"
   ],
   "license": "MIT",
   "dependencies": {
     "@circles-sdk/types": "workspace:*",
     "@circles-sdk/core": "workspace:*",
     "@circles-sdk/rpc": "workspace:*",
-    "@circles-sdk/profiles": "workspace:*",
     "@circles-sdk/utils": "workspace:*",
-    "@circles-sdk/runner": "workspace:*",
     "@circles-sdk/pathfinder": "workspace:*",
-    "@circles-sdk/transfers": "workspace:*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

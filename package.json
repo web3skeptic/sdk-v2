@@ -6,12 +6,13 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/profiles' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/sdk' build && bun run --filter '@circles-sdk/runner' build",
+    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/profiles' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/transfers' build && bun run --filter '@circles-sdk/sdk' build && bun run --filter '@circles-sdk/runner' build",
     "build:abis": "bun run --filter '@circles-sdk/abis' build",
     "build:core": "bun run --filter '@circles-sdk/core' build",
     "build:rpc": "bun run --filter '@circles-sdk/rpc' build",
     "build:utils": "bun run --filter '@circles-sdk/utils' build",
     "build:profiles": "bun run --filter '@circles-sdk/profiles' build",
+    "build:transfers": "bun run --filter '@circles-sdk/transfers' build",
     "build:sdk": "bun run --filter '@circles-sdk/sdk' build",
     "build:pathfinder": "bun run --filter '@circles-sdk/pathfinder' build",
     "build:analyze": "bun run build:analyze:abis && bun run build:analyze:utils && bun run build:analyze:profiles && bun run build:analyze:sdk && bun run build:analyze:core && bun run build:analyze:pathfinder && bun run build:analyze:rpc",
@@ -44,6 +45,7 @@
     "packages/runner",
     "packages/pathfinder",
     "packages/profiles",
+    "packages/transfers",
     "packages/sdk"
   ]
 }

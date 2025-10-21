@@ -55,6 +55,7 @@ export type {
   FlowEdgeStruct,
   StreamStruct,
   FlowMatrix,
+  AdvancedTransferOptions,
 } from './pathfinding';
 
 // Network types

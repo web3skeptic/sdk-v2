@@ -88,11 +88,29 @@
       "version": "0.1.0",
       "dependencies": {
         "@circles-sdk/core": "workspace:*",
+        "@circles-sdk/pathfinder": "workspace:*",
         "@circles-sdk/profiles": "workspace:*",
         "@circles-sdk/rpc": "workspace:*",
         "@circles-sdk/runner": "workspace:*",
+        "@circles-sdk/transfers": "workspace:*",
         "@circles-sdk/types": "workspace:*",
         "@circles-sdk/utils": "workspace:*",
+        "viem": "^2.38.0",
+      },
+      "devDependencies": {
+        "typescript": "^5.0.4",
+      },
+    },
+    "packages/transfers": {
+      "name": "@circles-sdk/transfers",
+      "version": "0.1.0",
+      "dependencies": {
+        "@circles-sdk/core": "workspace:*",
+        "@circles-sdk/pathfinder": "workspace:*",
+        "@circles-sdk/rpc": "workspace:*",
+        "@circles-sdk/types": "workspace:*",
+        "@circles-sdk/utils": "workspace:*",
+        "viem": "^2.38.0",
       },
       "devDependencies": {
         "typescript": "^5.0.4",
@@ -132,6 +150,8 @@
     "@circles-sdk/runner": ["@circles-sdk/runner@workspace:packages/runner"],
 
     "@circles-sdk/sdk": ["@circles-sdk/sdk@workspace:packages/sdk"],
+
+    "@circles-sdk/transfers": ["@circles-sdk/transfers@workspace:packages/transfers"],
 
     "@circles-sdk/types": ["@circles-sdk/types@workspace:packages/types"],
 

@@ -17,8 +17,15 @@ export async function getTokenInfoMapFromPath(
   const batch = await rpc.token.getTokenInfoBatch(
     Array.from(uniqueAddresses) as Address[]
   );
-  batch.forEach((info) => {
-    tokenInfoMap.set(info.token.toLowerCase(), info);
+
+  batch.forEach((info: any) => {
+    // @todo temporary fix
+    // @dev required to handle wrong returned tokenType from `circles_getTokenInfoBatch`
+    if(info.isWrapped && !info.isInflationary){
+      info.tokenType = "CrcV2_ERC20WrapperDeployed_Demurraged";
+    }
+
+    tokenInfoMap.set(info.tokenAddress.toLowerCase(), info);
   });
   return tokenInfoMap;
 }
@@ -31,11 +38,11 @@ export function getWrappedTokenTotalsFromPath(
 
   transferPath.transfers.forEach((t) => {
     const info = tokenInfoMap.get(t.tokenOwner.toLowerCase());
-    const isWrapper = info && info.type.startsWith('CrcV2_ERC20WrapperDeployed');
+    const isWrapper = info && info.tokenType.startsWith('CrcV2_ERC20WrapperDeployed');
 
     if (isWrapper) {
       if (!wrappedEdgeTotals[t.tokenOwner]) {
-        wrappedEdgeTotals[t.tokenOwner] = [BigInt(0), info!.type];
+        wrappedEdgeTotals[t.tokenOwner] = [BigInt(0), info!.tokenType];
       }
       wrappedEdgeTotals[t.tokenOwner][0] += BigInt(t.value);
     }

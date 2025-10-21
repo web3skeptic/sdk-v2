@@ -1,4 +1,10 @@
-import type { Address, Profile, TransactionResponse, FindPathParams } from '@circles-sdk/types';
+import type {
+  Address,
+  AdvancedTransferOptions,
+  Profile,
+  TransactionResponse,
+  FindPathParams,
+} from '@circles-sdk/types';
 import type { Core } from '@circles-sdk/core';
 import type {
   Observable,
@@ -10,14 +16,16 @@ import type {
   CirclesQuery,
   ContractRunner,
 } from './types';
-import { cidV0ToHex } from '@circles-sdk/utils';
+import { cidV0ToHex, bytesToHex } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
-import { CirclesRpc } from '@circles-sdk/rpc';
 import {
   CirclesType,
   DemurrageCirclesContract,
   InflationaryCirclesContract
 } from '@circles-sdk/core';
+import { encodeAbiParameters, parseAbiParameters, encodeFunctionData } from 'viem';
+import { TransferBuilder } from '@circles-sdk/transfers';
+import { CirclesRpc } from '@circles-sdk/rpc';
 
 // Type aliases for transaction responses
 export type TransactionReceipt = TransactionResponse;
@@ -43,6 +51,7 @@ export class HumanAvatar {
   public readonly events: Observable<CirclesEvent>;
   private readonly runner: ContractRunner;
   private readonly profiles: Profiles;
+  private readonly transferBuilder: TransferBuilder;
   private readonly rpc: CirclesRpc;
   private _cachedProfile?: Profile;
   private _cachedProfileCid?: string;
@@ -74,8 +83,11 @@ export class HumanAvatar {
     // Initialize profiles client with the profile service URL from config
     this.profiles = new Profiles(core.config.profileServiceUrl);
 
-    // Initialize RPC client for pathfinding
+    // Initialize RPC client
     this.rpc = new CirclesRpc(core.config.circlesRpcUrl);
+
+    // Initialize transfer builder
+    this.transferBuilder = new TransferBuilder(core);
 
     // TODO: Implement event streaming
     this.events = {
@@ -110,33 +122,122 @@ export class HumanAvatar {
 
   // Transfer methods
   public readonly transfer = {
-    send: async (to: Address, amount: number | bigint): Promise<TransactionReceipt> => {
-      // TODO: Implement simple transfer
-      throw new Error('transfer.send() not yet implemented');
+    /**
+     * Send Circles tokens directly to another address
+     * This is a simple direct transfer without pathfinding
+     *
+     * Supports both ERC1155 (personal/group tokens) and ERC20 (wrapped tokens) transfers.
+     * The token type is automatically detected and the appropriate transfer method is used.
+     *
+     * For transfers using pathfinding (which can use trust network and multiple token types),
+     * use transfer.advanced() instead.
+     *
+     * @param to Recipient address
+     * @param amount Amount to transfer (in atto-circles)
+     * @param tokenAddress Token address to transfer (defaults to sender's personal token)
+     * @param txData Optional transaction data (only used for ERC1155 transfers)
+     * @returns Transaction receipt
+     *
+     * @example
+     * ```typescript
+     * // Send 100 of your personal CRC directly
+     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18));
+     *
+     * // Send wrapped tokens
+     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
+     * ```
+     */
+    send: async (
+      to: Address,
+      amount: bigint,
+      tokenAddress?: Address,
+      txData?: Uint8Array
+    ): Promise<TransactionReceipt> => {
+      // Default to sender's personal token if not specified
+      const token = tokenAddress || this.address;
+
+      // Get token info to determine transfer type
+      const tokenInfo = await this.rpc.token.getTokenInfo(token);
+
+      if (!tokenInfo) {
+        throw new Error(`Token not found: ${token}`);
+      }
+
+      // Define token type sets
+      const erc1155Types = new Set(['CrcV2_RegisterHuman', 'CrcV2_RegisterGroup']);
+      const erc20Types = new Set([
+        'CrcV2_ERC20WrapperDeployed_Demurraged',
+        'CrcV2_ERC20WrapperDeployed_Inflationary'
+      ]);
+
+      // Route to appropriate transfer method based on token type
+      if (erc1155Types.has(tokenInfo.tokenType)) {
+        return await this._transferErc1155(token, to, amount, txData);
+      } else if (erc20Types.has(tokenInfo.tokenType)) {
+        return await this._transferErc20(to, amount, token);
+      }
+
+      throw new Error(`Token type ${tokenInfo.tokenType} not supported for direct transfer`);
     },
 
     advanced: async (
       to: Address,
       amount: number | bigint,
-      options?: any
+      options?: AdvancedTransferOptions
     ): Promise<TransactionReceipt> => {
-      // TODO: Implement advanced transfer
-      throw new Error('transfer.advanced() not yet implemented');
+      // Construct transfer using TransferBuilder
+      const transactions = await this.transferBuilder.constructAdvancedTransfer(
+        this.address,
+        to,
+        amount,
+        options
+      );
+
+      // Execute the constructed transactions
+      return await this.runner.sendTransaction!(transactions);
     },
 
     getMaxAmount: async (to: Address): Promise<bigint> => {
-      return await this.rpc.pathfinder.findMaxFlow({
-        from: this.address,
-        to
-      });
+      return await this.transferBuilder.getMaxAmount(this.address, to);
     },
 
     getMaxAmountAdvanced: async (to: Address, options?: PathfindingOptions): Promise<bigint> => {
-      return await this.rpc.pathfinder.findMaxFlow({
-        from: this.address,
-        to,
-        ...options
-      });
+      return await this.transferBuilder.getMaxAmountAdvanced(this.address, to, options);
+    },
+
+    /**
+     * Replenish unwrapped personal CRC tokens by converting wrapped/other tokens
+     *
+     * This method uses pathfinding to find the best way to convert your available tokens
+     * (including wrapped tokens) into unwrapped ERC1155 personal CRC tokens.
+     *
+     * Useful when you have wrapped tokens or other people's tokens and want to
+     * convert them to your own personal unwrapped tokens for transfers.
+     *
+     * @param options Optional pathfinding options
+     * @returns Transaction receipt
+     *
+     * @example
+     * ```typescript
+     * // Convert all available wrapped/other tokens to unwrapped personal CRC
+     * const receipt = await avatar.transfer.replenish();
+     * console.log('Replenished personal tokens, tx hash:', receipt.hash);
+     * ```
+     */
+    replenish: async (options?: PathfindingOptions): Promise<TransactionReceipt> => {
+      // Construct replenish transactions using TransferBuilder
+      const transactions = await this.transferBuilder.constructReplenish(
+        this.address,
+        options
+      );
+
+      // If no transactions needed, return early
+      if (transactions.length === 0) {
+        throw new Error('No tokens available to replenish. You may not have any wrapped tokens or convertible tokens.');
+      }
+
+      // Execute the constructed transactions
+      return await this.runner.sendTransaction!(transactions);
     },
   };
 
@@ -264,6 +365,179 @@ export class HumanAvatar {
     getAll: async (): Promise<TrustRelationRow[]> => {
       // TODO: Implement trust relations fetching
       throw new Error('trust.getAll() not yet implemented');
+    },
+  };
+
+  // Invitation methods
+  public readonly invite = {
+    /**
+     * Invite someone to Circles by escrowing 100 CRC tokens
+     *
+     * This batches two transactions atomically:
+     * 1. Establishes trust with the invitee (with indefinite expiry)
+     * 2. Transfers 100 of your personal CRC tokens to the InvitationEscrow contract
+     *
+     * The tokens are held in escrow until the invitee redeems the invitation by registering.
+     *
+     * Requirements:
+     * - You must have at least 100 CRC available
+     * - Invitee must not be already registered in Circles
+     * - You can only have one active invitation per invitee
+     *
+     * @param invitee The address to invite
+     * @returns Transaction response
+     *
+     * @example
+     * ```typescript
+     * // Invite someone with 100 CRC (automatically establishes trust)
+     * await avatar.invite.send('0x123...');
+     * ```
+     */
+    send: async (invitee: Address): Promise<TransactionReceipt> => {
+      //@todo add replenish/unwrap logic
+      // Create trust transaction (indefinite trust)
+      const trustTx = this.core.hubV2.trust(invitee, BigInt('0xFFFFFFFFFFFFFFFFFFFFFFFF'));
+
+      // Get the token ID for this avatar's personal token
+      const tokenId = await this.core.hubV2.toTokenId(this.address);
+
+      // ABI-encode the invitee address as 32 bytes
+      const encodedInvitee = encodeAbiParameters(
+        parseAbiParameters('address'),
+        [invitee]
+      );
+
+      // Create the safeTransferFrom transaction to the InvitationEscrow contract
+      const transferTx = this.core.hubV2.safeTransferFrom(
+        this.address,
+        this.core.config.invitationEscrowAddress,
+        tokenId,
+        BigInt(100e18),
+        encodedInvitee
+      );
+
+      // Batch both transactions: trust + invitation transfer
+      return await this.runner.sendTransaction!([trustTx, transferTx]);
+    },
+
+    /**
+     * Revoke a previously sent invitation
+     *
+     * This returns the escrowed tokens (with demurrage applied) back to you
+     * as wrapped ERC20 tokens.
+     *
+     * @param invitee The address whose invitation to revoke
+     * @returns Transaction response
+     *
+     * @example
+     * ```typescript
+     * await avatar.invite.revoke('0x123...');
+     * ```
+     */
+    revoke: async (invitee: Address): Promise<TransactionReceipt> => {
+      const revokeTx = this.core.invitationEscrow.revokeInvitation(invitee);
+      return await this.runner.sendTransaction!([revokeTx]);
+    },
+
+    /**
+     * Revoke all active invitations at once
+     *
+     * This returns all escrowed tokens (with demurrage applied) back to you
+     * as wrapped ERC20 tokens in a single transaction.
+     *
+     * @returns Transaction response
+     *
+     * @example
+     * ```typescript
+     * await avatar.invite.revokeAll();
+     * ```
+     */
+    revokeAll: async (): Promise<TransactionReceipt> => {
+      const revokeAllTx = this.core.invitationEscrow.revokeAllInvitations();
+      return await this.runner.sendTransaction!([revokeAllTx]);
+    },
+
+    /**
+     * Redeem an invitation received from an inviter
+     *
+     * This claims the escrowed tokens from a specific inviter and refunds
+     * all other inviters' escrows back to them.
+     *
+     * @param inviter The address of the inviter whose invitation to redeem
+     * @returns Transaction response
+     *
+     * @example
+     * ```typescript
+     * // Get all inviters first
+     * const inviters = await avatar.invite.getInviters();
+     *
+     * // Redeem invitation from the first inviter
+     * await avatar.invite.redeem(inviters[0]);
+     * ```
+     */
+    redeem: async (inviter: Address): Promise<TransactionReceipt> => {
+      const redeemTx = this.core.invitationEscrow.redeemInvitation(inviter);
+      return await this.runner.sendTransaction!([redeemTx]);
+    },
+
+    /**
+     * Get all addresses that have sent invitations to you
+     *
+     * @returns Array of inviter addresses
+     *
+     * @example
+     * ```typescript
+     * const inviters = await avatar.invite.getInviters();
+     * console.log(`You have ${inviters.length} pending invitations`);
+     * ```
+     */
+    getInviters: async (): Promise<Address[]> => {
+      return await this.core.invitationEscrow.getInviters(this.address);
+    },
+
+    /**
+     * Get all addresses you have invited
+     *
+     * @returns Array of invitee addresses
+     *
+     * @example
+     * ```typescript
+     * const invitees = await avatar.invite.getInvitees();
+     * console.log(`You have invited ${invitees.length} people`);
+     * ```
+     */
+    getInvitees: async (): Promise<Address[]> => {
+      return await this.core.invitationEscrow.getInvitees(this.address);
+    },
+
+    /**
+     * Get the escrowed amount and days since escrow for a specific invitation
+     *
+     * The amount returned has demurrage applied, so it decreases over time.
+     *
+     * @param inviter The inviter address (when checking invitations you received)
+     * @param invitee The invitee address (when checking invitations you sent)
+     * @returns Object with escrowedAmount (in atto-circles) and days since escrow
+     *
+     * @example
+     * ```typescript
+     * // Check an invitation you sent
+     * const { escrowedAmount, days_ } = await avatar.invite.getEscrowedAmount(
+     *   avatar.address,
+     *   '0xinvitee...'
+     * );
+     * console.log(`Escrowed: ${CirclesConverter.attoCirclesToCircles(escrowedAmount)} CRC`);
+     * console.log(`Days since escrow: ${days_}`);
+     *
+     * // Check an invitation you received
+     * const { escrowedAmount, days_ } = await avatar.invite.getEscrowedAmount(
+     *   '0xinviter...',
+     *   avatar.address
+     * );
+     * ```
+     */
+    getEscrowedAmount: async (inviter: Address, invitee: Address) => {
+      return await this.core.invitationEscrow.getEscrowedAmountAndDays(inviter, invitee);
     },
   };
 
@@ -582,11 +856,69 @@ export class HumanAvatar {
     },
   };
 
-  // Invite methods
-  public readonly invite = {
-    human: async (avatar: Address): Promise<TransactionReceipt> => {
-      // @todo: Implement invitation with invitation escrow
-      throw new Error('invite.human() not yet implemented');
-    },
-  };
+  // ============================================================================
+  // Private Helper Methods
+  // ============================================================================
+
+  /**
+   * Transfer ERC1155 tokens using safeTransferFrom
+   * @private
+   */
+  private async _transferErc1155(
+    tokenAddress: Address,
+    to: Address,
+    amount: bigint,
+    txData?: Uint8Array
+  ): Promise<TransactionReceipt> {
+    // Get the token ID for the token address
+    const tokenId = await this.core.hubV2.toTokenId(tokenAddress);
+
+    // Convert txData to hex string if provided, otherwise use empty hex
+    const data = txData ? bytesToHex(txData) as `0x${string}` : '0x';
+
+    // Create the safeTransferFrom transaction
+    const transferTx = this.core.hubV2.safeTransferFrom(
+      this.address,
+      to,
+      tokenId,
+      amount,
+      data
+    );
+
+    // Execute the transaction
+    return await this.runner.sendTransaction!([transferTx]);
+  }
+
+  /**
+   * Transfer ERC20 tokens using the standard transfer function
+   * @private
+   */
+  private async _transferErc20(
+    to: Address,
+    amount: bigint,
+    tokenAddress: Address
+  ): Promise<TransactionReceipt> {
+    // Encode the ERC20 transfer function call
+    const data = encodeFunctionData({
+      abi: [{
+        type: 'function',
+        name: 'transfer',
+        inputs: [
+          { name: 'to', type: 'address' },
+          { name: 'value', type: 'uint256' }
+        ],
+        outputs: [{ name: '', type: 'bool' }],
+        stateMutability: 'nonpayable',
+      }],
+      functionName: 'transfer',
+      args: [to, amount],
+    });
+
+    // Create and send the transaction
+    return await this.runner.sendTransaction!([{
+      to: tokenAddress,
+      data,
+      value: 0n,
+    }]);
+  }
 }

@@ -77,3 +77,14 @@ export interface FlowMatrix {
   packedCoordinates: string; // hex bytes
   sourceCoordinate: number; // convenience, not part of ABI
 }
+
+/**
+ * Advanced transfer options
+ * Extends FindPathParams to add transfer-specific options
+ */
+export interface AdvancedTransferOptions extends Omit<FindPathParams, 'from' | 'to' | 'targetFlow'> {
+  /**
+   * Custom data to attach to the transfer (optional)
+   */
+  txData?: Uint8Array;
+}

@@ -23,7 +23,7 @@ export function createFlowMatrix(
     const isTerminal = t.to.toLowerCase() === receiver;
     return {
       streamSinkId: isTerminal ? 1 : 0,
-      amount: t.value // keep as string – will be converted by ABI encoder
+      amount: t.value
     };
   });
 

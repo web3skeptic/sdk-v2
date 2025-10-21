@@ -210,9 +210,7 @@ export class SafeContractRunner implements ContractRunner {
 
     // Execute the batched transaction with explicit gas limit to avoid estimation errors
     // This prevents "wrong transaction nonce" errors during gas estimation
-    const txResult = await safe.executeTransaction(safeTransaction, {
-      gasLimit: 10000000, // 10M gas - sufficient for most Safe transactions
-    });
+    const txResult = await safe.executeTransaction(safeTransaction);
 
     if (!txResult.hash) {
       throw new Error('Transaction execution failed: no transaction hash');

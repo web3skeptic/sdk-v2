@@ -36,7 +36,8 @@ export interface TokenInfo {
   logIndex: number;
   transactionHash: string;
   version: number;
-  type: string;
+  type?: string;
+  tokenType: string;
   token: Address;
   tokenOwner: Address;
 }

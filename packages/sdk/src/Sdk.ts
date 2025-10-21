@@ -8,6 +8,7 @@ import type {
 import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
+import { cidV0ToHex } from '@circles-sdk/utils';
 import { HumanAvatar } from './HumanAvatar';
 import type {
   ContractRunner,
@@ -45,6 +46,7 @@ import type {
 export class Sdk {
   public readonly circlesConfig: CirclesConfig;
   public readonly contractRunner?: ContractRunner;
+  public readonly senderAddress?: Address;
   public readonly core: Core;
   private readonly rpc: CirclesRpc;
   private readonly profilesClient: Profiles;
@@ -96,6 +98,7 @@ export class Sdk {
    *
    * @param config Circles configuration (defaults to Gnosis Chain mainnet)
    * @param contractRunner Optional contract runner for executing transactions
+   * @throws Error if contractRunner is provided but doesn't support sendTransaction or has no address
    */
   constructor(config: CirclesConfig = circlesConfig[100], contractRunner?: ContractRunner) {
     this.circlesConfig = config;
@@ -103,6 +106,20 @@ export class Sdk {
     this.core = new Core(config);
     this.rpc = new CirclesRpc(config.circlesRpcUrl);
     this.profilesClient = new Profiles(config.profileServiceUrl);
+
+    // Validate and extract sender address from contract runner
+    if (contractRunner) {
+      if (!contractRunner.sendTransaction) {
+        throw new Error('Contract runner must support sendTransaction method');
+      }
+
+      const address = (contractRunner as any).address;
+      if (!address) {
+        throw new Error('Cannot determine sender address from contract runner');
+      }
+
+      this.senderAddress = address as Address;
+    }
   }
 
   /**
@@ -126,17 +143,102 @@ export class Sdk {
    */
   public readonly register = {
     /**
-     * Register as a human (requires invitation)
-     * @param inviter Address of the inviting avatar
-     * @param profile Profile data (can be a Profile object or CID string)
+     * Register as a human in the Circles ecosystem
+     *
+     * This function:
+     * 1. Checks for pending invitations from inviters in the InvitationEscrow
+     * 2. If invitations exist, redeems one to claim escrowed tokens
+     * 3. Otherwise, checks if the specified inviter has enough unwrapped CRC
+     * 4. Creates and uploads profile data to IPFS
+     * 5. Registers the human with the profile CID
+     * 6. Returns a HumanAvatar instance for the registered account
+     *
+     * Requirements:
+     * - Contract runner must be configured to execute transactions
+     * - Either: pending invitations from inviters, OR inviter has 96+ CRC unwrapped
+     *
+     * @param inviter Address of the inviting avatar (fallback if no invitations found)
+     * @param profile Profile data with name, description, etc.
      * @returns HumanAvatar instance for the newly registered human
+     *
+     * @example
+     * ```typescript
+     * const avatar = await sdk.register.asHuman('0xInviter', {
+     *   name: 'Alice',
+     *   description: 'Developer'
+     * });
+     * ```
      */
     asHuman: async (
       inviter: Address,
       profile: Profile | string
     ): Promise<HumanAvatar> => {
-      // TODO: Implement human registration
-      throw new Error('register.asHuman() not yet implemented');
+      if (
+        !this.contractRunner ||
+        !this.contractRunner.sendTransaction ||
+        !this.senderAddress
+      ) {
+        throw new Error('Sdk requires a contract runner with a sender address. Initialize with a ContractRunner.');
+      }
+
+      // List of transactions to execute
+      const transactions: any[] = [];
+
+      // Step 1: Check for pending invitations in the InvitationEscrow
+      const inviters = await this.core.invitationEscrow.getInviters(this.senderAddress);
+
+      if (inviters.length > 0) {
+        // Redeem the invitation from the first available inviter
+        const redeemTx = this.core.invitationEscrow.redeemInvitation(inviters[0]);
+        transactions.push(redeemTx);
+      } else {
+        // No invitations found, check if inviter has enough unwrapped CRC
+        // Minimum required: 96 CRC (after demurrage it becomes valid amount)
+        const minRequiredCRC = BigInt(96e18); // 96 CRC in atto-circles
+
+        // Get the token ID for the inviter's personal token
+        const tokenId = await this.core.hubV2.toTokenId(inviter);
+
+        // Check balance at the Inviter address
+        const balance = await this.core.hubV2.balanceOf(inviter, tokenId);
+
+        if (balance < minRequiredCRC) {
+          throw new Error(
+            `Insufficient unwrapped CRC balance. Inviter needs 96+ CRC. ` +
+            `Current balance: ${Number(balance) / 1e18} CRC`
+          );
+        }
+      }
+
+      // Step 2: Create and upload profile to IPFS
+      let profileCid: string;
+
+      if (typeof profile === 'string') {
+        // Profile is already a CID
+        profileCid = profile;
+      } else {
+        // Create profile and upload to IPFS
+        profileCid = await this.profilesClient.create(profile);
+      }
+
+      // Convert CID to metadata digest hex (format expected by registerHuman)
+      const metadataDigest = cidV0ToHex(profileCid);
+
+      // Step 3: Call registerHuman with profile data
+      const registerTx = this.core.hubV2.registerHuman(inviter, metadataDigest as `0x${string}`);
+      transactions.push(registerTx);
+
+      // Step 4: Execute all transactions
+      await this.contractRunner!.sendTransaction(transactions);
+
+      // Step 5: Return a HumanAvatar instance for the newly registered account
+      const avatarInfo = await this.rpc.avatar.getAvatarInfo(this.senderAddress);
+      return new HumanAvatar(
+        this.senderAddress,
+        this.core,
+        this.contractRunner,
+        avatarInfo as any // @todo remove any
+      );
     },
 
     /**
