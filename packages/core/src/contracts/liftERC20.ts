@@ -79,13 +79,12 @@ export class LiftERC20Contract extends Contract<typeof liftERC20Abi> {
    */
   ensureERC20(
     avatar: Address,
-    circlesType: CirclesType,
-    value: bigint = BigInt(0)
+    circlesType: CirclesType
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('ensureERC20', [avatar, circlesType]),
-      value,
+      value: BigInt(0),
     };
   }
 }

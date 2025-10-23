@@ -12,18 +12,18 @@ import type {
   TransactionHistoryRow,
   TrustRelationRow,
   ContractRunner,
-} from './types';
+} from '../types';
 import type { Observable, CirclesEvent } from '@circles-sdk/events';
 import { Observable as ObservableClass } from '@circles-sdk/events';
 import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk/utils';
-import { SdkError } from './errors';
+import { SdkError } from '../errors';
 import { Profiles } from '@circles-sdk/profiles';
 import {
   CirclesType,
   DemurrageCirclesContract,
   InflationaryCirclesContract
 } from '@circles-sdk/core';
-import { encodeAbiParameters, parseAbiParameters, encodeFunctionData } from 'viem';
+import { encodeFunctionData } from 'viem';
 import { TransferBuilder } from '@circles-sdk/transfers';
 import { CirclesRpc } from '@circles-sdk/rpc';
 
@@ -33,13 +33,14 @@ import { CirclesRpc } from '@circles-sdk/rpc';
 export type PathfindingOptions = Omit<FindPathParams, 'from' | 'to' | 'targetFlow'>;
 
 /**
- * HumanAvatar class implementation
- * Provides a simplified, user-friendly wrapper around Circles protocol for human avatars
+ * OrganisationAvatar class implementation
+ * Provides a simplified, user-friendly wrapper around Circles protocol for organisation avatars
  *
- * This class represents a human avatar in the Circles ecosystem and provides
- * methods for managing trust relationships, personal token minting, transfers, and more.
+ * This class represents an organisation avatar in the Circles ecosystem.
+ * Unlike human avatars, organisations cannot mint personal CRC tokens and do not require invitations.
+ * They can manage trust relationships, make transfers, and interact with group tokens.
  */
-export class HumanAvatar {
+export class OrganisationAvatar {
   public readonly address: Address;
   public readonly avatarInfo: AvatarRow | undefined;
   public readonly core: Core;
@@ -414,228 +415,6 @@ export class HumanAvatar {
     getAll: async (): Promise<TrustRelationRow[]> => {
       // TODO: Implement trust relations fetching
       throw new Error('trust.getAll() not yet implemented');
-    },
-  };
-
-  // Invitation methods
-  public readonly invite = {
-    /**
-     * Invite someone to Circles by escrowing 100 CRC tokens
-     *
-     * This batches two transactions atomically:
-     * 1. Establishes trust with the invitee (with indefinite expiry)
-     * 2. Transfers 100 of your personal CRC tokens to the InvitationEscrow contract
-     *
-     * The tokens are held in escrow until the invitee redeems the invitation by registering.
-     *
-     * Requirements:
-     * - You must have at least 100 CRC available
-     * - Invitee must not be already registered in Circles
-     * - You can only have one active invitation per invitee
-     *
-     * @param invitee The address to invite
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * // Invite someone with 100 CRC (automatically establishes trust)
-     * await avatar.invite.send('0x123...');
-     * ```
-     */
-    send: async (invitee: Address): Promise<TransactionReceipt> => {
-      //@todo add replenish/unwrap logic
-      // Create trust transaction (indefinite trust)
-      const trustTx = this.core.hubV2.trust(invitee, BigInt('0xFFFFFFFFFFFFFFFFFFFFFFFF'));
-
-      // Get the token ID for this avatar's personal token
-      const tokenId = await this.core.hubV2.toTokenId(this.address);
-
-      // ABI-encode the invitee address as 32 bytes
-      const encodedInvitee = encodeAbiParameters(
-        parseAbiParameters('address'),
-        [invitee]
-      );
-
-      // Create the safeTransferFrom transaction to the InvitationEscrow contract
-      const transferTx = this.core.hubV2.safeTransferFrom(
-        this.address,
-        this.core.config.invitationEscrowAddress,
-        tokenId,
-        BigInt(100e18),
-        encodedInvitee
-      );
-
-      // Batch both transactions: trust + invitation transfer
-      return await this.runner.sendTransaction!([trustTx, transferTx]);
-    },
-
-    /**
-     * Revoke a previously sent invitation
-     *
-     * This returns the escrowed tokens (with demurrage applied) back to you
-     * as wrapped ERC20 tokens.
-     *
-     * @param invitee The address whose invitation to revoke
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * await avatar.invite.revoke('0x123...');
-     * ```
-     */
-    revoke: async (invitee: Address): Promise<TransactionReceipt> => {
-      const revokeTx = this.core.invitationEscrow.revokeInvitation(invitee);
-      return await this.runner.sendTransaction!([revokeTx]);
-    },
-
-    /**
-     * Revoke all active invitations at once
-     *
-     * This returns all escrowed tokens (with demurrage applied) back to you
-     * as wrapped ERC20 tokens in a single transaction.
-     *
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * await avatar.invite.revokeAll();
-     * ```
-     */
-    revokeAll: async (): Promise<TransactionReceipt> => {
-      const revokeAllTx = this.core.invitationEscrow.revokeAllInvitations();
-      return await this.runner.sendTransaction!([revokeAllTx]);
-    },
-
-    /**
-     * Redeem an invitation received from an inviter
-     *
-     * This claims the escrowed tokens from a specific inviter and refunds
-     * all other inviters' escrows back to them.
-     *
-     * @param inviter The address of the inviter whose invitation to redeem
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * // Get all inviters first
-     * const inviters = await avatar.invite.getInviters();
-     *
-     * // Redeem invitation from the first inviter
-     * await avatar.invite.redeem(inviters[0]);
-     * ```
-     */
-    redeem: async (inviter: Address): Promise<TransactionReceipt> => {
-      const redeemTx = this.core.invitationEscrow.redeemInvitation(inviter);
-      return await this.runner.sendTransaction!([redeemTx]);
-    },
-
-    /**
-     * Get all addresses that have sent invitations to you
-     *
-     * @returns Array of inviter addresses
-     *
-     * @example
-     * ```typescript
-     * const inviters = await avatar.invite.getInviters();
-     * console.log(`You have ${inviters.length} pending invitations`);
-     * ```
-     */
-    getInviters: async (): Promise<Address[]> => {
-      return await this.core.invitationEscrow.getInviters(this.address);
-    },
-
-    /**
-     * Get all addresses you have invited
-     *
-     * @returns Array of invitee addresses
-     *
-     * @example
-     * ```typescript
-     * const invitees = await avatar.invite.getInvitees();
-     * console.log(`You have invited ${invitees.length} people`);
-     * ```
-     */
-    getInvitees: async (): Promise<Address[]> => {
-      return await this.core.invitationEscrow.getInvitees(this.address);
-    },
-
-    /**
-     * Get the escrowed amount and days since escrow for a specific invitation
-     *
-     * The amount returned has demurrage applied, so it decreases over time.
-     *
-     * @param inviter The inviter address (when checking invitations you received)
-     * @param invitee The invitee address (when checking invitations you sent)
-     * @returns Object with escrowedAmount (in atto-circles) and days since escrow
-     *
-     * @example
-     * ```typescript
-     * // Check an invitation you sent
-     * const { escrowedAmount, days_ } = await avatar.invite.getEscrowedAmount(
-     *   avatar.address,
-     *   '0xinvitee...'
-     * );
-     * console.log(`Escrowed: ${CirclesConverter.attoCirclesToCircles(escrowedAmount)} CRC`);
-     * console.log(`Days since escrow: ${days_}`);
-     *
-     * // Check an invitation you received
-     * const { escrowedAmount, days_ } = await avatar.invite.getEscrowedAmount(
-     *   '0xinviter...',
-     *   avatar.address
-     * );
-     * ```
-     */
-    getEscrowedAmount: async (inviter: Address, invitee: Address) => {
-      return await this.core.invitationEscrow.getEscrowedAmountAndDays(inviter, invitee);
-    },
-  };
-
-  // Personal token / Minting methods
-  public readonly personalToken = {
-    /**
-     * Get the available amount of personal tokens that can be minted
-     * @returns Amount in CRC (human-readable format)
-     */
-    getAvailableAmount: async (): Promise<number> => {
-      // TODO: Implement mintable amount calculation using calculateIssuance
-      throw new Error('personalToken.getAvailableAmount() not yet implemented');
-    },
-
-    /**
-     * Mint personal Circles tokens
-     * This claims all available personal tokens that have accrued since last mint
-     *
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * const receipt = await avatar.personalToken.mint();
-     * console.log('Minted tokens, tx hash:', receipt.hash);
-     * ```
-     */
-    mint: async (): Promise<TransactionReceipt> => {
-      const mintTx = this.core.hubV2.personalMint();
-      return await this.runner.sendTransaction!([mintTx]);
-    },
-
-    /**
-     * Stop personal token minting
-     * This permanently stops the ability to mint new personal tokens
-     *
-     * WARNING: This action is irreversible!
-     *
-     * @returns Transaction response
-     *
-     * @example
-     * ```typescript
-     * const receipt = await avatar.personalToken.stop();
-     * console.log('Stopped minting, tx hash:', receipt.hash);
-     * ```
-     */
-    stop: async (): Promise<TransactionReceipt> => {
-      // Use the stop method from core
-      const stopTx = this.core.hubV2.stop();
-      return await this.runner.sendTransaction!([stopTx]);
     },
   };
 

@@ -8,8 +8,7 @@ import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
 import { cidV0ToHex } from '@circles-sdk/utils';
-import { HumanAvatar } from './HumanAvatar';
-import { BaseGroupAvatar } from './BaseGroupAvatar';
+import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 import type {
   ContractRunner,
   CirclesData,
@@ -125,9 +124,9 @@ export class Sdk {
   /**
    * Get an avatar by address
    * Automatically detects the avatar type and returns the appropriate avatar instance
-   * @returns HumanAvatar for human/organization avatars, BaseGroupAvatar for group avatars
+   * @returns HumanAvatar, OrganisationAvatar, or BaseGroupAvatar depending on type
    */
-  async getAvatar(avatarAddress: Address): Promise<HumanAvatar | BaseGroupAvatar> {
+  async getAvatar(avatarAddress: Address): Promise<HumanAvatar | OrganisationAvatar | BaseGroupAvatar> {
     try {
       const avatarInfo = await this.rpc.avatar.getAvatarInfo(avatarAddress);
 
@@ -138,11 +137,17 @@ export class Sdk {
         return new BaseGroupAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
       }
 
-      // Default to HumanAvatar for human/organization types
+      if (avatarType === 'CrcV2_RegisterOrganization') {
+        return new OrganisationAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      }
+
+      // Default to HumanAvatar for human type
       return new HumanAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
     } catch (error) {
-      // Return HumanAvatar without info if fetch fails
-      return new HumanAvatar(avatarAddress, this.core, this.contractRunner);
+      // Return HumanAvatar without info if fetch fails (could be human or org)
+      // @todo return error or null
+      // new HumanAvatar(avatarAddress, this.core, this.contractRunner);
+      throw new Error(`Failed to get avatar info`);
     }
   }
 
@@ -181,19 +186,18 @@ export class Sdk {
       inviter: Address,
       profile: Profile | string
     ): Promise<HumanAvatar> => {
-      if (
-        !this.contractRunner ||
-        !this.contractRunner.sendTransaction ||
-        !this.senderAddress
-      ) {
-        throw new Error('Sdk requires a contract runner with a sender address. Initialize with a ContractRunner.');
+      if (!this.contractRunner || !this.senderAddress) {
+        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
       }
+
+      const contractRunner: ContractRunner = this.contractRunner;
+      const senderAddress: Address = this.senderAddress;
 
       // List of transactions to execute
       const transactions: any[] = [];
 
       // Step 1: Check for pending invitations in the InvitationEscrow
-      const inviters = await this.core.invitationEscrow.getInviters(this.senderAddress);
+      const inviters = await this.core.invitationEscrow.getInviters(senderAddress);
 
       if (inviters.length > 0) {
         // Redeem the invitation from the first available inviter
@@ -237,37 +241,210 @@ export class Sdk {
       transactions.push(registerTx);
 
       // Step 4: Execute all transactions
-      await this.contractRunner!.sendTransaction(transactions);
+      await contractRunner.sendTransaction!(transactions);
 
       // Step 5: Return a HumanAvatar instance for the newly registered account
-      const avatarInfo = await this.rpc.avatar.getAvatarInfo(this.senderAddress);
+      const avatarInfo = await this.rpc.avatar.getAvatarInfo(senderAddress);
       return new HumanAvatar(
-        this.senderAddress,
+        senderAddress,
         this.core,
-        this.contractRunner,
+        contractRunner,
         avatarInfo as any // @todo remove any
       );
     },
 
     /**
      * Register as an organization
-     * @param profile Profile data for the organization
-     * @returns HumanAvatar instance for the newly registered organization
+     * Organizations can participate in Circles without minting personal tokens
+     * and do not require invitations to register
+     *
+     * @param profile Profile data for the organization or CID string
+     * @returns OrganisationAvatar instance for the newly registered organization
+     *
+     * @example
+     * ```typescript
+     * const orgAvatar = await sdk.register.asOrganization({
+     *   name: 'My Organization',
+     *   description: 'A Circles organization'
+     * });
+     * ```
      */
-    asOrganization: async (profile: Profile): Promise<HumanAvatar> => {
-      // TODO: Implement organization registration
-      throw new Error('register.asOrganization() not yet implemented');
+    asOrganization: async (profile: Profile | string): Promise<OrganisationAvatar> => {
+      if (!this.contractRunner || !this.senderAddress) {
+        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
+      }
+
+      const contractRunner: ContractRunner = this.contractRunner;
+      const senderAddress: Address = this.senderAddress;
+
+      // Step 1: Create and upload profile to IPFS, and extract name
+      let profileCid: string;
+      let profileData: Profile;
+
+      if (typeof profile === 'string') {
+        // Profile is already a CID - fetch it to get the name
+        profileCid = profile;
+        const fetchedProfile = await this.profilesClient.get(profileCid);
+        if (!fetchedProfile) {
+          throw new Error(`Failed to fetch profile with CID: ${profileCid}`);
+        }
+        profileData = fetchedProfile;
+      } else {
+        // Create profile and upload to IPFS
+        profileData = profile;
+        profileCid = await this.profilesClient.create(profile);
+      }
+
+      // Validate that profile has a name
+      if (!profileData.name) {
+        throw new Error('Profile must have a name field for organization registration');
+      }
+
+      // Convert CID to metadata digest hex (format expected by registerOrganization)
+      const metadataDigest = cidV0ToHex(profileCid);
+
+      // Step 2: Call registerOrganization with name and profile data
+      const registerTx = this.core.hubV2.registerOrganization(
+        profileData.name,
+        metadataDigest as `0x${string}`
+      );
+
+      // Step 3: Execute the transaction
+      await contractRunner.sendTransaction!([registerTx]);
+
+      // Step 4: Return an OrganisationAvatar instance for the newly registered account
+      const avatarInfo = await this.rpc.avatar.getAvatarInfo(senderAddress);
+      return new OrganisationAvatar(
+        senderAddress,
+        this.core,
+        contractRunner,
+        avatarInfo as any // @todo remove any
+      );
     },
 
     /**
-     * Register as a group
-     * @param mint Address of the mint policy
-     * @param profile Group profile data (includes symbol)
-     * @returns HumanAvatar instance for the newly registered group
+     * Register a base group
+     * Creates a new base group using the BaseGroupFactory and registers it in the Circles ecosystem
+     *
+     * @param owner The address that will own the newly created BaseGroup
+     * @param service The address of the service for the new BaseGroup
+     * @param feeCollection The address of the fee collection for the new BaseGroup
+     * @param initialConditions An array of initial condition addresses
+     * @param profile Group profile data (includes name, symbol, and other metadata) or CID string
+     * @returns BaseGroupAvatar instance for the newly registered group
+     *
+     * @example
+     * ```typescript
+     * const groupAvatar = await sdk.register.asGroup(
+     *   '0xOwnerAddress',
+     *   '0xServiceAddress',
+     *   '0xFeeCollectionAddress',
+     *   [], // initial conditions
+     *   {
+     *     name: 'My Group',
+     *     symbol: 'MYG',
+     *     description: 'A Circles base group'
+     *   }
+     * );
+     * ```
      */
-    asGroup: async (mint: Address, profile: GroupProfile): Promise<HumanAvatar> => {
-      // TODO: Implement group registration
-      throw new Error('register.asGroup() not yet implemented');
+    asGroup: async (
+      owner: Address,
+      service: Address,
+      feeCollection: Address,
+      initialConditions: Address[],
+      profile: GroupProfile | string
+    ): Promise<BaseGroupAvatar> => {
+      if (!this.contractRunner || !this.senderAddress) {
+        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
+      }
+
+      const contractRunner: ContractRunner = this.contractRunner;
+      const senderAddress: Address = this.senderAddress;
+
+      // Step 1: Create and upload profile to IPFS, and extract name and symbol
+      let profileCid: string;
+      let profileData: GroupProfile;
+
+      if (typeof profile === 'string') {
+        // Profile is already a CID - fetch it to get the name and symbol
+        profileCid = profile;
+        const fetchedProfile = await this.profilesClient.get(profileCid);
+        if (!fetchedProfile) {
+          throw new Error(`Failed to fetch profile with CID: ${profileCid}`);
+        }
+        // Validate it's a GroupProfile with symbol
+        if (!('symbol' in fetchedProfile)) {
+          throw new Error('Profile must be a GroupProfile with a symbol field');
+        }
+        profileData = fetchedProfile as GroupProfile;
+      } else {
+        // Create profile and upload to IPFS
+        profileData = profile;
+        profileCid = await this.profilesClient.create(profile);
+      }
+
+      // Validate that profile has name and symbol
+      if (!profileData.name) {
+        throw new Error('Profile must have a name field for group registration');
+      }
+      if (!profileData.symbol) {
+        throw new Error('Profile must have a symbol field for group registration');
+      }
+
+      // Validate name length (must be 19 characters or fewer)
+      if (profileData.name.length > 19) {
+        throw new Error('Group name must be 19 characters or fewer');
+      }
+
+      // Convert CID to metadata digest hex (format expected by createBaseGroup)
+      const metadataDigest = cidV0ToHex(profileCid);
+
+      // Step 2: Create the base group using the factory
+      const createGroupTx = this.core.baseGroupFactory.createBaseGroup(
+        owner,
+        service,
+        feeCollection,
+        initialConditions,
+        profileData.name,
+        profileData.symbol,
+        metadataDigest as `0x${string}`
+      );
+
+      // Step 3: Execute the transaction
+      const receipt = await contractRunner.sendTransaction!([createGroupTx]);
+
+      // Step 4: Extract the group address from the transaction logs
+      // The BaseGroupCreated event contains the group address as the first indexed parameter
+      let groupAddress: Address | undefined;
+
+      for (const log of receipt.logs) {
+        // The group address is the first indexed parameter (topics[1])
+        // BaseGroupCreated event: event BaseGroupCreated(address indexed group, address indexed owner, address indexed mintHandler, address treasury)
+        if (log.topics && log.topics.length >= 2) {
+          // Extract the address from the topic (remove leading zeros and format)
+          const addressHex = log.topics[1];
+          if (addressHex && addressHex.length === 66) { // 0x + 64 hex chars
+            // Address is the last 40 chars (20 bytes)
+            const extractedAddress = ('0x' + addressHex.slice(-40)) as Address;
+            groupAddress = extractedAddress;
+            break;
+          }
+        }
+      }
+
+      if (!groupAddress) {
+        throw new Error('Failed to extract group address from transaction receipt');
+      }
+
+      // Step 5: Return a BaseGroupAvatar instance for the newly created group
+      const avatarInfo = await this.rpc.avatar.getAvatarInfo(groupAddress);
+      return new BaseGroupAvatar(
+        groupAddress,
+        this.core,
+        contractRunner,
+        avatarInfo as any // @todo remove any
+      );
     },
   };
 

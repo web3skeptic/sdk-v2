@@ -133,22 +133,22 @@ export class NameRegistryContract extends Contract<typeof nameRegistryAbi> {
   /**
    * Register a custom name for an avatar
    */
-  registerCustomName(avatar: Address, name: string, value: bigint = BigInt(0)): TransactionRequest {
+  registerCustomName(avatar: Address, name: string): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerCustomName', [avatar, name]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Register a custom symbol for an avatar
    */
-  registerCustomSymbol(avatar: Address, symbol: string, value: bigint = BigInt(0)): TransactionRequest {
+  registerCustomSymbol(avatar: Address, symbol: string): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerCustomSymbol', [avatar, symbol]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -159,40 +159,40 @@ export class NameRegistryContract extends Contract<typeof nameRegistryAbi> {
     return {
       to: this.address,
       data: this.encodeWrite('registerShortName', []),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Register a short name with a specific nonce
    */
-  registerShortNameWithNonce(nonce: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  registerShortNameWithNonce(nonce: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerShortNameWithNonce', [nonce]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Set metadata digest for an avatar (admin function)
    */
-  setMetadataDigest(avatar: Address, metadataDigest: Hex, value: bigint = BigInt(0)): TransactionRequest {
+  setMetadataDigest(avatar: Address, metadataDigest: Hex): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setMetadataDigest', [avatar, metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Update metadata digest for the caller
    */
-  updateMetadataDigest(metadataDigest: Hex, value: bigint = BigInt(0)): TransactionRequest {
+  updateMetadataDigest(metadataDigest: Hex): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('updateMetadataDigest', [metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 }

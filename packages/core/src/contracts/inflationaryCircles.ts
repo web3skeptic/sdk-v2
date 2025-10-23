@@ -176,66 +176,66 @@ export class InflationaryCirclesContract extends Contract<typeof inflationaryCir
   /**
    * Transfer tokens to another address
    */
-  transfer(to: Address, amount: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  transfer(to: Address, amount: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('transfer', [to, amount]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Transfer tokens from one address to another
    */
-  transferFrom(from: Address, to: Address, amount: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  transferFrom(from: Address, to: Address, amount: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('transferFrom', [from, to, amount]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Approve a spender to spend tokens
    */
-  approve(spender: Address, amount: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  approve(spender: Address, amount: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('approve', [spender, amount]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Increase the allowance of a spender
    */
-  increaseAllowance(spender: Address, addedValue: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  increaseAllowance(spender: Address, addedValue: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('increaseAllowance', [spender, addedValue]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Decrease the allowance of a spender
    */
-  decreaseAllowance(spender: Address, subtractedValue: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  decreaseAllowance(spender: Address, subtractedValue: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('decreaseAllowance', [spender, subtractedValue]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Unwrap inflationary Circles back to ERC1155
    */
-  unwrap(amount: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  unwrap(amount: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('unwrap', [amount]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -249,13 +249,12 @@ export class InflationaryCirclesContract extends Contract<typeof inflationaryCir
     deadline: bigint,
     v: number,
     r: Hex,
-    s: Hex,
-    value: bigint = BigInt(0)
+    s: Hex
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('permit', [owner, spender, permitValue, deadline, v, r, s]),
-      value,
+      value: BigInt(0),
     };
   }
 }

@@ -190,7 +190,7 @@ export class TrustMethods {
           timestamp: maxTimestamp,
         };
       });
-  }
+  }// @todo type of trusted entity would be really helpful
 
   /**
    * Get addresses that trust the given avatar (incoming trust)

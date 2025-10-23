@@ -2,8 +2,8 @@
 export { Sdk } from './Sdk';
 
 // Avatar classes
-export { HumanAvatar } from './HumanAvatar';
-export { BaseGroupAvatar } from './BaseGroupAvatar';
+export { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
+export type { PathfindingOptions } from './avatars';
 export type { TransactionReceipt } from 'viem';
 
 // Error handling

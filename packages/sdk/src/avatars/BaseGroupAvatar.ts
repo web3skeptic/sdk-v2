@@ -11,7 +11,7 @@ import type {
   TrustRelationRow,
   CirclesQuery,
   ContractRunner,
-} from './types';
+} from '../types';
 import type { Observable, CirclesEvent } from '@circles-sdk/events';
 import { Observable as ObservableClass } from '@circles-sdk/events';
 import { cidV0ToHex } from '@circles-sdk/utils';

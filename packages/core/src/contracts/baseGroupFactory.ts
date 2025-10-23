@@ -44,8 +44,7 @@ export class BaseGroupFactoryContract extends Contract<typeof baseGroupFactoryAb
     initialConditions: readonly Address[],
     name: string,
     symbol: string,
-    metadataDigest: Hex,
-    value: bigint = BigInt(0)
+    metadataDigest: Hex
   ): TransactionRequest {
     return {
       to: this.address,
@@ -58,7 +57,7 @@ export class BaseGroupFactoryContract extends Contract<typeof baseGroupFactoryAb
         symbol,
         metadataDigest,
       ]),
-      value,
+      value: BigInt(0),
     };
   }
 }

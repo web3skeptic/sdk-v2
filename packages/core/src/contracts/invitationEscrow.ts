@@ -32,11 +32,11 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
    * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
-  redeemInvitation(inviter: Address, value: bigint = BigInt(0)): TransactionRequest {
+  redeemInvitation(inviter: Address): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('redeemInvitation', [inviter]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -46,11 +46,11 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
    * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
-  revokeInvitation(invitee: Address, value: bigint = BigInt(0)): TransactionRequest {
+  revokeInvitation(invitee: Address): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('revokeInvitation', [invitee]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -59,11 +59,11 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
    * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
-  revokeAllInvitations(value: bigint = BigInt(0)): TransactionRequest {
+  revokeAllInvitations(): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('revokeAllInvitations', []),
-      value,
+      value: BigInt(0),
     };
   }
 

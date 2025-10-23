@@ -111,11 +111,11 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * Create a personal mint transaction
    * Mints personal Circles tokens for the caller
    */
-  personalMint(value: bigint = BigInt(0)): TransactionRequest {
+  personalMint(): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('personalMint', []),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -133,13 +133,12 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
     group: Address,
     collateralAvatars: readonly Address[],
     amounts: readonly bigint[],
-    data: Hex = '0x',
-    value: bigint = BigInt(0)
+    data: Hex = '0x'
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('groupMint', [group, collateralAvatars, amounts, data]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -147,33 +146,33 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * Create a trust transaction
    * Trust another address until the specified expiry time
    */
-  trust(trustReceiver: Address, expiry: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  trust(trustReceiver: Address, expiry: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('trust', [trustReceiver, expiry]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a register human transaction
    */
-  registerHuman(inviter: Address, metadataDigest: Hex, value: bigint = BigInt(0)): TransactionRequest {
+  registerHuman(inviter: Address, metadataDigest: Hex): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerHuman', [inviter, metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a register organization transaction
    */
-  registerOrganization(name: string, metadataDigest: Hex, value: bigint = BigInt(0)): TransactionRequest {
+  registerOrganization(name: string, metadataDigest: Hex): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerOrganization', [name, metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -184,13 +183,12 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
     mint: Address,
     name: string,
     symbol: string,
-    metadataDigest: Hex,
-    value: bigint = BigInt(0)
+    metadataDigest: Hex
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerGroup', [mint, name, symbol, metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -202,13 +200,12 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
     to: Address,
     id: bigint,
     amount: bigint,
-    data: Hex = '0x',
-    value: bigint = BigInt(0)
+    data: Hex = '0x'
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('safeTransferFrom', [from, to, id, amount, data]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -220,35 +217,34 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
     to: Address,
     ids: readonly bigint[],
     amounts: readonly bigint[],
-    data: Hex = '0x',
-    value: bigint = BigInt(0)
+    data: Hex = '0x'
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('safeBatchTransferFrom', [from, to, ids, amounts, data]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create an approval for all transaction
    */
-  setApprovalForAll(operator: Address, approved: boolean, value: bigint = BigInt(0)): TransactionRequest {
+  setApprovalForAll(operator: Address, approved: boolean): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setApprovalForAll', [operator, approved]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a burn transaction
    */
-  burn(id: bigint, amount: bigint, data: Hex = '0x', value: bigint = BigInt(0)): TransactionRequest {
+  burn(id: bigint, amount: bigint, data: Hex = '0x'): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('burn', [id, amount, data]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -257,11 +253,11 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * Permanently stops the ability to mint new personal tokens
    * WARNING: This action is irreversible!
    */
-  stop(value: bigint = BigInt(0)): TransactionRequest {
+  stop(): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('stop', []),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -278,13 +274,12 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
   wrap(
     avatar: Address,
     amount: bigint,
-    circlesType: number, // @todo implement enum
-    value: bigint = BigInt(0)
+    circlesType: number // @todo implement enum
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('wrap', [avatar, amount, circlesType]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -296,19 +291,17 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * @param flowEdges - Array of flow edges with stream sink IDs and amounts
    * @param streams - Array of streams defining the transfer paths
    * @param packedCoordinates - Packed coordinate data
-   * @param value - native token value to send with transaction (default: 0)
    */
   operateFlowMatrix(
     flowVertices: readonly Address[],
     flowEdges: readonly { streamSinkId: number; amount: bigint }[],
     streams: readonly { sourceCoordinate: number; flowEdgeIds: readonly number[]; data: Uint8Array | Hex }[],
-    packedCoordinates: Hex,
-    value: bigint = BigInt(0)
+    packedCoordinates: Hex
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('operateFlowMatrix', [flowVertices, flowEdges, streams, packedCoordinates]),
-      value,
+      value: BigInt(0),
     };
   }
 }

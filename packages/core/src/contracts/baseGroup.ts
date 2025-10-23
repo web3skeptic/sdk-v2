@@ -113,33 +113,33 @@ export class BaseGroupContract extends Contract<typeof baseGroupAbi> {
   /**
    * Create a transaction to set a new owner
    */
-  setOwner(newOwner: Address, value: bigint = BigInt(0)): TransactionRequest {
+  setOwner(newOwner: Address): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setOwner', [newOwner]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a transaction to set a new service address
    */
-  setService(newService: Address, value: bigint = BigInt(0)): TransactionRequest {
+  setService(newService: Address): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setService', [newService]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a transaction to set a new fee collection address
    */
-  setFeeCollection(newFeeCollection: Address, value: bigint = BigInt(0)): TransactionRequest {
+  setFeeCollection(newFeeCollection: Address): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setFeeCollection', [newFeeCollection]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -148,24 +148,23 @@ export class BaseGroupContract extends Contract<typeof baseGroupAbi> {
    */
   setMembershipCondition(
     condition: Address,
-    enabled: boolean,
-    value: bigint = BigInt(0)
+    enabled: boolean
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('setMembershipCondition', [condition, enabled]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a transaction to trust a member (without membership checks)
    */
-  trust(trustReceiver: Address, expiry: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  trust(trustReceiver: Address, expiry: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('trust', [trustReceiver, expiry]),
-      value,
+      value: BigInt(0),
     };
   }
 
@@ -174,35 +173,34 @@ export class BaseGroupContract extends Contract<typeof baseGroupAbi> {
    */
   trustBatchWithConditions(
     members: readonly Address[],
-    expiry: bigint,
-    value: bigint = BigInt(0)
+    expiry: bigint
   ): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('trustBatchWithConditions', [members, expiry]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a transaction to update the metadata digest
    */
-  updateMetadataDigest(metadataDigest: Hex, value: bigint = BigInt(0)): TransactionRequest {
+  updateMetadataDigest(metadataDigest: Hex): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('updateMetadataDigest', [metadataDigest]),
-      value,
+      value: BigInt(0),
     };
   }
 
   /**
    * Create a transaction to register a short name with a specific nonce
    */
-  registerShortNameWithNonce(nonce: bigint, value: bigint = BigInt(0)): TransactionRequest {
+  registerShortNameWithNonce(nonce: bigint): TransactionRequest {
     return {
       to: this.address,
       data: this.encodeWrite('registerShortNameWithNonce', [nonce]),
-      value,
+      value: BigInt(0),
     };
   }
 }
