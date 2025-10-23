@@ -4,7 +4,7 @@ export { Sdk } from './Sdk';
 // Avatar classes
 export { HumanAvatar } from './HumanAvatar';
 export { BaseGroupAvatar } from './BaseGroupAvatar';
-export type { TransactionReceipt, ContractTransactionReceipt } from './HumanAvatar';
+export type { TransactionReceipt } from 'viem';
 
 // Error handling
 export { SdkError } from './errors';

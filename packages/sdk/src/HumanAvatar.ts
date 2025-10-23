@@ -2,17 +2,15 @@ import type {
   Address,
   AdvancedTransferOptions,
   Profile,
-  TransactionResponse,
   FindPathParams,
 } from '@circles-sdk/types';
+import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk/core';
 import type {
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
-  TransactionHistoryRowWithCircles,
   TrustRelationRow,
-  CirclesQuery,
   ContractRunner,
 } from './types';
 import type { Observable, CirclesEvent } from '@circles-sdk/events';
@@ -28,10 +26,6 @@ import {
 import { encodeAbiParameters, parseAbiParameters, encodeFunctionData } from 'viem';
 import { TransferBuilder } from '@circles-sdk/transfers';
 import { CirclesRpc } from '@circles-sdk/rpc';
-
-// Type aliases for transaction responses
-export type TransactionReceipt = TransactionResponse;
-export type ContractTransactionReceipt = TransactionResponse;
 
 /**
  * Advanced pathfinding options (reuses FindPathParams optional fields)
@@ -619,7 +613,7 @@ export class HumanAvatar {
      * console.log('Minted tokens, tx hash:', receipt.hash);
      * ```
      */
-    mint: async (): Promise<ContractTransactionReceipt> => {
+    mint: async (): Promise<TransactionReceipt> => {
       const mintTx = this.core.hubV2.personalMint();
       return await this.runner.sendTransaction!([mintTx]);
     },
@@ -638,7 +632,7 @@ export class HumanAvatar {
      * console.log('Stopped minting, tx hash:', receipt.hash);
      * ```
      */
-    stop: async (): Promise<ContractTransactionReceipt> => {
+    stop: async (): Promise<TransactionReceipt> => {
       // Use the stop method from core
       const stopTx = this.core.hubV2.stop();
       return await this.runner.sendTransaction!([stopTx]);
@@ -747,7 +741,7 @@ export class HumanAvatar {
      * console.log('Metadata updated, tx hash:', receipt.hash);
      * ```
      */
-    updateMetadata: async (cid: string): Promise<ContractTransactionReceipt> => {
+    updateMetadata: async (cid: string): Promise<TransactionReceipt> => {
       // Convert CIDv0 (base58-encoded multihash) to bytes32 hex format
       // This extracts the 32-byte SHA-256 digest from the CID
       const cidHex = cidV0ToHex(cid);
@@ -774,7 +768,7 @@ export class HumanAvatar {
      * console.log('Short name registered, tx hash:', receipt.hash);
      * ```
      */
-    registerShortName: async (nonce: number): Promise<ContractTransactionReceipt> => {
+    registerShortName: async (nonce: number): Promise<TransactionReceipt> => {
       const registerTx = this.core.nameRegistry.registerShortNameWithNonce(BigInt(nonce));
       return await this.runner.sendTransaction!([registerTx]);
     },
@@ -799,7 +793,7 @@ export class HumanAvatar {
      */
     getTransactions: async (
       limit: number = 50
-    ): Promise<TransactionHistoryRowWithCircles[]> => {
+    ): Promise<TransactionHistoryRow[]> => {
       return await this.rpc.transaction.getTransactionHistory(this.address, limit);
     },
   };
@@ -811,7 +805,7 @@ export class HumanAvatar {
       collateral: Address[],
       amounts: bigint[],
       data: Uint8Array
-    ): Promise<ContractTransactionReceipt> => {
+    ): Promise<TransactionReceipt> => {
       // TODO: Implement group minting
       throw new Error('groupToken.mint() not yet implemented');
     },
@@ -849,34 +843,34 @@ export class HumanAvatar {
     },
 
     setProperties: {
-      owner: async (owner: Address): Promise<ContractTransactionReceipt> => {
+      owner: async (owner: Address): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.owner() not yet implemented');
       },
-      service: async (service: Address): Promise<ContractTransactionReceipt> => {
+      service: async (service: Address): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.service() not yet implemented');
       },
-      mintHandler: async (mintHandler: Address): Promise<ContractTransactionReceipt> => {
+      mintHandler: async (mintHandler: Address): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.mintHandler() not yet implemented');
       },
       redemptionHandler: async (
         redemptionHandler: Address
-      ): Promise<ContractTransactionReceipt> => {
+      ): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.redemptionHandler() not yet implemented');
       },
       minimalDeposit: async (
         minimalDeposit: bigint
-      ): Promise<ContractTransactionReceipt> => {
+      ): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.minimalDeposit() not yet implemented');
       },
       feeCollection: async (
         feeCollection: Address
-      ): Promise<ContractTransactionReceipt> => {
+      ): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.feeCollection() not yet implemented');
       },
       membershipCondition: async (
         condition: Address,
         enabled: boolean
-      ): Promise<ContractTransactionReceipt> => {
+      ): Promise<TransactionReceipt> => {
         throw new Error('groupToken.setProperties.membershipCondition() not yet implemented');
       },
     },
@@ -903,7 +897,7 @@ export class HumanAvatar {
     unwrapDemurraged: async (
       tokenAddress: Address,
       amount: bigint
-    ): Promise<ContractTransactionReceipt> => {
+    ): Promise<TransactionReceipt> => {
       const demurrageContract = new DemurrageCirclesContract({
         address: tokenAddress,
         rpcUrl: this.core.rpcUrl
@@ -915,7 +909,7 @@ export class HumanAvatar {
     unwrapInflationary: async (
       tokenAddress: Address,
       amount: bigint
-    ): Promise<ContractTransactionReceipt> => {
+    ): Promise<TransactionReceipt> => {
       const inflationaryContract = new InflationaryCirclesContract({
         address: tokenAddress,
         rpcUrl: this.core.rpcUrl

@@ -1,8 +1,8 @@
 import type {
   Address,
   Profile,
-  TransactionResponse,
 } from '@circles-sdk/types';
+import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk/core';
 import type {
   AvatarRow,
@@ -18,10 +18,6 @@ import { cidV0ToHex } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
 import { BaseGroupContract } from '@circles-sdk/core';
 import { CirclesRpc } from '@circles-sdk/rpc';
-
-// Type aliases for transaction responses
-export type TransactionReceipt = TransactionResponse;
-export type ContractTransactionReceipt = TransactionResponse;
 
 /**
  * BaseGroupAvatar class implementation
@@ -212,17 +208,17 @@ export class BaseGroupAvatar {
 
   // Group property setters
   public readonly setProperties = {
-    owner: async (newOwner: Address): Promise<ContractTransactionReceipt> => {
+    owner: async (newOwner: Address): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.setOwner(newOwner);
       return await this.runner.sendTransaction!([tx]);
     },
 
-    service: async (newService: Address): Promise<ContractTransactionReceipt> => {
+    service: async (newService: Address): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.setService(newService);
       return await this.runner.sendTransaction!([tx]);
     },
 
-    feeCollection: async (newFeeCollection: Address): Promise<ContractTransactionReceipt> => {
+    feeCollection: async (newFeeCollection: Address): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.setFeeCollection(newFeeCollection);
       return await this.runner.sendTransaction!([tx]);
     },
@@ -230,7 +226,7 @@ export class BaseGroupAvatar {
     membershipCondition: async (
       condition: Address,
       enabled: boolean
-    ): Promise<ContractTransactionReceipt> => {
+    ): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.setMembershipCondition(condition, enabled);
       return await this.runner.sendTransaction!([tx]);
     },
@@ -298,7 +294,7 @@ export class BaseGroupAvatar {
     /**
      * Update the metadata digest (CID)
      */
-    updateMetadata: async (cid: string): Promise<ContractTransactionReceipt> => {
+    updateMetadata: async (cid: string): Promise<TransactionReceipt> => {
       const cidHex = cidV0ToHex(cid);
       const tx = this.baseGroup.updateMetadataDigest(cidHex);
       return await this.runner.sendTransaction!([tx]);
@@ -307,7 +303,7 @@ export class BaseGroupAvatar {
     /**
      * Register a short name for this avatar using a specific nonce
      */
-    registerShortName: async (nonce: number): Promise<ContractTransactionReceipt> => {
+    registerShortName: async (nonce: number): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.registerShortNameWithNonce(BigInt(nonce));
       return await this.runner.sendTransaction!([tx]);
     },

@@ -1,8 +1,9 @@
-import type { Address, Hex, TransactionRequest, TransactionResponse } from '@circles-sdk/types';
+import type { Address, Hex, TransactionRequest } from '@circles-sdk/types';
 import type { ContractRunner, BatchRun } from './runner';
-import type { PublicClient } from 'viem';
+import type { PublicClient, TransactionReceipt } from 'viem';
 import type { SafeTransaction } from '@safe-global/types-kit';
 import { type MetaTransactionData, OperationType } from '@safe-global/safe-core-sdk-types';
+import { RunnerError } from './errors';
 
 // Use require for Safe to ensure compatibility with bun's CJS/ESM interop
 // Safe Protocol Kit v5 uses CommonJS exports, so we use require() for proper interop
@@ -17,7 +18,10 @@ const Safe = SafeModule.default || SafeModule;
 export class SafeBatchRun implements BatchRun {
   private readonly transactions: TransactionRequest[] = [];
 
-  constructor(private readonly safe: any) {}
+  constructor(
+    private readonly safe: any,
+    private readonly publicClient: PublicClient
+  ) {}
 
   /**
    * Add a transaction to the batch
@@ -45,28 +49,34 @@ export class SafeBatchRun implements BatchRun {
   }
 
   /**
-   * Execute all batched transactions
+   * Execute all batched transactions and wait for confirmation
+   * @throws {RunnerError} If transaction reverts or execution fails
    */
-  async run(): Promise<TransactionResponse> {
+  async run(): Promise<TransactionReceipt> {
     const safeTransaction = await this.getSafeTransaction();
 
     const txResult = await this.safe.executeTransaction(safeTransaction);
 
     if (!txResult.hash) {
-      throw new Error('Transaction execution failed: no transaction hash');
+      throw RunnerError.executionFailed('No transaction hash returned from Safe execution');
     }
 
-    const response: TransactionResponse = {
+    // Wait for transaction receipt
+    const receipt = await this.publicClient.waitForTransactionReceipt({
       hash: txResult.hash as Hex,
-      from: (await this.safe.getAddress()) as Address,
-      to: undefined,
-      data: '0x' as Hex,
-      value: BigInt(0),
-      blockNumber: 0,
-      blockHash: '0x' as Hex,
-    };
+    });
 
-    return response;
+    // Check transaction status and throw if reverted
+    if (receipt.status === 'reverted') {
+      throw RunnerError.transactionReverted(
+        receipt.transactionHash,
+        receipt.blockNumber,
+        receipt.gasUsed
+      );
+    }
+
+    // Return viem's TransactionReceipt directly
+    return receipt;
   }
 }
 
@@ -186,14 +196,16 @@ export class SafeContractRunner implements ContractRunner {
   };
 
   /**
-   * Send one or more transactions through the Safe
+   * Send one or more transactions through the Safe and wait for confirmation
    * All transactions are batched and executed atomically
+   *
+   * @throws {RunnerError} If transaction reverts or execution fails
    */
-  sendTransaction = async (txs: TransactionRequest[]): Promise<TransactionResponse> => {
+  sendTransaction = async (txs: TransactionRequest[]): Promise<TransactionReceipt> => {
     const safe = this.ensureSafe();
 
     if (txs.length === 0) {
-      throw new Error('No transactions provided');
+      throw RunnerError.executionFailed('No transactions provided');
     }
 
     const metaTransactions: MetaTransactionData[] = txs.map((tx) => ({
@@ -208,26 +220,29 @@ export class SafeContractRunner implements ContractRunner {
       transactions: metaTransactions,
     });
 
-    // Execute the batched transaction with explicit gas limit to avoid estimation errors
-    // This prevents "wrong transaction nonce" errors during gas estimation
+    // Execute the batched transaction
     const txResult = await safe.executeTransaction(safeTransaction);
 
     if (!txResult.hash) {
-      throw new Error('Transaction execution failed: no transaction hash');
+      throw RunnerError.executionFailed('No transaction hash returned from Safe execution');
     }
 
-    // Build response
-    const response: TransactionResponse = {
+    // Wait for transaction receipt
+    const receipt = await this.publicClient.waitForTransactionReceipt({
       hash: txResult.hash as Hex,
-      from: (await safe.getAddress()) as Address,
-      to: undefined,
-      data: '0x' as Hex,
-      value: BigInt(0),
-      blockNumber: 0,
-      blockHash: '0x' as Hex,
-    };
+    });
 
-    return response;
+    // Check transaction status and throw if reverted
+    if (receipt.status === 'reverted') {
+      throw RunnerError.transactionReverted(
+        receipt.transactionHash,
+        receipt.blockNumber,
+        receipt.gasUsed
+      );
+    }
+
+    // Return viem's TransactionReceipt directly
+    return receipt;
   };
 
   /**
@@ -236,6 +251,6 @@ export class SafeContractRunner implements ContractRunner {
    */
   sendBatchTransaction = (): SafeBatchRun => {
     const safe = this.ensureSafe();
-    return new SafeBatchRun(safe);
+    return new SafeBatchRun(safe, this.publicClient);
   };
 }

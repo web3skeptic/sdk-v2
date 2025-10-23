@@ -42,19 +42,6 @@ export interface TransactionRequest {
 }
 
 /**
- * Transaction response
- */
-export interface TransactionResponse {
-  hash: Hash;
-  from: Address;
-  to?: Address;
-  data: Hex;
-  value: bigint;
-  blockNumber?: number;
-  blockHash?: Hash;
-}
-
-/**
  * Call result
  */
 export interface CallResult<T = unknown> {

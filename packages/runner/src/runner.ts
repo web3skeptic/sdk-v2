@@ -1,5 +1,5 @@
-import type { Address, TransactionRequest, TransactionResponse } from '@circles-sdk/types';
-import type { Account, Chain, PublicClient, Transport, WalletClient } from 'viem';
+import type { Address, TransactionRequest } from '@circles-sdk/types';
+import type { Account, Chain, PublicClient, Transport, WalletClient, TransactionReceipt } from 'viem';
 
 /**
  * Batch transaction runner interface
@@ -13,9 +13,9 @@ export interface BatchRun {
 
   /**
    * Execute all batched transactions
-   * @returns Single transaction response for the entire batch
+   * @returns Single transaction receipt for the entire batch
    */
-  run(): Promise<TransactionResponse>;
+  run(): Promise<TransactionReceipt>;
 }
 
 /**
@@ -55,12 +55,11 @@ export interface ContractRunner {
 
   /**
    * Send one or more transactions
-   * - Safe: batches all transactions atomically and returns single TransactionResponse
-   * - EOA: does not support multiple transactions
+   * - Safe: batches all transactions atomically and returns single TransactionReceipt
    */
   sendTransaction?(
     txs: TransactionRequest[]
-  ): Promise<TransactionResponse>;
+  ): Promise<TransactionReceipt>;
 
   /**
    * Create a batch transaction runner (if supported)

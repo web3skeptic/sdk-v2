@@ -97,4 +97,25 @@ export class RunnerError extends CirclesError<RunnerErrorSource> {
       context: { txHash, timeout },
     });
   }
+
+  /**
+   * Create error for reverted transactions
+   */
+  static transactionReverted(
+    txHash: string,
+    blockNumber: bigint,
+    gasUsed: bigint,
+    cause?: unknown
+  ): RunnerError {
+    return new RunnerError('Transaction reverted', {
+      code: 'RUNNER_TX_REVERTED',
+      source: 'TRANSACTION_EXECUTION',
+      cause,
+      context: {
+        transactionHash: txHash,
+        blockNumber: blockNumber.toString(),
+        gasUsed: gasUsed.toString(),
+      },
+    });
+  }
 }

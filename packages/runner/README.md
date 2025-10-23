@@ -1,10 +1,10 @@
 # @circles-sdk/runner
 
-Contract runner implementations for executing blockchain operations with the Circles SDK.
+Safe multisig wallet integration for executing blockchain operations with the Circles SDK.
 
 ## Overview
 
-This package provides contract runner implementations that handle transaction signing and execution. Contract runners abstract away the details of how transactions are signed, allowing you to easily switch between different signing methods (private key, hardware wallet, etc.).
+This package provides the `SafeContractRunner` implementation for executing transactions through Safe multisig wallets. It handles transaction batching, signing, and confirmation, making it easy to interact with Circles protocol using Safe wallets.
 
 ## Installation
 
@@ -14,14 +14,14 @@ npm install @circles-sdk/runner
 
 ## Usage
 
-### PrivateKeyContractRunner
+### SafeContractRunner
 
-The `PrivateKeyContractRunner` uses a private key to sign transactions.
+The `SafeContractRunner` executes transactions through a Safe multisig wallet.
 
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { gnosis } from 'viem/chains';
-import { PrivateKeyContractRunner } from '@circles-sdk/runner';
+import { SafeContractRunner } from '@circles-sdk/runner';
 
 // Create a public client
 const publicClient = createPublicClient({
@@ -30,29 +30,45 @@ const publicClient = createPublicClient({
 });
 
 // Create the runner
-const runner = new PrivateKeyContractRunner(
+const runner = new SafeContractRunner(
   publicClient,
-  '0x...' // your private key
+  '0x...', // private key of Safe signer
+  'https://rpc.gnosischain.com',
+  '0x...' // Safe address
 );
 
 // Initialize the runner
 await runner.init();
 
-// Now you can use the runner to send transactions
-const response = await runner.sendTransaction({
+// Send a single transaction
+const receipt = await runner.sendTransaction([{
   to: '0x...',
   data: '0x...',
   value: 0n,
-});
+}]);
 
-console.log('Transaction hash:', response.hash);
+console.log('Transaction hash:', receipt.transactionHash);
+console.log('Status:', receipt.status);
+console.log('Gas used:', receipt.gasUsed);
+
+// Batch multiple transactions atomically
+const batchReceipt = await runner.sendTransaction([
+  { to: '0x...', data: '0x...', value: 0n },
+  { to: '0x...', data: '0x...', value: 0n },
+  { to: '0x...', data: '0x...', value: 0n },
+]);
 ```
+
+## Features
+
+- **Transaction Confirmation**: Automatically waits for transactions to be mined
+- **Status Checking**: Throws errors if transactions revert
+- **Atomic Batching**: Execute multiple transactions in a single Safe transaction
+- **Full Receipt Data**: Returns complete viem TransactionReceipt with gas, logs, etc.
 
 ## API
 
 ### ContractRunner Interface
-
-The base interface that all runners implement:
 
 ```typescript
 interface ContractRunner {
@@ -63,17 +79,25 @@ interface ContractRunner {
   estimateGas?(tx: TransactionRequest): Promise<bigint>;
   call?(tx: TransactionRequest): Promise<string>;
   resolveName?(name: string): Promise<string | null>;
-  sendTransaction?(tx: TransactionRequest): Promise<TransactionResponse>;
+  sendTransaction?(txs: TransactionRequest[]): Promise<TransactionResponse>;
+  sendBatchTransaction?(): BatchRun;
 }
 ```
 
-### PrivateKeyContractRunner
+### SafeContractRunner
 
 ```typescript
-class PrivateKeyContractRunner implements ContractRunner {
-  constructor(publicClient: PublicClient, privateKey: Hex);
+class SafeContractRunner implements ContractRunner {
+  constructor(
+    publicClient: PublicClient,
+    privateKey: Hex,
+    rpcUrl: string,
+    safeAddress?: Address
+  );
 
-  // Implements all ContractRunner methods
+  init(safeAddress?: Address): Promise<void>;
+  sendTransaction(txs: TransactionRequest[]): Promise<TransactionResponse>;
+  sendBatchTransaction(): SafeBatchRun;
 }
 ```
 

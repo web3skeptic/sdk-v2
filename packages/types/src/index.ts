@@ -11,7 +11,6 @@ export type {
   Hash,
   ContractConfig,
   TransactionRequest,
-  TransactionResponse,
   CallResult,
 } from './base';
 

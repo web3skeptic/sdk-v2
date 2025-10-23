@@ -68,4 +68,7 @@ export class AvatarMethods {
   async getNetworkSnapshot(): Promise<NetworkSnapshot> {
     return this.client.call<[], NetworkSnapshot>('circles_getNetworkSnapshot', []);
   }
+  // @todo is backer
+  // @todo is batch backer
+  // @todo get backers
 }

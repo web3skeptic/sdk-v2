@@ -6,6 +6,7 @@ import type { Address } from './base';
 
 /**
  * Transaction history row (base data from RPC)
+ * Might include conversions between different circle representations
  */
 export interface TransactionHistoryRow {
   blockNumber: number;
@@ -19,23 +20,16 @@ export interface TransactionHistoryRow {
   id: string;
   tokenAddress: Address;
   value: string;
-}
-
-/**
- * Transaction history row with calculated circle amounts
- * Includes conversions between different circle representations
- */
-export interface TransactionHistoryRowWithCircles extends TransactionHistoryRow {
   /** Human-readable circle amount (demurraged) */
-  circles: number;
+  circles?: number;
   /** Atto-circles (demurraged, 18 decimals) */
-  attoCircles: bigint;
+  attoCircles?: bigint;
   /** Static circles (inflationary, human-readable) */
-  staticCircles: number;
+  staticCircles?: number;
   /** Atto-static circles (inflationary, 18 decimals) */
-  staticAttoCircles: bigint;
+  staticAttoCircles?: bigint;
   /** Time Circles (CRC) human-readable */
-  crc: number;
+  crc?: number;
   /** Atto-CRC (18 decimals) */
-  attoCrc: bigint;
+  attoCrc?: bigint;
 }

@@ -2,7 +2,6 @@ import type {
   Address,
   CirclesConfig,
   Profile,
-  TransactionResponse,
   GroupProfile
 } from '@circles-sdk/types';
 import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
