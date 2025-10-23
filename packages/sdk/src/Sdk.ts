@@ -10,6 +10,7 @@ import { CirclesRpc } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
 import { cidV0ToHex } from '@circles-sdk/utils';
 import { HumanAvatar } from './HumanAvatar';
+import { BaseGroupAvatar } from './BaseGroupAvatar';
 import type {
   ContractRunner,
   CirclesData,
@@ -124,16 +125,24 @@ export class Sdk {
 
   /**
    * Get an avatar by address
-   * Returns a HumanAvatar instance that provides methods for interacting with the avatar
+   * Automatically detects the avatar type and returns the appropriate avatar instance
+   * @returns HumanAvatar for human/organization avatars, BaseGroupAvatar for group avatars
    */
-  async getAvatar(avatarAddress: Address): Promise<HumanAvatar> {
-    // TODO: Implement avatar fetching with RPC
-    // For now, return a basic HumanAvatar instance
+  async getAvatar(avatarAddress: Address): Promise<HumanAvatar | BaseGroupAvatar> {
     try {
       const avatarInfo = await this.rpc.avatar.getAvatarInfo(avatarAddress);
+
+      // Detect avatar type and return appropriate avatar class
+      const avatarType = (avatarInfo as any)?.type;
+
+      if (avatarType === 'CrcV2_RegisterGroup') {
+        return new BaseGroupAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      }
+
+      // Default to HumanAvatar for human/organization types
       return new HumanAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
     } catch (error) {
-      // Return avatar without info if fetch fails
+      // Return HumanAvatar without info if fetch fails
       return new HumanAvatar(avatarAddress, this.core, this.contractRunner);
     }
   }

@@ -3,12 +3,11 @@ import type {
 } from '@circles-sdk/types';
 import type { ContractRunner } from '@circles-sdk/runner';
 
-/**
- * Observable type for event streaming
- */
-export type Observable<T> = {
-  subscribe(observer: (value: T) => void): { unsubscribe(): void };
-};
+// Re-export types from events package
+export type { Observable, CirclesEvent, CirclesEventType } from '@circles-sdk/events';
+
+// Re-export types from types package
+export type { TransactionHistoryRow, TransactionHistoryRowWithCircles } from '@circles-sdk/types';
 
 /**
  * Avatar row data from RPC
@@ -31,32 +30,12 @@ export interface TokenBalanceRow {
 }
 
 /**
- * Transaction history row from RPC
- */
-export interface TransactionHistoryRow {
-  hash: string;
-  from: Address;
-  to: Address;
-  value: bigint;
-  timestamp: number;
-  // Additional fields as needed
-}
-
-/**
  * Trust relation row from RPC
  */
 export interface TrustRelationRow {
   truster: Address;
   trustee: Address;
   expiryTime: number;
-}
-
-/**
- * Circles event type
- */
-export interface CirclesEvent {
-  type: string;
-  data: any;
 }
 
 /**

@@ -7,16 +7,18 @@ import type {
 } from '@circles-sdk/types';
 import type { Core } from '@circles-sdk/core';
 import type {
-  Observable,
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
+  TransactionHistoryRowWithCircles,
   TrustRelationRow,
-  CirclesEvent,
   CirclesQuery,
   ContractRunner,
 } from './types';
-import { cidV0ToHex, bytesToHex } from '@circles-sdk/utils';
+import type { Observable, CirclesEvent } from '@circles-sdk/events';
+import { Observable as ObservableClass } from '@circles-sdk/events';
+import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk/utils';
+import { SdkError } from './errors';
 import { Profiles } from '@circles-sdk/profiles';
 import {
   CirclesType,
@@ -48,13 +50,14 @@ export class HumanAvatar {
   public readonly avatarInfo: AvatarRow | undefined;
   public readonly core: Core;
   public readonly contractRunner?: ContractRunner;
-  public readonly events: Observable<CirclesEvent>;
+  public events: Observable<CirclesEvent>;
   private readonly runner: ContractRunner;
   private readonly profiles: Profiles;
   private readonly transferBuilder: TransferBuilder;
   private readonly rpc: CirclesRpc;
   private _cachedProfile?: Profile;
   private _cachedProfileCid?: string;
+  private _eventSubscription?: () => void;
 
   constructor(
     address: Address,
@@ -69,13 +72,14 @@ export class HumanAvatar {
 
     // Validate contract runner is available
     if (!contractRunner) {
-      throw new Error(
-        'Contract runner not available. Please provide a ContractRunner when creating the SDK instance.'
-      );
+      throw SdkError.notInitialized('ContractRunner');
     }
 
     if (!contractRunner.sendTransaction) {
-      throw new Error('Contract runner does not support sendTransaction');
+      throw SdkError.unsupportedOperation(
+        'sendTransaction',
+        'Contract runner does not support transaction sending'
+      );
     }
 
     this.runner = contractRunner;
@@ -89,34 +93,92 @@ export class HumanAvatar {
     // Initialize transfer builder
     this.transferBuilder = new TransferBuilder(core);
 
-    // TODO: Implement event streaming
-    this.events = {
-      subscribe: () => {
-        throw new Error('Event streaming not yet implemented');
-      },
-    };
+    // Event subscription is optional - initialize with stub observable
+    const stub = ObservableClass.create<CirclesEvent>();
+    this.events = stub.property;
   }
 
   // Balance methods
   public readonly balances = {
-    getTotal: async (): Promise<number> => {
-      // TODO: Implement total balance calculation
-      throw new Error('balances.getTotal() not yet implemented');
+    getTotal: async (): Promise<bigint> => {
+      return await this.rpc.balance.getTotalBalance(this.address);
     },
 
-    getDetailed: async (): Promise<TokenBalanceRow[]> => {
-      // TODO: Implement detailed balance fetching
-      throw new Error('balances.getDetailed() not yet implemented');
-    },
-
-    getGasToken: async (): Promise<bigint> => {
-      // TODO: Implement gas token balance fetching
-      throw new Error('balances.getGasToken() not yet implemented');
+    getTokenBalances: async (): Promise<TokenBalanceRow[]> => {
+      return await this.rpc.balance.getTokenBalances(this.address) as unknown as TokenBalanceRow[];
     },
 
     getTotalSupply: async (): Promise<bigint> => {
       // TODO: Implement total supply fetching
       throw new Error('balances.getTotalSupply() not yet implemented');
+    },
+
+    /**
+     * Get the maximum amount that can be replenished (converted to unwrapped personal CRC)
+     * This calculates how much of your wrapped tokens and other tokens can be converted
+     * into your own unwrapped ERC1155 personal CRC tokens using pathfinding
+     *
+     * @param options Optional pathfinding options
+     * @returns Maximum replenishable amount in atto-circles
+     *
+     * @example
+     * ```typescript
+     * const maxReplenishable = await avatar.balances.getMaxReplenishable();
+     * console.log('Can replenish:', CirclesConverter.attoCirclesToCircles(maxReplenishable), 'CRC');
+     * ```
+     */
+    //@todo improve calculation
+    getMaxReplenishable: async (options?: PathfindingOptions): Promise<bigint> => {
+      const addr = this.address.toLowerCase() as Address;
+
+      // Find maximum flow from avatar to itself, targeting personal tokens as destination
+      // This effectively asks: "How much can I convert to my own personal tokens?"
+      const maxFlow = await this.rpc.pathfinder.findMaxFlow({
+        from: addr,
+        to: addr,
+        toTokens: [addr], // Destination token is sender's own personal CRC
+        useWrappedBalances: true, // Include wrapped tokens
+        ...options,
+      });
+
+      return maxFlow;
+    },
+
+    /**
+     * Replenish unwrapped personal CRC tokens by converting wrapped/other tokens
+     *
+     * This method uses pathfinding to find the best way to convert your available tokens
+     * (including wrapped tokens) into unwrapped ERC1155 personal CRC tokens.
+     *
+     * Useful when you have wrapped tokens or other people's tokens and want to
+     * convert them to your own personal unwrapped tokens for transfers.
+     *
+     * @param options Optional pathfinding options
+     * @returns Transaction receipt
+     *
+     * @example
+     * ```typescript
+     * // Convert all available wrapped/other tokens to unwrapped personal CRC
+     * const receipt = await avatar.balances.replenish();
+     * console.log('Replenished personal tokens, tx hash:', receipt.hash);
+     * ```
+     */
+    //@todo double check
+    //@todo add amount to replenish
+    replenish: async (options?: PathfindingOptions): Promise<TransactionReceipt> => {
+      // Construct replenish transactions using TransferBuilder
+      const transactions = await this.transferBuilder.constructReplenish(
+        this.address,
+        options
+      );
+
+      // If no transactions needed, return early
+      if (transactions.length === 0) {
+        throw new Error('No tokens available to replenish. You may not have any wrapped tokens or convertible tokens.');
+      }
+
+      // Execute the constructed transactions
+      return await this.runner.sendTransaction!(transactions);
     },
   };
 
@@ -154,13 +216,27 @@ export class HumanAvatar {
       txData?: Uint8Array
     ): Promise<TransactionReceipt> => {
       // Default to sender's personal token if not specified
+      // Validate inputs
+      if (!to || to.length !== 42 || !to.startsWith('0x')) {
+        throw ValidationError.invalidAddress(to);
+      }
+
+      if (amount <= 0n) {
+        throw ValidationError.invalidAmount(amount, 'Amount must be positive');
+      }
+
       const token = tokenAddress || this.address;
+
+      // Validate token address if provided
+      if (tokenAddress && (!tokenAddress || tokenAddress.length !== 42 || !tokenAddress.startsWith('0x'))) {
+        throw ValidationError.invalidAddress(tokenAddress);
+      }
 
       // Get token info to determine transfer type
       const tokenInfo = await this.rpc.token.getTokenInfo(token);
 
       if (!tokenInfo) {
-        throw new Error(`Token not found: ${token}`);
+        throw SdkError.configError(`Token not found: ${token}`, { token });
       }
 
       // Define token type sets
@@ -198,46 +274,18 @@ export class HumanAvatar {
     },
 
     getMaxAmount: async (to: Address): Promise<bigint> => {
-      return await this.transferBuilder.getMaxAmount(this.address, to);
+      return await this.rpc.pathfinder.findMaxFlow({
+        from: this.address.toLowerCase() as Address,
+        to: to.toLowerCase() as Address
+      });
     },
 
     getMaxAmountAdvanced: async (to: Address, options?: PathfindingOptions): Promise<bigint> => {
-      return await this.transferBuilder.getMaxAmountAdvanced(this.address, to, options);
-    },
-
-    /**
-     * Replenish unwrapped personal CRC tokens by converting wrapped/other tokens
-     *
-     * This method uses pathfinding to find the best way to convert your available tokens
-     * (including wrapped tokens) into unwrapped ERC1155 personal CRC tokens.
-     *
-     * Useful when you have wrapped tokens or other people's tokens and want to
-     * convert them to your own personal unwrapped tokens for transfers.
-     *
-     * @param options Optional pathfinding options
-     * @returns Transaction receipt
-     *
-     * @example
-     * ```typescript
-     * // Convert all available wrapped/other tokens to unwrapped personal CRC
-     * const receipt = await avatar.transfer.replenish();
-     * console.log('Replenished personal tokens, tx hash:', receipt.hash);
-     * ```
-     */
-    replenish: async (options?: PathfindingOptions): Promise<TransactionReceipt> => {
-      // Construct replenish transactions using TransferBuilder
-      const transactions = await this.transferBuilder.constructReplenish(
-        this.address,
-        options
-      );
-
-      // If no transactions needed, return early
-      if (transactions.length === 0) {
-        throw new Error('No tokens available to replenish. You may not have any wrapped tokens or convertible tokens.');
-      }
-
-      // Execute the constructed transactions
-      return await this.runner.sendTransaction!(transactions);
+      return await this.rpc.pathfinder.findMaxFlow({
+        from: this.address.toLowerCase() as Address,
+        to: to.toLowerCase() as Address,
+        ...options
+      });
     },
   };
 
@@ -309,15 +357,22 @@ export class HumanAvatar {
      * ```
      */
     remove: async (avatar: Address | Address[]): Promise<TransactionReceipt> => {
-      // Untrust by setting expiry to 0
-      const untrustExpiry = BigInt(0);
-
       // Prepare transaction(s)
       const avatars = Array.isArray(avatar) ? avatar : [avatar];
 
       if (avatars.length === 0) {
-        throw new Error('No avatars provided to untrust');
+        throw ValidationError.missingParameter('avatar');
       }
+
+      // Validate addresses
+      for (const addr of avatars) {
+        if (!addr || addr.length !== 42 || !addr.startsWith('0x')) {
+          throw ValidationError.invalidAddress(addr);
+        }
+      }
+
+      // Untrust by setting expiry to 0
+      const untrustExpiry = BigInt(0);
 
       // Create untrust transactions for all avatars
       const transactions = avatars.map((trustee) =>
@@ -727,11 +782,25 @@ export class HumanAvatar {
 
   // History methods
   public readonly history = {
+    /**
+     * Get transaction history for this avatar
+     * Returns incoming/outgoing transactions and minting events
+     *
+     * @param limit Maximum number of transactions to return (default: 50)
+     * @returns Array of transaction history entries
+     *
+     * @example
+     * ```typescript
+     * const txHistory = await avatar.history.getTransactions(20);
+     * txHistory.forEach(tx => {
+     *   console.log(`${tx.from} -> ${tx.to}: ${tx.value}`);
+     * });
+     * ```
+     */
     getTransactions: async (
-      pageSize: number
-    ): Promise<CirclesQuery<TransactionHistoryRow>> => {
-      // TODO: Implement transaction history fetching
-      throw new Error('history.getTransactions() not yet implemented');
+      limit: number = 50
+    ): Promise<TransactionHistoryRowWithCircles[]> => {
+      return await this.rpc.transaction.getTransactionHistory(this.address, limit);
     },
   };
 
@@ -855,6 +924,47 @@ export class HumanAvatar {
       return await this.runner.sendTransaction!([unwrapTx]);
     },
   };
+
+  // ============================================================================
+  // Event Subscription Methods
+  // ============================================================================
+
+  /**
+   * Subscribe to Circles events for this avatar
+   * Events are filtered to only include events related to this avatar's address
+   *
+   * @returns Promise that resolves when subscription is established
+   *
+   * @example
+   * ```typescript
+   * await avatar.subscribeToEvents();
+   *
+   * // Listen for events
+   * avatar.events.subscribe((event) => {
+   *   console.log('Event received:', event.$event, event);
+   *
+   *   if (event.$event === 'CrcV2_PersonalMint') {
+   *     console.log('Minted:', event.amount);
+   *   }
+   * });
+   * ```
+   */
+  async subscribeToEvents(): Promise<void> {
+    // Subscribe to events via RPC WebSocket
+    const observable = await this.rpc.client.subscribe(this.address);
+    this.events = observable;
+  }
+
+  /**
+   * Unsubscribe from events
+   * Cleans up the WebSocket connection and event listeners
+   */
+  unsubscribeFromEvents(): void {
+    if (this._eventSubscription) {
+      this._eventSubscription();
+      this._eventSubscription = undefined;
+    }
+  }
 
   // ============================================================================
   // Private Helper Methods

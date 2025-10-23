@@ -33,6 +33,15 @@
         "typescript": "^5.0.4",
       },
     },
+    "packages/events": {
+      "name": "@circles-sdk/events",
+      "version": "0.1.0",
+      "dependencies": {
+        "@circles-sdk/abis": "workspace:*",
+        "@circles-sdk/types": "workspace:*",
+        "viem": "^2.21.54",
+      },
+    },
     "packages/pathfinder": {
       "name": "@circles-sdk/pathfinder",
       "version": "0.1.0",
@@ -60,6 +69,7 @@
       "name": "@circles-sdk/rpc",
       "version": "0.1.0",
       "dependencies": {
+        "@circles-sdk/events": "workspace:*",
         "@circles-sdk/types": "workspace:*",
         "@circles-sdk/utils": "workspace:*",
       },
@@ -88,6 +98,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@circles-sdk/core": "workspace:*",
+        "@circles-sdk/events": "workspace:*",
         "@circles-sdk/pathfinder": "workspace:*",
         "@circles-sdk/profiles": "workspace:*",
         "@circles-sdk/rpc": "workspace:*",
@@ -140,6 +151,8 @@
     "@circles-sdk/abis": ["@circles-sdk/abis@workspace:packages/abis"],
 
     "@circles-sdk/core": ["@circles-sdk/core@workspace:packages/core"],
+
+    "@circles-sdk/events": ["@circles-sdk/events@workspace:packages/events"],
 
     "@circles-sdk/pathfinder": ["@circles-sdk/pathfinder@workspace:packages/pathfinder"],
 

@@ -29,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@circles-sdk/types": "workspace:*",
+    "@circles-sdk/events": "workspace:*",
     "@circles-sdk/core": "workspace:*",
     "@circles-sdk/rpc": "workspace:*",
     "@circles-sdk/profiles": "workspace:*",

@@ -3,7 +3,12 @@ export { Sdk } from './Sdk';
 
 // Avatar classes
 export { HumanAvatar } from './HumanAvatar';
+export { BaseGroupAvatar } from './BaseGroupAvatar';
 export type { TransactionReceipt, ContractTransactionReceipt } from './HumanAvatar';
+
+// Error handling
+export { SdkError } from './errors';
+export type { SdkErrorSource } from './errors';
 
 // All types (consolidated in types.ts)
 export type {

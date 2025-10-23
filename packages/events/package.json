@@ -1,33 +1,34 @@
 {
-  "name": "@circles-sdk/rpc",
+  "name": "@circles-sdk/events",
   "version": "0.1.0",
-  "description": "Circles RPC wrapper",
+  "description": "Event observation and subscription system for Circles SDK",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
   },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
-    "dev": "tsc --watch"
-  },
+  "keywords": [
+    "circles",
+    "events",
+    "observable",
+    "subscription"
+  ],
+  "license": "MIT",
   "dependencies": {
     "@circles-sdk/types": "workspace:*",
-    "@circles-sdk/utils": "workspace:*",
-    "@circles-sdk/events": "workspace:*"
-  },
-  "devDependencies": {
-    "@esbuild-kit/esm-loader": "^2.6.5",
-    "@types/bun": "^1.2.23",
-    "esbuild": "^0.25.10",
-    "typescript": "^5.0.4"
+    "@circles-sdk/abis": "workspace:*",
+    "viem": "^2.21.54"
   }
 }
