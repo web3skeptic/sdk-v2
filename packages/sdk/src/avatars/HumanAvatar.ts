@@ -25,7 +25,7 @@ import {
 } from '@circles-sdk/core';
 import { encodeAbiParameters, parseAbiParameters, encodeFunctionData } from 'viem';
 import { TransferBuilder } from '@circles-sdk/transfers';
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
 
 /**
  * Advanced pathfinding options (reuses FindPathParams optional fields)
@@ -411,9 +411,8 @@ export class HumanAvatar {
       return await this.core.hubV2.isTrusted(otherAvatar, this.address);
     },
 
-    getAll: async (): Promise<TrustRelationRow[]> => {
-      // TODO: Implement trust relations fetching
-      throw new Error('trust.getAll() not yet implemented');
+    getAll: async (): Promise<AggregatedTrustRelation[]> => {
+      return await this.rpc.trust.getAggregatedTrustRelations(this.address);
     },
   };
 

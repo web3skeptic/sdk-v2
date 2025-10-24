@@ -74,7 +74,6 @@ export class LiftERC20Contract extends Contract<typeof liftERC20Abi> {
    *
    * @param avatar The avatar address (must be a registered human or group)
    * @param circlesType The type of wrapper to create (Demurrage or Inflation)
-   * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request that will return the wrapper address when executed
    */
   ensureERC20(

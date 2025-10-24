@@ -1,7 +1,10 @@
 import type {
-  Address
+  Address,
+  AvatarInfo,
+  TokenBalance
 } from '@circles-sdk/types';
 import type { ContractRunner } from '@circles-sdk/runner';
+import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
 
 // Re-export types from events package
 export type { Observable, CirclesEvent, CirclesEventType } from '@circles-sdk/events';
@@ -55,10 +58,9 @@ export type { ContractRunner };
  * Provides read access to Circles protocol data
  */
 export interface CirclesData {
-  // TODO: Define data access methods
-  getAvatar(address: Address): Promise<any>;
-  getTrustRelations(address: Address): Promise<any>;
-  getBalances(address: Address): Promise<any>;
+  getAvatar(address: Address): Promise<AvatarInfo | undefined>;
+  getTrustRelations(address: Address): Promise<AggregatedTrustRelation[]>;
+  getBalances(address: Address): Promise<TokenBalance[]>;
 }
 
 /**

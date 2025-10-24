@@ -127,7 +127,6 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * @param collateralAvatars - Array of avatar addresses providing collateral
    * @param amounts - Array of amounts corresponding to each collateral avatar
    * @param data - Additional data to pass to the contract (use '0x' for no data)
-   * @param value - ETH value to send with transaction (default: 0)
    */
   groupMint(
     group: Address,
@@ -268,7 +267,6 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
    * @param avatar - The avatar address whose tokens to wrap
    * @param amount - The amount to wrap
    * @param circlesType - The type of wrapper (0 for Demurrage, 1 for Inflationary)
-   * @param value - ETH value to send with transaction (default: 0)
    * @returns Transaction request that will return the wrapper address when executed
    */
   wrap(

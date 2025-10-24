@@ -34,7 +34,6 @@ export class BaseGroupFactoryContract extends Contract<typeof baseGroupFactoryAb
    * @param name The group name (must be 19 characters or fewer)
    * @param symbol The group symbol
    * @param metadataDigest A hash containing additional metadata for the BaseGroup
-   * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request object
    */
   createBaseGroup(

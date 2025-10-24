@@ -29,7 +29,6 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
   /**
    * Redeem the invitation escrow from a specific inviter
    * @param inviter The address of the inviter whose escrowed invitation is being redeemed
-   * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
   redeemInvitation(inviter: Address): TransactionRequest {
@@ -43,7 +42,6 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
   /**
    * Revoke a single invitation escrow
    * @param invitee The address of the invitee whose escrow is being revoked
-   * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
   revokeInvitation(invitee: Address): TransactionRequest {
@@ -56,7 +54,6 @@ export class InvitationEscrowContract extends Contract<typeof invitationEscrowAb
 
   /**
    * Revoke all active invitation escrows
-   * @param value ETH value to send with transaction (default: 0)
    * @returns Transaction request
    */
   revokeAllInvitations(): TransactionRequest {

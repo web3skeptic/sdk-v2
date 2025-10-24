@@ -10,6 +10,9 @@ export type { TransactionReceipt } from 'viem';
 export { SdkError } from './errors';
 export type { SdkErrorSource } from './errors';
 
+// Re-export trust relation types from RPC
+export type { AggregatedTrustRelation, TrustRelationType } from '@circles-sdk/rpc';
+
 // All types (consolidated in types.ts)
 export type {
   // Avatar types

@@ -14,10 +14,11 @@ import type {
 } from '../types';
 import type { Observable, CirclesEvent } from '@circles-sdk/events';
 import { Observable as ObservableClass } from '@circles-sdk/events';
-import { cidV0ToHex } from '@circles-sdk/utils';
+import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
 import { BaseGroupContract } from '@circles-sdk/core';
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
+import { SdkError } from '../errors';
 
 /**
  * BaseGroupAvatar class implementation
@@ -52,13 +53,11 @@ export class BaseGroupAvatar {
 
     // Validate contract runner is available
     if (!contractRunner) {
-      throw new Error(
-        'Contract runner not available. Please provide a ContractRunner when creating the SDK instance.'
-      );
+      throw SdkError.missingContractRunner('BaseGroupAvatar initialization');
     }
 
     if (!contractRunner.sendTransaction) {
-      throw new Error('Contract runner does not support sendTransaction');
+      throw SdkError.configError('Contract runner does not support sendTransaction');
     }
 
     this.runner = contractRunner;
@@ -113,7 +112,7 @@ export class BaseGroupAvatar {
       const avatars = Array.isArray(avatar) ? avatar : [avatar];
 
       if (avatars.length === 0) {
-        throw new Error('No avatars provided to trust');
+        throw ValidationError.invalidParameter('avatar', avatars, 'No avatars provided to trust');
       }
 
       // Create trust transactions for all avatars
@@ -151,7 +150,7 @@ export class BaseGroupAvatar {
       const avatars = Array.isArray(avatar) ? avatar : [avatar];
 
       if (avatars.length === 0) {
-        throw new Error('No avatars provided to untrust');
+        throw ValidationError.invalidParameter('avatar', avatars, 'No avatars provided to untrust');
       }
 
       // Create untrust transactions for all avatars
@@ -176,9 +175,8 @@ export class BaseGroupAvatar {
       return await this.core.hubV2.isTrusted(otherAvatar, this.address);
     },
 
-    getAll: async (): Promise<TrustRelationRow[]> => {
-      // TODO: Implement trust relations fetching
-      throw new Error('trust.getAll() not yet implemented');
+    getAll: async (): Promise<AggregatedTrustRelation[]> => {
+      return await this.rpc.trust.getAggregatedTrustRelations(this.address);
     },
   };
 
@@ -270,13 +268,13 @@ export class BaseGroupAvatar {
       // Step 1: Pin the profile to IPFS and get CID
       const cid = await this.profiles.create(profile);
       if (!cid) {
-        throw new Error('Failed to update profile. The profile service did not return a CID.');
+        throw SdkError.profileOperationFailed('create', 'The profile service did not return a CID');
       }
 
       // Step 2: Update the metadata digest
       const updateReceipt = await this.profile.updateMetadata(cid);
       if (!updateReceipt) {
-        throw new Error('Failed to update profile. The CID was not updated.');
+        throw SdkError.profileOperationFailed('update', 'The CID was not updated');
       }
 
       // Update local avatar info if available
@@ -314,8 +312,7 @@ export class BaseGroupAvatar {
     getTransactions: async (
       pageSize: number
     ): Promise<CirclesQuery<TransactionHistoryRow>> => {
-      // TODO: Implement transaction history fetching
-      throw new Error('history.getTransactions() not yet implemented');
+      throw SdkError.unsupportedOperation('history.getTransactions', 'not yet implemented');
     },
   };
 }

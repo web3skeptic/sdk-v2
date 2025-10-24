@@ -2,13 +2,17 @@ import type {
   Address,
   CirclesConfig,
   Profile,
-  GroupProfile
+  AvatarInfo,
+  TokenBalance
 } from '@circles-sdk/types';
 import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
 import { Profiles } from '@circles-sdk/profiles';
 import { cidV0ToHex } from '@circles-sdk/utils';
 import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
+import { SdkError } from './errors';
+import { decodeEventLog } from 'viem';
+import { baseGroupFactoryAbi } from '@circles-sdk/abis';
 import type {
   ContractRunner,
   CirclesData,
@@ -51,44 +55,14 @@ export class Sdk {
   private readonly profilesClient: Profiles;
 
   public readonly data: CirclesData = {
-    getAvatar: async (address: Address) => {
-      throw new Error('data.getAvatar() not yet implemented');
+    getAvatar: async (address: Address): Promise<AvatarInfo | undefined> => {
+      return await this.rpc.avatar.getAvatarInfo(address);
     },
-    getTrustRelations: async (address: Address) => {
-      throw new Error('data.getTrustRelations() not yet implemented');
+    getTrustRelations: async (address: Address): Promise<AggregatedTrustRelation[]> => {
+      return await this.rpc.trust.getAggregatedTrustRelations(address);
     },
-    getBalances: async (address: Address) => {
-      throw new Error('data.getBalances() not yet implemented');
-    },
-  };
-
-  public readonly v2Hub: HubV2 = {
-    registerHuman: async (inviter: Address) => {
-      throw new Error('v2Hub.registerHuman() not yet implemented');
-    },
-    registerOrganization: async () => {
-      throw new Error('v2Hub.registerOrganization() not yet implemented');
-    },
-    registerGroup: async (mint: Address, name: string, symbol: string) => {
-      throw new Error('v2Hub.registerGroup() not yet implemented');
-    },
-    trust: async (trustee: Address, expiry: bigint) => {
-      throw new Error('v2Hub.trust() not yet implemented');
-    },
-    personalMint: async () => {
-      throw new Error('v2Hub.personalMint() not yet implemented');
-    },
-    groupMint: async (group: Address, collateral: Address[], amounts: bigint[], data: Uint8Array) => {
-      throw new Error('v2Hub.groupMint() not yet implemented');
-    },
-  };
-
-  public readonly v2Pathfinder: V2Pathfinder = {
-    computeTransfer: async (from: Address, to: Address, value: bigint) => {
-      throw new Error('v2Pathfinder.computeTransfer() not yet implemented');
-    },
-    findPath: async (from: Address, to: Address, value: bigint) => {
-      throw new Error('v2Pathfinder.findPath() not yet implemented');
+    getBalances: async (address: Address): Promise<TokenBalance[]> => {
+      return await this.rpc.balance.getTokenBalances(address);
     },
   };
 
@@ -109,12 +83,12 @@ export class Sdk {
     // Validate and extract sender address from contract runner
     if (contractRunner) {
       if (!contractRunner.sendTransaction) {
-        throw new Error('Contract runner must support sendTransaction method');
+        throw SdkError.configError('Contract runner must support sendTransaction method');
       }
 
       const address = (contractRunner as any).address;
       if (!address) {
-        throw new Error('Cannot determine sender address from contract runner');
+        throw SdkError.configError('Cannot determine sender address from contract runner');
       }
 
       this.senderAddress = address as Address;
@@ -144,10 +118,7 @@ export class Sdk {
       // Default to HumanAvatar for human type
       return new HumanAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
     } catch (error) {
-      // Return HumanAvatar without info if fetch fails (could be human or org)
-      // @todo return error or null
-      // new HumanAvatar(avatarAddress, this.core, this.contractRunner);
-      throw new Error(`Failed to get avatar info`);
+      throw SdkError.avatarNotFound(avatarAddress);
     }
   }
 
@@ -187,7 +158,7 @@ export class Sdk {
       profile: Profile | string
     ): Promise<HumanAvatar> => {
       if (!this.contractRunner || !this.senderAddress) {
-        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
+        throw SdkError.missingContractRunner('Human registration');
       }
 
       const contractRunner: ContractRunner = this.contractRunner;
@@ -215,9 +186,10 @@ export class Sdk {
         const balance = await this.core.hubV2.balanceOf(inviter, tokenId);
 
         if (balance < minRequiredCRC) {
-          throw new Error(
-            `Insufficient unwrapped CRC balance. Inviter needs 96+ CRC. ` +
-            `Current balance: ${Number(balance) / 1e18} CRC`
+          throw SdkError.insufficientBalance(
+            '96 CRC',
+            `${Number(balance) / 1e18} CRC`,
+            'unwrapped CRC'
           );
         }
       }
@@ -271,7 +243,7 @@ export class Sdk {
      */
     asOrganization: async (profile: Profile | string): Promise<OrganisationAvatar> => {
       if (!this.contractRunner || !this.senderAddress) {
-        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
+        throw SdkError.missingContractRunner('Organization registration');
       }
 
       const contractRunner: ContractRunner = this.contractRunner;
@@ -286,7 +258,7 @@ export class Sdk {
         profileCid = profile;
         const fetchedProfile = await this.profilesClient.get(profileCid);
         if (!fetchedProfile) {
-          throw new Error(`Failed to fetch profile with CID: ${profileCid}`);
+          throw SdkError.profileOperationFailed('fetch', `Profile not found with CID: ${profileCid}`);
         }
         profileData = fetchedProfile;
       } else {
@@ -297,7 +269,7 @@ export class Sdk {
 
       // Validate that profile has a name
       if (!profileData.name) {
-        throw new Error('Profile must have a name field for organization registration');
+        throw SdkError.invalidProfile('Profile must have a name field for organization registration');
       }
 
       // Convert CID to metadata digest hex (format expected by registerOrganization)
@@ -330,7 +302,9 @@ export class Sdk {
      * @param service The address of the service for the new BaseGroup
      * @param feeCollection The address of the fee collection for the new BaseGroup
      * @param initialConditions An array of initial condition addresses
-     * @param profile Group profile data (includes name, symbol, and other metadata) or CID string
+     * @param name The group name (must be 19 characters or fewer)
+     * @param symbol The group symbol (e.g., 'MYG')
+     * @param profile Profile data (name, description, images, etc.) or CID string
      * @returns BaseGroupAvatar instance for the newly registered group
      *
      * @example
@@ -340,9 +314,10 @@ export class Sdk {
      *   '0xServiceAddress',
      *   '0xFeeCollectionAddress',
      *   [], // initial conditions
+     *   'My Group', // name
+     *   'MYG', // symbol
      *   {
      *     name: 'My Group',
-     *     symbol: 'MYG',
      *     description: 'A Circles base group'
      *   }
      * );
@@ -353,48 +328,42 @@ export class Sdk {
       service: Address,
       feeCollection: Address,
       initialConditions: Address[],
-      profile: GroupProfile | string
+      name: string,
+      symbol: string,
+      profile: Profile | string
     ): Promise<BaseGroupAvatar> => {
       if (!this.contractRunner || !this.senderAddress) {
-        throw new Error('Registration requires a contract runner. Initialize SDK with a ContractRunner.');
+        throw SdkError.missingContractRunner('Group registration');
       }
 
       const contractRunner: ContractRunner = this.contractRunner;
       const senderAddress: Address = this.senderAddress;
 
-      // Step 1: Create and upload profile to IPFS, and extract name and symbol
-      let profileCid: string;
-      let profileData: GroupProfile;
-
-      if (typeof profile === 'string') {
-        // Profile is already a CID - fetch it to get the name and symbol
-        profileCid = profile;
-        const fetchedProfile = await this.profilesClient.get(profileCid);
-        if (!fetchedProfile) {
-          throw new Error(`Failed to fetch profile with CID: ${profileCid}`);
-        }
-        // Validate it's a GroupProfile with symbol
-        if (!('symbol' in fetchedProfile)) {
-          throw new Error('Profile must be a GroupProfile with a symbol field');
-        }
-        profileData = fetchedProfile as GroupProfile;
-      } else {
-        // Create profile and upload to IPFS
-        profileData = profile;
-        profileCid = await this.profilesClient.create(profile);
+      // Validate name and symbol
+      if (!name) {
+        throw SdkError.invalidProfile('Name is required for group registration');
       }
-
-      // Validate that profile has name and symbol
-      if (!profileData.name) {
-        throw new Error('Profile must have a name field for group registration');
-      }
-      if (!profileData.symbol) {
-        throw new Error('Profile must have a symbol field for group registration');
+      if (!symbol) {
+        throw SdkError.invalidProfile('Symbol is required for group registration');
       }
 
       // Validate name length (must be 19 characters or fewer)
-      if (profileData.name.length > 19) {
-        throw new Error('Group name must be 19 characters or fewer');
+      if (name.length > 19) {
+        throw SdkError.invalidProfile('Group name must be 19 characters or fewer', {
+          name,
+          length: name.length
+        });
+      }
+
+      // Step 1: Create and upload profile to IPFS
+      let profileCid: string;
+
+      if (typeof profile === 'string') {
+        // Profile is already a CID
+        profileCid = profile;
+      } else {
+        // Create profile and upload to IPFS
+        profileCid = await this.profilesClient.create(profile);
       }
 
       // Convert CID to metadata digest hex (format expected by createBaseGroup)
@@ -406,35 +375,37 @@ export class Sdk {
         service,
         feeCollection,
         initialConditions,
-        profileData.name,
-        profileData.symbol,
+        name,
+        symbol,
         metadataDigest as `0x${string}`
       );
 
       // Step 3: Execute the transaction
       const receipt = await contractRunner.sendTransaction!([createGroupTx]);
 
-      // Step 4: Extract the group address from the transaction logs
-      // The BaseGroupCreated event contains the group address as the first indexed parameter
+      // Step 4: Decode the BaseGroupCreated event to extract the group address
       let groupAddress: Address | undefined;
 
       for (const log of receipt.logs) {
-        // The group address is the first indexed parameter (topics[1])
-        // BaseGroupCreated event: event BaseGroupCreated(address indexed group, address indexed owner, address indexed mintHandler, address treasury)
-        if (log.topics && log.topics.length >= 2) {
-          // Extract the address from the topic (remove leading zeros and format)
-          const addressHex = log.topics[1];
-          if (addressHex && addressHex.length === 66) { // 0x + 64 hex chars
-            // Address is the last 40 chars (20 bytes)
-            const extractedAddress = ('0x' + addressHex.slice(-40)) as Address;
-            groupAddress = extractedAddress;
+        try {
+          const decoded = decodeEventLog({
+            abi: baseGroupFactoryAbi,
+            data: log.data,
+            topics: log.topics,
+          });
+
+          if (decoded.eventName === 'BaseGroupCreated') {
+            groupAddress = (decoded.args as any).group;
             break;
           }
+        } catch {
+          // Not the event we're looking for, continue
+          continue;
         }
       }
 
       if (!groupAddress) {
-        throw new Error('Failed to extract group address from transaction receipt');
+        throw SdkError.transactionDataExtractionFailed('group address', 'BaseGroupCreated event not found in transaction receipt');
       }
 
       // Step 5: Return a BaseGroupAvatar instance for the newly created group
@@ -504,8 +475,7 @@ export class Sdk {
      * @returns Group type or undefined if not a group
      */
     getType: async (avatar: Address): Promise<GroupType | undefined> => {
-      // TODO: Implement group type detection
-      throw new Error('groups.getType() not yet implemented');
+      throw SdkError.unsupportedOperation('groups.getType', 'not yet implemented');
     },
   };
 }
