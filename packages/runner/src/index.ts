@@ -7,8 +7,11 @@
 
 export type { ContractRunner, BatchRun } from './runner';
 
-// Safe Multisig Runner
+// Safe Multisig Runner (server-side with private key)
 export { SafeContractRunner, SafeBatchRun } from './safe-runner';
+
+// Safe Browser Runner (client-side with Web3 wallet)
+export { SafeBrowserRunner, SafeBrowserBatchRun } from './safe-browser-runner';
 
 // Error handling
 export { RunnerError } from './errors';

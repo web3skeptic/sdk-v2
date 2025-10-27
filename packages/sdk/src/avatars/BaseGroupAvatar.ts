@@ -8,8 +8,6 @@ import type {
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
-  TrustRelationRow,
-  CirclesQuery,
   ContractRunner,
 } from '../types';
 import type { Observable, CirclesEvent } from '@circles-sdk/events';
@@ -46,6 +44,7 @@ export class BaseGroupAvatar {
     contractRunner?: ContractRunner,
     avatarInfo?: AvatarRow
   ) {
+    // @todo the address is extractable from either contract runner or avatar info
     this.address = address;
     this.core = core;
     this.contractRunner = contractRunner;
@@ -310,9 +309,9 @@ export class BaseGroupAvatar {
   // History methods
   public readonly history = {
     getTransactions: async (
-      pageSize: number
-    ): Promise<CirclesQuery<TransactionHistoryRow>> => {
-      throw SdkError.unsupportedOperation('history.getTransactions', 'not yet implemented');
+      limit: number = 50
+    ): Promise<TransactionHistoryRow[]> => {
+      return await this.rpc.transaction.getTransactionHistory(this.address, limit);
     },
   };
 }
