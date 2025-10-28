@@ -1,6 +1,6 @@
 import type { JsonRpcRequest, JsonRpcResponse, Address } from '@circles-sdk/types';
-import { Observable, parseRpcSubscriptionMessage } from '@circles-sdk/events';
-import type { CirclesEvent } from '@circles-sdk/events';
+import { Observable, parseRpcSubscriptionMessage } from './events';
+import type { CirclesEvent } from './events';
 import { RpcError } from './errors';
 
 /**

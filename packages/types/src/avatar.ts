@@ -15,8 +15,9 @@ export interface AvatarInfo {
   blockNumber: number;
   /**
    * The timestamp of the last change to the avatar
+   * Note: May be undefined for some avatars
    */
-  timestamp: number;
+  timestamp?: number;
   /**
    * The transaction index
    */

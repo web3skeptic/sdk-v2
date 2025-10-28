@@ -80,6 +80,7 @@ export class HubV2Contract extends Contract<typeof hubV2Abi> {
   /**
    * Calculate issuance for a human avatar
    */
+  // @todo check how this function works with the static call
   async calculateIssuance(human: Address): Promise<readonly [bigint, bigint, bigint]> {
     return this.read('calculateIssuance', [human]) as Promise<readonly [bigint, bigint, bigint]>;
   }

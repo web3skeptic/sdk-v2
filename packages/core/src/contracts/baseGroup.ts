@@ -48,31 +48,10 @@ export class BaseGroupContract extends Contract<typeof baseGroupAbi> {
   }
 
   /**
-   * Get the Hub contract address (constant)
-   */
-  async HUB(): Promise<Address> {
-    return this.read('HUB') as Promise<Address>;
-  }
-
-  /**
-   * Get the LiftERC20 contract address (constant)
-   */
-  async LIFT_ERC20(): Promise<Address> {
-    return this.read('LIFT_ERC20') as Promise<Address>;
-  }
-
-  /**
    * Get the maximum number of membership conditions allowed (constant)
    */
   async MAX_CONDITIONS(): Promise<bigint> {
     return this.read('MAX_CONDITIONS') as Promise<bigint>;
-  }
-
-  /**
-   * Get the NameRegistry contract address (constant)
-   */
-  async NAME_REGISTRY(): Promise<Address> {
-    return this.read('NAME_REGISTRY') as Promise<Address>;
   }
 
   /**

@@ -1,6 +1,5 @@
 /**
- * @circles-sdk/events
- * Event observation and subscription system for Circles SDK
+ * Event observation and subscription system
  */
 
 // Types

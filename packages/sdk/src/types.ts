@@ -6,8 +6,8 @@ import type {
 import type { ContractRunner } from '@circles-sdk/runner';
 import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
 
-// Re-export types from events package
-export type { Observable, CirclesEvent, CirclesEventType } from '@circles-sdk/events';
+// Re-export types from rpc package (events are now part of rpc)
+export type { Observable, CirclesEvent, CirclesEventType } from '@circles-sdk/rpc';
 
 // Re-export types from types package
 export type { TransactionHistoryRow, TransactionHistoryRowWithCircles } from '@circles-sdk/types';

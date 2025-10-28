@@ -21,8 +21,7 @@
   },
   "dependencies": {
     "@circles-sdk/types": "workspace:*",
-    "@circles-sdk/utils": "workspace:*",
-    "@circles-sdk/events": "workspace:*"
+    "@circles-sdk/utils": "workspace:*"
   },
   "devDependencies": {
     "@esbuild-kit/esm-loader": "^2.6.5",

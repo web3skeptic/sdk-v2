@@ -10,8 +10,8 @@ import type {
   TransactionHistoryRow,
   ContractRunner,
 } from '../types';
-import type { Observable, CirclesEvent } from '@circles-sdk/events';
-import { Observable as ObservableClass } from '@circles-sdk/events';
+import type { Observable, CirclesEvent } from '@circles-sdk/rpc';
+import { Observable as ObservableClass } from '@circles-sdk/rpc';
 import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
 import { Profiles } from '@circles-sdk/profiles';
 import { BaseGroupContract } from '@circles-sdk/core';

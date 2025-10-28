@@ -28,3 +28,19 @@ export type { RpcErrorSource } from './errors';
 
 // Utils
 export { normalizeAddress, normalizeAddresses, parseStringsToBigInt } from './utils';
+
+// Events (subscription and observation)
+export {
+  Observable,
+  parseRpcEvent,
+  parseRpcSubscriptionMessage,
+  isCirclesEvent,
+} from './events';
+
+export type {
+  CirclesEvent,
+  CirclesEventType,
+  CirclesBaseEvent,
+  CirclesEventOfType,
+  RpcSubscriptionEvent,
+} from './events';
