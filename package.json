@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/events' build && bun run --filter '@circles-sdk/profiles' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/transfers' build && bun run --filter '@circles-sdk/sdk' build && bun run --filter '@circles-sdk/runner' build",
+    "build": "bun run --filter '@circles-sdk/abis' build && bun run --filter '@circles-sdk/utils' build && bun run --filter '@circles-sdk/profiles' build && bun run --filter '@circles-sdk/core' build && bun run --filter '@circles-sdk/rpc' build && bun run --filter '@circles-sdk/transfers' build && bun run --filter '@circles-sdk/sdk' build && bun run --filter '@circles-sdk/runner' build",
     "build:abis": "bun run --filter '@circles-sdk/abis' build",
     "build:core": "bun run --filter '@circles-sdk/core' build",
     "build:rpc": "bun run --filter '@circles-sdk/rpc' build",
@@ -40,7 +40,6 @@
     "packages/types",
     "packages/utils",
     "packages/abis",
-    "packages/events",
     "packages/core",
     "packages/rpc",
     "packages/runner",
