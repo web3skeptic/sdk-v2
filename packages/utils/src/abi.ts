@@ -40,7 +40,12 @@ const toHex64 = (num: number | bigint): string => num.toString(16).padStart(HEX_
 // ADDRESS CHECKSUMMING (EIP-55)
 // ============================================================================
 
-function toChecksumAddress(address: string): string {
+/**
+ * Convert an Ethereum address to EIP-55 checksummed format
+ * @param address - The address to checksum (with or without 0x prefix)
+ * @returns The checksummed address with 0x prefix
+ */
+export function checksumAddress(address: string): string {
   const addr = address.toLowerCase().replace('0x', '');
   const hash = bytesToHex(keccak_256(new TextEncoder().encode(addr))).slice(2);
 
@@ -349,7 +354,7 @@ function decodePrimitive(type: AbiType, data: string, offset: number): DecodeRes
   // Address
   if (type === 'address') {
     return {
-      value: toChecksumAddress('0x' + chunk.slice(24)),
+      value: checksumAddress('0x' + chunk.slice(24)),
       consumed: HEX_CHARS
     };
   }

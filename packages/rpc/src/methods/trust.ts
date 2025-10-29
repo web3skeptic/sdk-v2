@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, TrustRelation } from '@circles-sdk/types';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface QueryResponse {
   columns: string[];
@@ -49,11 +49,13 @@ export class TrustMethods {
    * );
    * ```
    */
+  // @todo check if we need to normilize addr before the call
   async getCommonTrust(address1: Address, address2: Address): Promise<Address[]> {
-    return this.client.call<[Address, Address], Address[]>('circles_getCommonTrust', [
+    const result = await this.client.call<[Address, Address], Address[]>('circles_getCommonTrust', [
       normalizeAddress(address1),
       normalizeAddress(address2),
     ]);
+    return checksumAddresses(result);
   }
 
   /**
@@ -129,7 +131,8 @@ export class TrustMethods {
       },
     ]);
 
-    return this.transformQueryResponse<TrustRelation>(response);
+    const result = this.transformQueryResponse<TrustRelation>(response);
+    return checksumAddresses(result);
   }
 
   /**
@@ -158,7 +161,10 @@ export class TrustMethods {
     const trustBucket: Record<Address, TrustRelation[]> = {};
 
     trustListRows.forEach((row) => {
-      const counterpart = row.truster !== normalized ? row.truster : row.trustee;
+      // Normalize addresses for comparison (both are already checksummed from getTrustRelations)
+      const trusterNorm = normalizeAddress(row.truster);
+      const trusteeNorm = normalizeAddress(row.trustee);
+      const counterpart = trusterNorm !== normalized ? row.truster : row.trustee;
 
       if (!trustBucket[counterpart]) {
         trustBucket[counterpart] = [];
@@ -167,17 +173,17 @@ export class TrustMethods {
     });
 
     // Determine trust relations
-    return Object.entries(trustBucket)
-      .filter(([address]) => address !== normalized)
+    const result = Object.entries(trustBucket)
+      .filter(([address]) => normalizeAddress(address as Address) !== normalized)
       .map(([address, rows]) => {
         const maxTimestamp = Math.max(...rows.map((o) => o.timestamp));
 
         let relation: TrustRelationType;
         if (rows.length === 2) {
           relation = 'mutuallyTrusts';
-        } else if (rows[0]?.trustee === normalized) {
+        } else if (normalizeAddress(rows[0]?.trustee) === normalized) {
           relation = 'trustedBy';
-        } else if (rows[0]?.truster === normalized) {
+        } else if (normalizeAddress(rows[0]?.truster) === normalized) {
           relation = 'trusts';
         } else {
           throw new Error(`Unexpected trust list row. Couldn't determine trust relation.`);
@@ -190,7 +196,9 @@ export class TrustMethods {
           timestamp: maxTimestamp,
         };
       });
-  }// @todo type of trusted entity would be really helpful
+
+    return checksumAddresses(result);
+  }
 
   /**
    * Get addresses that trust the given avatar (incoming trust)
@@ -208,7 +216,8 @@ export class TrustMethods {
   async getTrustedBy(avatar: Address): Promise<AggregatedTrustRelation[]> {
     const normalized = normalizeAddress(avatar);
     const relations = await this.getAggregatedTrustRelations(normalized);
-    return relations.filter((r) => r.relation === 'trustedBy');
+    const filtered = relations.filter((r) => r.relation === 'trustedBy');
+    return checksumAddresses(filtered);
   }
 
   /**
@@ -227,7 +236,8 @@ export class TrustMethods {
   async getTrusts(avatar: Address): Promise<AggregatedTrustRelation[]> {
     const normalized = normalizeAddress(avatar);
     const relations = await this.getAggregatedTrustRelations(normalized);
-    return relations.filter((r) => r.relation === 'trusts');
+    const filtered = relations.filter((r) => r.relation === 'trusts');
+    return checksumAddresses(filtered);
   }
 
   /**
@@ -246,6 +256,7 @@ export class TrustMethods {
   async getMutualTrusts(avatar: Address): Promise<AggregatedTrustRelation[]> {
     const normalized = normalizeAddress(avatar);
     const relations = await this.getAggregatedTrustRelations(normalized);
-    return relations.filter((r) => r.relation === 'mutuallyTrusts');
+    const filtered = relations.filter((r) => r.relation === 'mutuallyTrusts');
+    return checksumAddresses(filtered);
   }
 }

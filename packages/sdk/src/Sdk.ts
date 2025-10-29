@@ -46,6 +46,7 @@ import type {
  * await avatar.personalToken.mint();
  * ```
  */
+// @todo build common avatar inst
 export class Sdk {
   public readonly circlesConfig: CirclesConfig;
   public readonly contractRunner?: ContractRunner;

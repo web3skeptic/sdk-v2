@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, AvatarInfo, TokenBalance } from '@circles-sdk/types';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface InviterRow {
   inviter: Address;
@@ -66,7 +66,10 @@ export class InvitationMethods {
       },
     ]);
 
-    return results.length > 0 ? results[0].inviter : undefined;
+    if (results.length > 0) {
+      return checksumAddresses(results[0].inviter);
+    }
+    return undefined;
   }
 
   /**
@@ -156,13 +159,15 @@ export class InvitationMethods {
         [trusterInfo.avatar]
       );
 
-      const inviterOwnToken = balances.find((b) => b.tokenAddress === trusterInfo.avatar);
+      const inviterOwnToken = balances.find((b) =>
+        normalizeAddress(b.tokenAddress) === normalizeAddress(trusterInfo.avatar)
+      );
       if (inviterOwnToken && inviterOwnToken.circles >= MIN_TOKENS_REQUIRED) {
         humanInviters.push(trusterInfo);
       }
     }
 
-    return humanInviters;
+    return checksumAddresses(humanInviters);
   }
 
   /**
@@ -215,7 +220,8 @@ export class InvitationMethods {
       ]);
 
       const results = this.transformQueryResponse<{ avatar: Address }>(response);
-      return results.map((r) => r.avatar);
+      const avatars = results.map((r) => r.avatar);
+      return checksumAddresses(avatars);
     } else {
       // Find accounts that this avatar trusts without mutual trust
       const response = await this.client.call<[any], QueryResponse>('circles_query', [
@@ -260,13 +266,14 @@ export class InvitationMethods {
         [v2Trusted]
       );
 
-      // Create a Set of registered avatars (filter out null values)
+      // Create a Set of registered avatars (filter out null values) - normalize for comparison
       const registeredAvatarsSet = new Set(
-        trustedAvatarsInfo.filter((a): a is AvatarInfo => a !== null).map((a) => a.avatar)
+        trustedAvatarsInfo.filter((a): a is AvatarInfo => a !== null).map((a) => normalizeAddress(a.avatar))
       );
 
       // Return only unregistered accounts (pending invitations)
-      return v2Trusted.filter((addr) => !registeredAvatarsSet.has(addr));
+      const pending = v2Trusted.filter((addr) => !registeredAvatarsSet.has(normalizeAddress(addr)));
+      return checksumAddresses(pending);
     }
   }
 }

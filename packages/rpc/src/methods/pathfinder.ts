@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { FindPathParams, PathfindingResult } from '@circles-sdk/types';
-import { normalizeFindPathParams, parseStringsToBigInt } from '../utils';
+import { normalizeFindPathParams, parseStringsToBigInt, checksumAddresses } from '../utils';
 
 /**
  * Circles V1 and V2 balance and pathfinding methods
@@ -31,7 +31,8 @@ export class PathfinderMethods {
       [normalizedParams]
     );
 
-    return parseStringsToBigInt(result) as unknown as PathfindingResult;
+    const parsed = parseStringsToBigInt(result) as unknown as PathfindingResult;
+    return checksumAddresses(parsed);
   }
 
   /**

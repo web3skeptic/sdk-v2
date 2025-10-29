@@ -204,6 +204,7 @@ export class BaseGroupAvatar {
   };
 
   // Group property setters
+  //@todo put inside the props and rename set
   public readonly setProperties = {
     owner: async (newOwner: Address): Promise<TransactionReceipt> => {
       const tx = this.baseGroup.setOwner(newOwner);

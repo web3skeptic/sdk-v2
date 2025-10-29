@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter } from '@circles-sdk/types';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface QueryResponse {
   columns: string[];
@@ -176,7 +176,8 @@ export class GroupMethods {
     }
 
     // Apply limit after client-side filtering
-    return results.slice(0, limit);
+    const limited = results.slice(0, limit);
+    return checksumAddresses(limited);
   }
 
   /**
@@ -232,6 +233,7 @@ export class GroupMethods {
       },
     ]);
 
-    return this.transformQueryResponse<GroupMembershipRow>(response);
+    const result = this.transformQueryResponse<GroupMembershipRow>(response);
+    return checksumAddresses(result);
   }
 }

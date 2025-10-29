@@ -1,7 +1,8 @@
 export { CirclesConverter } from './circlesConverter';
 export { bytesToHex } from './bytes';
-export { encodeFunctionData, decodeFunctionResult } from './abi';
+export { encodeFunctionData, decodeFunctionResult, checksumAddress } from './abi';
 export { cidV0ToHex, cidV0ToUint8Array } from './cid';
+export { ZERO_ADDRESS } from './constants';
 
 // Error handling
 export {

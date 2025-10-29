@@ -1,5 +1,5 @@
 import type { Address, FindPathParams, SimulatedBalance } from '@circles-sdk/types';
-import { CirclesConverter } from '@circles-sdk/utils';
+import { checksumAddress as toChecksumAddress } from '@circles-sdk/utils';
 
 /**
  * Normalize an address to lowercase (required by the indexer)
@@ -13,6 +13,56 @@ export function normalizeAddress(address: Address): Address {
  */
 export function normalizeAddresses(addresses: Address[]): Address[] {
   return addresses.map(addr => normalizeAddress(addr));
+}
+
+/**
+ * Convert an address to EIP-55 checksummed format
+ */
+export function checksumAddress(address: Address): Address {
+  return toChecksumAddress(address) as Address;
+}
+
+/**
+ * Detect if a value is an Ethereum address (40 hex chars, optionally prefixed with 0x)
+ */
+function isAddress(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const cleaned = value.replace('0x', '');
+  return cleaned.length === 40 && /^[0-9a-fA-F]{40}$/.test(cleaned);
+}
+
+/**
+ * Recursively checksum all address strings in an object, array, or primitive value
+ */
+export function checksumAddresses<T>(value: T): T {
+  // Handle null/undefined
+  if (value === null || value === undefined) {
+    return value;
+  }
+
+  // Handle address strings
+  if (isAddress(value)) {
+    return checksumAddress(value as Address) as T;
+  }
+
+  // Handle arrays
+  if (Array.isArray(value)) {
+    return value.map(item => checksumAddresses(item)) as T;
+  }
+
+  // Handle objects
+  if (typeof value === 'object' && value !== null) {
+    const result: Record<string, unknown> = {};
+    for (const key in value) {
+      if (Object.prototype.hasOwnProperty.call(value, key)) {
+        result[key] = checksumAddresses((value as Record<string, unknown>)[key]);
+      }
+    }
+    return result as T;
+  }
+
+  // Return primitives as-is
+  return value;
 }
 
 /**

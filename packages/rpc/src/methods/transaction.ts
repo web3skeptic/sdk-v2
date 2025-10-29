@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, TransactionHistoryRowWithCircles } from '@circles-sdk/types';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress, checksumAddresses } from '../utils';
 import { CirclesConverter } from '@circles-sdk/utils';
 
 interface QueryResponse {
@@ -120,7 +120,7 @@ export class TransactionMethods {
     const { columns, rows } = response;
     const limitedRows = rows.slice(0, limit);
 
-    return limitedRows.map((row) => {
+    const result = limitedRows.map((row) => {
       const obj: any = {};
       columns.forEach((col, index) => {
         obj[col] = row[index];
@@ -134,5 +134,7 @@ export class TransactionMethods {
         ...amounts,
       } as TransactionHistoryRowWithCircles;
     });
+
+    return checksumAddresses(result);
   }
 }

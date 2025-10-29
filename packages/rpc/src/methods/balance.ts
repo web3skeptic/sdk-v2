@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, TokenBalance } from '@circles-sdk/types';
-import { normalizeAddress, parseStringsToBigInt } from '../utils';
+import { normalizeAddress, parseStringsToBigInt, checksumAddresses } from '../utils';
 import { CirclesConverter } from '@circles-sdk/utils';
 
 /**
@@ -46,6 +46,7 @@ export class BalanceMethods {
     const result = await this.client.call<[Address], Record<string, unknown>[]>('circles_getTokenBalances', [
       normalizeAddress(address),
     ]);
-    return result.map(item => parseStringsToBigInt(item)) as unknown as TokenBalance[];
+    const parsed = result.map(item => parseStringsToBigInt(item)) as unknown as TokenBalance[];
+    return checksumAddresses(parsed);
   }
 }

@@ -128,6 +128,7 @@ export class HumanAvatar {
 
       // Find maximum flow from avatar to itself, targeting personal tokens as destination
       // This effectively asks: "How much can I convert to my own personal tokens?"
+      // @todo add sim trust
       const maxFlow = await this.rpc.pathfinder.findMaxFlow({
         from: addr,
         to: addr,
@@ -204,6 +205,7 @@ export class HumanAvatar {
      * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
      * ```
      */
+    // @todo rename to direct transfer smth like that
     send: async (
       to: Address,
       amount: bigint,
@@ -524,6 +526,7 @@ export class HumanAvatar {
      * await avatar.invite.redeem(inviters[0]);
      * ```
      */
+    // @todo check if it functionable
     redeem: async (inviter: Address): Promise<TransactionReceipt> => {
       const redeemTx = this.core.invitationEscrow.redeemInvitation(inviter);
       return await this.runner.sendTransaction!([redeemTx]);
@@ -597,6 +600,7 @@ export class HumanAvatar {
      * @returns Amount in CRC (human-readable format)
      */
     getAvailableAmount: async (): Promise<number> => {
+      // @todo replace with actual mintable amount
       // TODO: Implement mintable amount calculation using calculateIssuance
       throw new Error('personalToken.getAvailableAmount() not yet implemented');
     },
@@ -886,6 +890,7 @@ export class HumanAvatar {
      * const receipt = await avatar.groupToken.redeem('0xGroupAddress...', BigInt(100e18));
      * ```
      */
+    //@todo check
     redeem: async (
       group: Address,
       amount: bigint
@@ -1059,38 +1064,6 @@ export class HumanAvatar {
       },
     },
 
-    setProperties: {
-      owner: async (owner: Address): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.owner() not yet implemented');
-      },
-      service: async (service: Address): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.service() not yet implemented');
-      },
-      mintHandler: async (mintHandler: Address): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.mintHandler() not yet implemented');
-      },
-      redemptionHandler: async (
-        redemptionHandler: Address
-      ): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.redemptionHandler() not yet implemented');
-      },
-      minimalDeposit: async (
-        minimalDeposit: bigint
-      ): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.minimalDeposit() not yet implemented');
-      },
-      feeCollection: async (
-        feeCollection: Address
-      ): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.feeCollection() not yet implemented');
-      },
-      membershipCondition: async (
-        condition: Address,
-        enabled: boolean
-      ): Promise<TransactionReceipt> => {
-        throw new Error('groupToken.setProperties.membershipCondition() not yet implemented');
-      },
-    },
   };
 
   // Group methods (alias for groupToken)

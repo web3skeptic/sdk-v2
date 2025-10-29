@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, TokenInfo } from '@circles-sdk/types';
-import { normalizeAddress, parseStringsToBigInt } from '../utils';
+import { normalizeAddress, parseStringsToBigInt, checksumAddresses } from '../utils';
 
 /**
  * Token information RPC methods
@@ -50,6 +50,7 @@ export class TokenMethods {
       [normalizedAddresses]
     );
 
-    return result.map(item => parseStringsToBigInt(item)) as unknown as TokenInfo[];
+    const parsed = result.map(item => parseStringsToBigInt(item)) as unknown as TokenInfo[];
+    return checksumAddresses(parsed);
   }
 }

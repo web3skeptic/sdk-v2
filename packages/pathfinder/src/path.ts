@@ -3,6 +3,7 @@ import { CirclesRpc } from '@circles-sdk/rpc';
 import { CirclesConverter } from '@circles-sdk/utils';
 
 export async function getTokenInfoMapFromPath(
+  currentAvatar: Address,
   rpcUrl: string,
   transferPath: PathfindingResult
 ): Promise<Map<string, TokenInfo>> {
@@ -10,7 +11,8 @@ export async function getTokenInfoMapFromPath(
   const uniqueAddresses = new Set<string>();
 
   transferPath.transfers.forEach((t) => {
-    uniqueAddresses.add(t.tokenOwner.toLowerCase());
+    if(currentAvatar.toLowerCase() === t.from.toLowerCase())
+      uniqueAddresses.add(t.tokenOwner.toLowerCase());
   });
 
   const rpc = new CirclesRpc(rpcUrl);
@@ -77,10 +79,20 @@ export function replaceWrappedTokens(
   path: PathfindingResult,
   unwrapped: Record<string, [bigint, string]>
 ): PathfindingResult {
-  const rewritten = path.transfers.map((edge) => {
-    const unwrap = unwrapped[edge.tokenOwner.toLowerCase()];
-    const hasUnwrap = Boolean(unwrap);
-    const tokenOwner = hasUnwrap ? unwrap[1] : edge.tokenOwner;
+  // Create a mapping from wrapped token addresses to avatar addresses
+  // unwrapped format: { wrapperAddress: [amount, avatarAddress] }
+  const wrapperToAvatar: Record<string, string> = {};
+  Object.entries(unwrapped).forEach(([wrapperAddr, [, avatarAddr]]) => {
+    wrapperToAvatar[wrapperAddr.toLowerCase()] = avatarAddr;
+  });
+
+  const rewritten: TransferStep[] = path.transfers.map((edge) => {
+    // Replace tokenOwner if it's a wrapped token address
+    // This changes which token is being transferred (from wrapped to underlying avatar token)
+    const tokenOwnerLower = edge.tokenOwner.toLowerCase();
+    const tokenOwner = (wrapperToAvatar[tokenOwnerLower] || edge.tokenOwner) as Address;
+
+    // Keep from and to addresses unchanged - they represent the actual flow participants
     return { ...edge, tokenOwner };
   });
 

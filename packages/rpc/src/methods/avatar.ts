@@ -1,6 +1,6 @@
 import type { RpcClient } from '../client';
 import type { Address, AvatarInfo, NetworkSnapshot } from '@circles-sdk/types';
-import { normalizeAddress } from '../utils';
+import { normalizeAddress, checksumAddresses } from '../utils';
 
 /**
  * Avatar and network RPC methods
@@ -50,7 +50,7 @@ export class AvatarMethods {
       [normalizedAddresses]
     );
 
-    return result;
+    return checksumAddresses(result);
   }
 
   /**
@@ -66,7 +66,8 @@ export class AvatarMethods {
    * ```
    */
   async getNetworkSnapshot(): Promise<NetworkSnapshot> {
-    return this.client.call<[], NetworkSnapshot>('circles_getNetworkSnapshot', []);
+    const result = await this.client.call<[], NetworkSnapshot>('circles_getNetworkSnapshot', []);
+    return checksumAddresses(result);
   }
   // @todo is backer
   // @todo is batch backer
