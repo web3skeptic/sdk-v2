@@ -1,14 +1,15 @@
-import type { Address, AdvancedTransferOptions } from '@circles-sdk/types';
+import type { Address, AdvancedTransferOptions, PathfindingResult } from '@circles-sdk/types';
 import type { Core } from '@circles-sdk/core';
 import {
   createFlowMatrix as createFlowMatrixUtil,
   getTokenInfoMapFromPath,
   getWrappedTokenTotalsFromPath,
-  getExpectedUnwrappedTokenTotals,
-  replaceWrappedTokens,
+  replaceWrappedTokensWithAvatars,
 } from '@circles-sdk/pathfinder';
 import { CirclesRpc } from '@circles-sdk/rpc';
-import { bytesToHex, CirclesConverter, encodeFunctionData } from '@circles-sdk/utils';
+import { bytesToHex, CirclesConverter, encodeFunctionData, ZERO_ADDRESS } from '@circles-sdk/utils';
+import { InflationaryCirclesContract, DemurrageCirclesContract, CirclesType } from '@circles-sdk/core';
+import { TransferError } from './errors';
 
 /**
  * TransferBuilder constructs transfer transactions without executing them
@@ -33,6 +34,7 @@ export class TransferBuilder {
    * @param options Advanced transfer options
    * @returns Array of transactions to execute in order
    */
+  //@todo remove debug logs
   async constructAdvancedTransfer(
     from: Address,
     to: Address,
@@ -44,6 +46,58 @@ export class TransferBuilder {
     const toAddr = to.toLowerCase() as Address;
     const amountBigInt = BigInt(amount);
 
+    // @todo move logic to separate function
+    // Optimization: Check if this is a self-transfer unwrap operation
+    // If sender == recipient and we have exactly one fromToken and one toToken,
+    // we can check if it's an unwrap operation and skip pathfinding
+    if (
+      fromAddr === toAddr &&
+      options?.fromTokens?.length === 1 &&
+      options?.toTokens?.length === 1
+    ) {
+      const fromTokenAddr = options.fromTokens[0];
+      const toTokenAddr = options.toTokens[0];
+
+      // Use lift contract to check if fromToken is a wrapper and determine its type
+      const [demurragedWrapper, inflationaryWrapper] = await Promise.all([
+        this.core.liftERC20.erc20Circles(CirclesType.Demurrage, toTokenAddr),
+        this.core.liftERC20.erc20Circles(CirclesType.Inflation, toTokenAddr)
+      ]);
+
+      // Check if fromToken is a demurraged wrapper for the toToken avatar
+      if (fromTokenAddr.toLowerCase() === demurragedWrapper.toLowerCase() &&
+          demurragedWrapper !== ZERO_ADDRESS) {
+        // Use demurraged wrapper contract to unwrap
+        const wrapper = new DemurrageCirclesContract({
+          address: fromTokenAddr,
+          rpcUrl: this.core.config.circlesRpcUrl
+        });
+        const unwrapTx = wrapper.unwrap(amountBigInt);
+        return [{
+          to: unwrapTx.to as Address,
+          data: unwrapTx.data as `0x${string}`,
+          value: unwrapTx.value ?? 0n
+        }];
+      }
+
+      // Check if fromToken is an inflationary wrapper for the toToken avatar
+      if (fromTokenAddr.toLowerCase() === inflationaryWrapper.toLowerCase() &&
+          inflationaryWrapper !== ZERO_ADDRESS) {
+        // Use inflationary wrapper contract to unwrap
+        const wrapper = new InflationaryCirclesContract({
+          address: fromTokenAddr,
+          rpcUrl: this.core.config.circlesRpcUrl
+        });
+        // Convert demurraged amount to static atto circles for inflationary unwrap
+        const unwrapAmount = CirclesConverter.attoCirclesToAttoStaticCircles(amountBigInt);
+        const unwrapTx = wrapper.unwrap(unwrapAmount);
+        return [{
+          to: unwrapTx.to as Address,
+          data: unwrapTx.data as `0x${string}`,
+          value: unwrapTx.value ?? 0n
+        }];
+      }
+    }
     // Truncate to 6 decimals for precision
     const truncatedAmount = this._truncateToSixDecimals(amountBigInt);
 
@@ -59,7 +113,6 @@ export class TransferBuilder {
       ...(completeExcludeFromTokens ? { excludeFromTokens: completeExcludeFromTokens } : {}),
     };
 
-    // Find transfer path using pathfinder
     let path = await this.rpc.pathfinder.findPath({
       from: fromAddr,
       to: toAddr,
@@ -69,49 +122,56 @@ export class TransferBuilder {
 
     // Check if path is valid
     if (!path.transfers || path.transfers.length === 0) {
-      throw new Error(
-        `No valid transfer path found from ${fromAddr} to ${toAddr}. ` +
-        `This could mean there's no trust connection, insufficient balance, or the tokens are not transferable.`
-      );
+      throw TransferError.noPathFound(fromAddr, toAddr);
     }
 
     // Check if pathfinder found enough tokens for the requested amount
     if (path.maxFlow < truncatedAmount) {
-      const requestedCrc = Number(truncatedAmount) / 1e18;
-      const availableCrc = Number(path.maxFlow) / 1e18;
-      throw new Error(
-        `Insufficient balance for transfer. ` +
-        `Requested: ${requestedCrc.toFixed(6)} CRC, ` +
-        `Available: ${availableCrc.toFixed(6)} CRC. `
-      );
+      throw TransferError.insufficientBalance(truncatedAmount, path.maxFlow, fromAddr, toAddr);
     }
     // Get token info for all tokens in the path using pathfinder utility
-    const tokenInfoMap = await getTokenInfoMapFromPath(this.core.config.circlesRpcUrl, path);
+    // @dev returning a Map<string, TokenInfo>
+    // @todo do only on source edges
+    // @todo get als opersonal baalnces of wrapped inflationary tokens
+    const tokenInfoMap = await getTokenInfoMapFromPath(fromAddr, this.core.config.circlesRpcUrl, path);
 
     // Get wrapped token totals using pathfinder utility
+    // @dev `tokenOwner` is a misleading naming, it is actually the tokens address (either wrapper or avatar)
+    // @dev returning a Record<string (tokenOwner), [bigint (amount), string (type)]>
+    // @todo in terms of amount accounting this is only valid for the wrapped demurraged tokens
+    // @todo rename `totals`
     const wrappedTokenTotals = getWrappedTokenTotalsFromPath(path, tokenInfoMap);
+    // @todo maybe there is an easier way to check if there are wrapped tokens
 
     const hasWrappedTokens = Object.keys(wrappedTokenTotals).length > 0;
+
     // Validate that wrapped tokens are enabled if they're needed
     if (hasWrappedTokens && !options?.useWrappedBalances) {
-      throw new Error(
-        `Insufficient unwrapped token balance for transfer. ` +
-        `Your balance contains wrapped tokens (ERC20 wrappers), but useWrappedBalances option is not enabled. ` +
-        `Please enable it by passing { useWrappedBalances: true } in the transfer options.`
-      );
+      throw TransferError.wrappedTokensRequired();
     }
 
     let unwrapCalls: Array<{ to: Address; data: `0x${string}`; value: bigint }> = [];
+    let wrapCalls: Array<{ to: Address; data: `0x${string}`; value: bigint }> = [];
 
     if (hasWrappedTokens) {
-      // Create unwrap calls for wrapped tokens
-      unwrapCalls = await this._createUnwrapCallsFromTotals(wrappedTokenTotals);
+      // Fetch token balances once for both unwrap and wrap operations
+      const balanceMap = await this._getTokenBalanceMap(fromAddr);
 
-      // Get expected unwrapped amounts using pathfinder utility
-      const unwrappedTotals = getExpectedUnwrappedTokenTotals(wrappedTokenTotals, tokenInfoMap);
+      // Create unwrap transaction calls for all wrapped tokens
+      unwrapCalls = this._createUnwrapCalls(wrappedTokenTotals, balanceMap);
 
-      // Replace wrapped tokens with underlying tokens in the path
-      path = replaceWrappedTokens(path, unwrappedTotals);
+      // Get inflationary wrapped balances info for wrap calls
+      const inflationaryWrappedBalances = this._getInflationaryWrappedBalances(
+        wrappedTokenTotals,
+        tokenInfoMap,
+        balanceMap
+      );
+
+      // Create wrap calls for leftover inflationary tokens
+      wrapCalls = this._createWrapCalls(inflationaryWrappedBalances);
+
+      // Replace wrapped token addresses with avatar addresses in the path
+      path = replaceWrappedTokensWithAvatars(path, wrappedTokenTotals, tokenInfoMap);
     }
 
     // Create flow matrix from the (possibly rewritten) path
@@ -144,10 +204,12 @@ export class TransferBuilder {
     // 1. Self-approval (only if not already approved)
     // 2. All unwraps
     // 3. operateFlowMatrix
+    // 4. All wraps (for leftover inflationary tokens)
     const allTransactions = [
       ...(isApproved ? [] : [this.core.hubV2.setApprovalForAll(fromAddr, true)]),
       ...unwrapCalls,
       operateFlowMatrixTx,
+      ...wrapCalls,
     ];
 
     return allTransactions as Array<{ to: Address; data: `0x${string}`; value: bigint }>;
@@ -162,97 +224,18 @@ export class TransferBuilder {
    * @param options Optional pathfinding options
    * @returns Array of transactions to execute in order to perform the replenish
    */
-  //@todo fix the current implementation
   async constructReplenish(
     avatarAddress: Address,
     options?: Omit<AdvancedTransferOptions, 'txData'>
   ): Promise<Array<{ to: Address; data: `0x${string}`; value: bigint }>> {
-    const addr = avatarAddress.toLowerCase() as Address;
+    // @todo Implement replenish functionality
+    // This should:
+    // 1. Find maximum flow from avatar to itself targeting personal tokens
+    // 2. Handle wrapped token unwrapping similar to constructAdvancedTransfer
+    // 3. Create flow matrix for self-transfer
+    // 4. Handle wrap calls for leftover inflationary tokens
 
-    // Find maximum flow from avatar to itself, targeting personal tokens as destination
-    // This effectively asks: "How much can I convert to my own personal tokens?"
-    const maxFlow = await this.rpc.pathfinder.findMaxFlow({
-      from: addr,
-      to: addr,
-      toTokens: [addr], // Destination token is sender's own personal CRC
-      useWrappedBalances: true, // Include wrapped tokens
-      ...options,
-    });
-
-    if (maxFlow === 0n) {
-      // No tokens available to replenish
-      return [];
-    }
-
-    // Find the path to convert tokens to personal CRC
-    let path = await this.rpc.pathfinder.findPath({
-      from: addr,
-      to: addr,
-      targetFlow: maxFlow,
-      toTokens: [addr], // Destination token is sender's own personal CRC
-      useWrappedBalances: true, // Include wrapped tokens
-      ...options,
-    });// @todo redundant call to the path
-
-    // Check if path is valid
-    if (!path.transfers || path.transfers.length === 0) {
-      // No path found - nothing to replenish
-      return [];
-    }
-
-    // Get token info for all tokens in the path
-    const tokenInfoMap = await getTokenInfoMapFromPath(this.core.config.circlesRpcUrl, path);
-
-    // Get wrapped token totals
-    const wrappedTokenTotals = getWrappedTokenTotalsFromPath(path, tokenInfoMap);
-    const hasWrappedTokens = Object.keys(wrappedTokenTotals).length > 0;
-
-    let unwrapCalls: Array<{ to: Address; data: `0x${string}`; value: bigint }> = [];
-
-    if (hasWrappedTokens) {
-      // Create unwrap calls for wrapped tokens
-      unwrapCalls = await this._createUnwrapCallsFromTotals(wrappedTokenTotals);
-
-      // Get expected unwrapped amounts
-      const unwrappedTotals = getExpectedUnwrappedTokenTotals(wrappedTokenTotals, tokenInfoMap);
-
-      // Replace wrapped tokens with underlying tokens in the path
-      path = replaceWrappedTokens(path, unwrappedTotals);
-    }
-
-    // Create flow matrix for the replenish operation
-    const flowMatrix = createFlowMatrixUtil(addr, addr, path.maxFlow, path.transfers);
-
-    // Convert Uint8Array data to hex strings for ABI encoding
-    const streamsWithHexData = flowMatrix.streams.map((stream) => ({
-      sourceCoordinate: stream.sourceCoordinate,
-      flowEdgeIds: stream.flowEdgeIds,
-      //@todo replenish call would have no tx data
-      data: stream.data instanceof Uint8Array ? bytesToHex(stream.data) as `0x${string}` : stream.data as `0x${string}`,
-    }));
-
-    // Create the operateFlowMatrix transaction
-    const operateFlowMatrixTx = this.core.hubV2.operateFlowMatrix(
-      flowMatrix.flowVertices as readonly Address[],
-      flowMatrix.flowEdges,
-      streamsWithHexData,
-      flowMatrix.packedCoordinates as `0x${string}`
-    );
-
-    // Check if self-approval is needed
-    const isApproved = await this.core.hubV2.isApprovedForAll(addr, addr);
-
-    // Assemble all transactions in strict order:
-    // 1. Self-approval (only if not already approved)
-    // 2. All unwraps
-    // 3. operateFlowMatrix (the actual conversion/replenish)
-    const allTransactions = [
-      ...(isApproved ? [] : [this.core.hubV2.setApprovalForAll(addr, true)]),
-      ...unwrapCalls,
-      operateFlowMatrixTx,
-    ];
-
-    return allTransactions as Array<{ to: Address; data: `0x${string}`; value: bigint }>;
+    throw new Error('constructReplenish is not yet implemented. Please use constructAdvancedTransfer with same from/to address as a workaround.');
   }
 
   // ============================================================================
@@ -260,23 +243,50 @@ export class TransferBuilder {
   // ============================================================================
 
   /**
-   * Creates unwrap transaction calls from wrapped token totals
-   * Uses the wrapped token information from pathfinder to generate unwrap calls
+   * Fetches token balances and creates a map for quick lookup
+   *
+   * @param from Source avatar address
+   * @returns Map of token address to balance (in static units)
+   */
+  private async _getTokenBalanceMap(from: Address): Promise<Map<string, bigint>> {
+    const allBalances = await this.rpc.balance.getTokenBalances(from);
+    const balanceMap = new Map<string, bigint>();
+    allBalances.forEach(balance => {
+      balanceMap.set(balance.tokenAddress.toLowerCase(), balance.staticAttoCircles);
+    });
+    return balanceMap;
+  }
+
+  /**
+   * Creates unwrap transaction calls for all wrapped tokens
+   * For demurraged tokens: unwraps the exact amount used in the path
+   * For inflationary tokens: unwraps the entire balance at the address
    *
    * @param wrappedTokenTotals Map of wrapped token addresses to [amount, type]
+   * @param balanceMap Map of token address to balance
    * @returns Array of unwrap transaction calls
    */
-  private async _createUnwrapCallsFromTotals(
-    wrappedTokenTotals: Record<string, [bigint, string]>
-  ): Promise<Array<{ to: Address; data: `0x${string}`; value: bigint }>> {
+  private _createUnwrapCalls(
+    wrappedTokenTotals: Record<string, [bigint, string]>,
+    balanceMap: Map<string, bigint>
+  ): Array<{ to: Address; data: `0x${string}`; value: bigint }> {
     const unwrapCalls: Array<{ to: Address; data: `0x${string}`; value: bigint }> = [];
 
-    for (const [wrapperAddr, [amount, type]] of Object.entries(wrappedTokenTotals)) {
-      let unwrapAmount = amount;
+    for (const [wrapperAddr, [amountUsedInPath, type]] of Object.entries(wrappedTokenTotals)) {
+      // For demurraged wrappers, unwrap only the amount used in the path
+      let unwrapAmount = amountUsedInPath;
 
-      // For inflationary wrappers, convert demurraged amount to static atto circles
+      // For inflationary wrappers, unwrap the entire balance
       if (type === 'CrcV2_ERC20WrapperDeployed_Inflationary') {
-        unwrapAmount = CirclesConverter.attoCirclesToAttoStaticCircles(amount);
+        // Get the current balance from the RPC response (in static units)
+        const currentBalance = balanceMap.get(wrapperAddr.toLowerCase()) || 0n;
+
+        if (currentBalance === 0n) {
+          continue;
+        }
+
+        // Unwrap the entire balance (in static units)
+        unwrapAmount = currentBalance;
       }
 
       // Create unwrap call
@@ -300,6 +310,83 @@ export class TransferBuilder {
     }
 
     return unwrapCalls;
+  }
+
+  /**
+   * Get inflationary wrapped token balances info for wrap calls
+   * Records the balance before unwrapping and amount used in path
+   *
+   * @param wrappedTokenTotals Map of wrapped token addresses to [amount, type]
+   * @param tokenInfoMap Map of token addresses to TokenInfo
+   * @param balanceMap Map of token address to balance
+   * @returns Map of token owners to inflationary wrapped balance info
+   */
+  private _getInflationaryWrappedBalances(
+    wrappedTokenTotals: Record<string, [bigint, string]>,
+    tokenInfoMap: Map<string, any>,
+    balanceMap: Map<string, bigint>
+  ): Record<string, { wrapperAddress: Address; tokenOwner: Address; balanceBeforeUnwrap: bigint; amountUsedInPath: bigint }> {
+    const inflationaryWrappedBalances: Record<string, { wrapperAddress: Address; tokenOwner: Address; balanceBeforeUnwrap: bigint; amountUsedInPath: bigint }> = {};
+
+    for (const [wrapperAddr, [amountUsedInPath, type]] of Object.entries(wrappedTokenTotals)) {
+      // Only process inflationary wrappers
+      if (type === 'CrcV2_ERC20WrapperDeployed_Inflationary') {
+        const tokenInfo = tokenInfoMap.get(wrapperAddr.toLowerCase());
+        const currentBalance = balanceMap.get(wrapperAddr.toLowerCase()) || 0n;
+
+        if (currentBalance === 0n) {
+          continue;
+        }
+
+        // Record the balance before unwrapping (in static units)
+        const tokenOwner = tokenInfo?.tokenOwner as Address;
+        inflationaryWrappedBalances[tokenOwner.toLowerCase()] = {
+          wrapperAddress: wrapperAddr as Address,
+          tokenOwner: tokenOwner as Address,
+          balanceBeforeUnwrap: currentBalance,
+          amountUsedInPath: amountUsedInPath // This is in demurraged units
+        };
+      }
+    }
+
+    return inflationaryWrappedBalances;
+  }
+
+  /**
+   * Creates wrap transaction calls for leftover inflationary tokens
+   * Amount to wrap = initial balance - amount used in path transfer
+   *
+   * @param inflationaryWrappedBalances Map of token owners to initial balance info
+   * @returns Array of wrap transaction calls
+   */
+  private _createWrapCalls(
+    inflationaryWrappedBalances: Record<string, { wrapperAddress: Address; tokenOwner: Address; balanceBeforeUnwrap: bigint; amountUsedInPath: bigint }>
+  ): Array<{ to: Address; data: `0x${string}`; value: bigint }> {
+    const wrapCalls: Array<{ to: Address; data: `0x${string}`; value: bigint }> = [];
+
+    for (const [_, info] of Object.entries(inflationaryWrappedBalances)) {
+
+      // Calculate leftover amount in static units
+      const leftoverAmount = CirclesConverter.attoStaticCirclesToAttoCircles(info.balanceBeforeUnwrap) - info.amountUsedInPath;
+
+      // Only create wrap call if there's leftover amount
+      if (leftoverAmount > 0n) {
+        // Create wrap call using hubV2 contract
+        const wrapTx = this.core.hubV2.wrap(
+          info.tokenOwner,
+          leftoverAmount,
+          CirclesType.Inflation // 1 = Inflationary
+        );
+
+        wrapCalls.push({
+          to: wrapTx.to as Address,
+          data: wrapTx.data as `0x${string}`,
+          value: wrapTx.value ?? 0n,
+        });
+      }
+    }
+
+    return wrapCalls;
   }
 
   /**

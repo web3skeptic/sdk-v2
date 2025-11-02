@@ -75,6 +75,41 @@ export function getExpectedUnwrappedTokenTotals(
   return unwrapped;
 }
 
+/**
+ * Replace wrapped token addresses with avatar addresses in the path
+ * This is used after unwrapping to reflect the actual tokens being transferred
+ */
+export function replaceWrappedTokensWithAvatars(
+  path: PathfindingResult,
+  wrappedTotals: Record<string, [bigint, string]>,
+  tokenInfoMap: Map<string, TokenInfo>
+): PathfindingResult {
+  // Create a mapping from wrapped token addresses to avatar addresses
+  const wrapperToAvatar: Record<string, string> = {};
+
+  Object.entries(wrappedTotals).forEach(([wrapperAddr, [, type]]) => {
+    const info = tokenInfoMap.get(wrapperAddr.toLowerCase());
+    if (!info) return;
+
+    // For both demurraged and inflationary wrappers, map to avatar address
+    if (type.startsWith('CrcV2_ERC20WrapperDeployed')) {
+      wrapperToAvatar[wrapperAddr.toLowerCase()] = info.tokenOwner;
+    }
+  });
+
+  const rewritten: TransferStep[] = path.transfers.map((edge) => {
+    // Replace tokenOwner if it's a wrapped token address
+    // This changes which token is being transferred (from wrapped to underlying avatar token)
+    const tokenOwnerLower = edge.tokenOwner.toLowerCase();
+    const tokenOwner = (wrapperToAvatar[tokenOwnerLower] || edge.tokenOwner) as Address;
+
+    // Keep from and to addresses unchanged - they represent the actual flow participants
+    return { ...edge, tokenOwner };
+  });
+
+  return { ...path, transfers: rewritten };
+}
+
 export function replaceWrappedTokens(
   path: PathfindingResult,
   unwrapped: Record<string, [bigint, string]>
