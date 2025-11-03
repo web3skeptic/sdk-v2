@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter } from '@circles-sdk/types';
+import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface QueryResponse {

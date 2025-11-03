@@ -1,6 +1,6 @@
 import { Contract } from './contract';
-import { baseGroupAbi } from '@circles-sdk/abis';
-import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
+import { baseGroupAbi } from '@circles-sdk-v2/abis';
+import type { Address, TransactionRequest, Hex } from '@circles-sdk-v2/types';
 
 /**
  * BaseGroup Contract Wrapper

@@ -28,11 +28,11 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/types": "workspace:*",
-    "@circles-sdk-v2/core": "workspace:*",
-    "@circles-sdk-v2/rpc": "workspace:*",
-    "@circles-sdk-v2/utils": "workspace:*",
-    "@circles-sdk-v2/pathfinder": "workspace:*",
+    "@circles-sdk-v2/types": "*",
+    "@circles-sdk-v2/core": "*",
+    "@circles-sdk-v2/rpc": "*",
+    "@circles-sdk-v2/utils": "*",
+    "@circles-sdk-v2/pathfinder": "*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 export * from './core';
 export * from './contracts';
-export type { CirclesConfig } from '@circles-sdk/types';
+export type { CirclesConfig } from '@circles-sdk-v2/types';
 export { circlesConfig } from './config';
 
 // Error handling

@@ -1,6 +1,6 @@
 import { Contract } from './contract';
 import type { Abi } from 'abitype';
-import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
+import type { Address, TransactionRequest, Hex } from '@circles-sdk-v2/types';
 
 /**
  * Base class for Wrapped Circles contracts (ERC20 wrappers)

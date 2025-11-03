@@ -1,4 +1,4 @@
-import type { Address } from '@circles-sdk/types';
+import type { Address } from '@circles-sdk-v2/types';
 
 /**
  * Base event structure with common fields

@@ -1,4 +1,4 @@
-# @circles-sdk/runner
+# @circles-sdk-v2/runner
 
 Safe multisig wallet integration for executing blockchain operations with the Circles SDK.
 
@@ -9,7 +9,7 @@ This package provides the `SafeContractRunner` implementation for executing tran
 ## Installation
 
 ```bash
-npm install @circles-sdk/runner
+npm install @circles-sdk-v2/runner
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ The `SafeContractRunner` executes transactions through a Safe multisig wallet.
 ```typescript
 import { createPublicClient, http } from 'viem';
 import { gnosis } from 'viem/chains';
-import { SafeContractRunner } from '@circles-sdk/runner';
+import { SafeContractRunner } from '@circles-sdk-v2/runner';
 
 // Create a public client
 const publicClient = createPublicClient({

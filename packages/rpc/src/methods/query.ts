@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { QueryParams, TableInfo, EventType } from '@circles-sdk/types';
+import type { QueryParams, TableInfo, EventType } from '@circles-sdk-v2/types';
 import { checksumAddresses } from '../utils';
 
 /**

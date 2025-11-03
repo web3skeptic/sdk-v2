@@ -1,4 +1,4 @@
-import type { Address, Hex, TransactionRequest } from '@circles-sdk/types';
+import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
 import type { ContractRunner, BatchRun } from './runner';
 import type { PublicClient, TransactionReceipt } from 'viem';
 import type { SafeTransaction } from '@safe-global/types-kit';

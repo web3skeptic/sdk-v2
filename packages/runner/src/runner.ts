@@ -1,4 +1,4 @@
-import type { Address, TransactionRequest } from '@circles-sdk/types';
+import type { Address, TransactionRequest } from '@circles-sdk-v2/types';
 import type { Account, Chain, PublicClient, Transport, WalletClient, TransactionReceipt } from 'viem';
 
 /**

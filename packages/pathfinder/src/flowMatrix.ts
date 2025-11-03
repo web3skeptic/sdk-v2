@@ -1,4 +1,4 @@
-import type { FlowMatrix, TransferStep, Address, FlowEdgeStruct, StreamStruct } from '@circles-sdk/types';
+import type { FlowMatrix, TransferStep, Address, FlowEdgeStruct, StreamStruct } from '@circles-sdk-v2/types';
 import { packCoordinates, transformToFlowVertices } from './packing';
 
 /**

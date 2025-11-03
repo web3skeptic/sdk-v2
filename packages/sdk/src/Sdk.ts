@@ -4,17 +4,17 @@ import type {
   Profile,
   AvatarInfo,
   TokenBalance
-} from '@circles-sdk/types';
-import { circlesConfig, Core, CirclesType } from '@circles-sdk/core';
-import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
-import { Profiles } from '@circles-sdk/profiles';
-import { cidV0ToHex } from '@circles-sdk/utils';
+} from '@circles-sdk-v2/types';
+import { circlesConfig, Core, CirclesType } from '@circles-sdk-v2/core';
+import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
+import { Profiles } from '@circles-sdk-v2/profiles';
+import { cidV0ToHex } from '@circles-sdk-v2/utils';
 import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 import { SdkError } from './errors';
 import { decodeEventLog } from 'viem';
-import { baseGroupFactoryAbi } from '@circles-sdk/abis';
-import type { GroupType } from '@circles-sdk/types';
-import type { ContractRunner } from '@circles-sdk/runner';
+import { baseGroupFactoryAbi } from '@circles-sdk-v2/abis';
+import type { GroupType } from '@circles-sdk-v2/types';
+import type { ContractRunner } from '@circles-sdk-v2/runner';
 import type { CirclesData } from './types';
 
 

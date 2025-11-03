@@ -1,5 +1,5 @@
-import type { Address, FindPathParams, SimulatedBalance } from '@circles-sdk/types';
-import { checksumAddress as toChecksumAddress } from '@circles-sdk/utils';
+import type { Address, FindPathParams, SimulatedBalance } from '@circles-sdk-v2/types';
+import { checksumAddress as toChecksumAddress } from '@circles-sdk-v2/utils';
 
 /**
  * Normalize an address to lowercase (required by the indexer)

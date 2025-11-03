@@ -3,13 +3,13 @@ import type {
   Profile,
   AvatarRow,
   TokenBalanceRow,
-} from '@circles-sdk/types';
+} from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk/core';
-import type { ContractRunner } from '@circles-sdk/runner';
-import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
-import { BaseGroupContract } from '@circles-sdk/core';
-import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
+import type { Core } from '@circles-sdk-v2/core';
+import type { ContractRunner } from '@circles-sdk-v2/runner';
+import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
+import { BaseGroupContract } from '@circles-sdk-v2/core';
+import { cidV0ToHex, ValidationError } from '@circles-sdk-v2/utils';
 import { SdkError } from '../errors';
 import { CommonAvatar } from './CommonAvatar';
 

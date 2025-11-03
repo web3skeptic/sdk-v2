@@ -1,4 +1,4 @@
-import type { Profile, GroupProfile } from '@circles-sdk/types';
+import type { Profile, GroupProfile } from '@circles-sdk-v2/types';
 
 export type { Profile, GroupProfile };
 

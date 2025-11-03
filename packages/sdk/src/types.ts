@@ -2,8 +2,8 @@ import type {
   Address,
   AvatarInfo,
   TokenBalance
-} from '@circles-sdk/types';
-import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
+} from '@circles-sdk-v2/types';
+import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 
 /**
  * Circles data access layer

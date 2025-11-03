@@ -1,6 +1,6 @@
 import { Contract } from './contract';
-import { invitationEscrowAbi } from '@circles-sdk/abis';
-import type { Address, TransactionRequest } from '@circles-sdk/types';
+import { invitationEscrowAbi } from '@circles-sdk-v2/abis';
+import type { Address, TransactionRequest } from '@circles-sdk-v2/types';
 
 /**
  * Escrowed Amount and Days Result

@@ -1,4 +1,4 @@
-import type { CirclesConfig } from '@circles-sdk/types';
+import type { CirclesConfig } from '@circles-sdk-v2/types';
 
 /**
  * Default Circles configurations by chain ID

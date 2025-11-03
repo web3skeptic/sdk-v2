@@ -1,4 +1,4 @@
-import type { Address, Hex, TransactionRequest } from '@circles-sdk/types';
+import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
 import type { ContractRunner, BatchRun } from './runner';
 import type { PublicClient, TransactionReceipt } from 'viem';
 import type { EIP1193Provider } from 'viem';
@@ -37,7 +37,7 @@ export class SafeBrowserRunner implements ContractRunner {
    * ```typescript
    * import { createPublicClient, http } from 'viem';
    * import { gnosis } from 'viem/chains';
-   * import { SafeBrowserRunner } from '@circles-sdk/runner';
+   * import { SafeBrowserRunner } from '@circles-sdk-v2/runner';
    *
    * const publicClient = createPublicClient({
    *   chain: gnosis,

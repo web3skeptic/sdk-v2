@@ -2,13 +2,13 @@ import type {
   Address,
   AvatarRow,
   TokenBalanceRow,
-} from '@circles-sdk/types';
+} from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk/core';
-import type { ContractRunner } from '@circles-sdk/runner';
-import { ValidationError } from '@circles-sdk/utils';
+import type { Core } from '@circles-sdk-v2/core';
+import type { ContractRunner } from '@circles-sdk-v2/runner';
+import { ValidationError } from '@circles-sdk-v2/utils';
 import { SdkError } from '../errors';
-import { BaseGroupContract } from '@circles-sdk/core';
+import { BaseGroupContract } from '@circles-sdk-v2/core';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
 
 /**

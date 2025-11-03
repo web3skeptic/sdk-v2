@@ -6,23 +6,23 @@ import type {
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
-} from '@circles-sdk/types';
+} from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk/core';
-import type { ContractRunner } from '@circles-sdk/runner';
-import type { Observable, CirclesEvent } from '@circles-sdk/rpc';
-import { Observable as ObservableClass } from '@circles-sdk/rpc';
-import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk/utils';
-import { Profiles } from '@circles-sdk/profiles';
-import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
+import type { Core } from '@circles-sdk-v2/core';
+import type { ContractRunner } from '@circles-sdk-v2/runner';
+import type { Observable, CirclesEvent } from '@circles-sdk-v2/rpc';
+import { Observable as ObservableClass } from '@circles-sdk-v2/rpc';
+import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk-v2/utils';
+import { Profiles } from '@circles-sdk-v2/profiles';
+import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 import { SdkError } from '../errors';
 import {
   CirclesType,
   DemurrageCirclesContract,
   InflationaryCirclesContract
-} from '@circles-sdk/core';
+} from '@circles-sdk-v2/core';
 import { encodeFunctionData } from 'viem';
-import { TransferBuilder } from '@circles-sdk/transfers';
+import { TransferBuilder } from '@circles-sdk-v2/transfers';
 
 /**
  * Advanced pathfinding options (reuses FindPathParams optional fields)

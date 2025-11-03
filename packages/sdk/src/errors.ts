@@ -2,7 +2,7 @@
  * SDK Package Error Types
  */
 
-import { CirclesError } from '@circles-sdk/utils';
+import { CirclesError } from '@circles-sdk-v2/utils';
 
 /**
  * SDK-specific error sources

@@ -1,7 +1,7 @@
 import type { RpcClient } from '../client';
-import type { Address, TransactionHistoryRow } from '@circles-sdk/types';
+import type { Address, TransactionHistoryRow } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
-import { CirclesConverter } from '@circles-sdk/utils';
+import { CirclesConverter } from '@circles-sdk-v2/utils';
 
 interface QueryResponse {
   columns: string[];

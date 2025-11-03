@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, TokenInfo } from '@circles-sdk/types';
+import type { Address, TokenInfo } from '@circles-sdk-v2/types';
 import { normalizeAddress, parseStringsToBigInt, checksumAddresses } from '../utils';
 
 /**

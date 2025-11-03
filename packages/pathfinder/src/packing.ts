@@ -1,5 +1,5 @@
-import { bytesToHex } from '@circles-sdk/utils';
-import type { TransferStep } from '@circles-sdk/types';
+import { bytesToHex } from '@circles-sdk-v2/utils';
+import type { TransferStep } from '@circles-sdk-v2/types';
 
 /**
  * Pack a uint16 array into a hex string (big‑endian, no padding).
