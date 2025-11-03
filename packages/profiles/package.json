@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/types": "*"
+    "@circles-sdk-v2/types": "0.1.0"
   },
   "devDependencies": {
     "typescript": "^5.0.4"
