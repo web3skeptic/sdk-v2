@@ -21,9 +21,9 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@circles-sdk-v2/abis": "0.1.0",
-    "@circles-sdk-v2/types": "0.1.0",
-    "@circles-sdk-v2/utils": "0.1.0",
+    "@circles-sdk-v2/abis": "workspace:*",
+    "@circles-sdk-v2/types": "workspace:*",
+    "@circles-sdk-v2/utils": "workspace:*",
     "abitype": "^1.1.1"
   },
   "devDependencies": {

@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/types": "0.1.0",
+    "@circles-sdk-v2/types": "workspace:*",
     "@safe-global/protocol-kit": "^5.1.1",
     "@safe-global/safe-core-sdk-types": "^5.1.0",
     "viem": "^2.38.0"

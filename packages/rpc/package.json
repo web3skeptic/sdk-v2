@@ -20,8 +20,8 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@circles-sdk-v2/types": "0.1.0",
-    "@circles-sdk-v2/utils": "0.1.0"
+    "@circles-sdk-v2/types": "workspace:*",
+    "@circles-sdk-v2/utils": "workspace:*"
   },
   "devDependencies": {
     "@esbuild-kit/esm-loader": "^2.6.5",
