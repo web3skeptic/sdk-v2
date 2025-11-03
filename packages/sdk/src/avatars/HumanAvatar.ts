@@ -595,12 +595,34 @@ export class HumanAvatar {
   public readonly personalToken = {
     /**
      * Get the available amount of personal tokens that can be minted
-     * @returns Amount in CRC (human-readable format)
+     *
+     * This method calls the HubV2 contract's calculateIssuance function which returns:
+     * - Total issuance amount: The total amount of tokens that can be minted
+     * - Start period: The period when minting started
+     * - End period: The current period
+     *
+     * @returns Object containing issuance amount (in atto-circles), start period, and end period
+     *
+     * @example
+     * ```typescript
+     * const { amount, startPeriod, endPeriod } = await avatar.personalToken.getMintableAmount();
+     * console.log('Mintable amount:', CirclesConverter.attoCirclesToCircles(amount), 'CRC');
+     * console.log('Start period:', startPeriod.toString());
+     * console.log('End period:', endPeriod.toString());
+     * ```
      */
-    getAvailableAmount: async (): Promise<number> => {
-      // @todo replace with actual mintable amount
-      // TODO: Implement mintable amount calculation using calculateIssuance
-      throw new Error('personalToken.getAvailableAmount() not yet implemented');
+    getMintableAmount: async (): Promise<{
+      amount: bigint;
+      startPeriod: bigint;
+      endPeriod: bigint;
+    }> => {
+      const [amount, startPeriod, endPeriod] = await this.core.hubV2.calculateIssuance(this.address);
+
+      return {
+        amount,
+        startPeriod,
+        endPeriod,
+      };
     },
 
     /**
