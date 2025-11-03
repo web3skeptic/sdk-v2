@@ -86,8 +86,8 @@ const gasBalance = await avatar.balances.getGasToken();
 #### Transfer Methods
 
 ```typescript
-// Simple transfer
-await avatar.transfer.send('0xRecipient', 100);
+// Simple direct transfer
+await avatar.transfer.direct('0xRecipient', 100);
 
 // Advanced transfer with options
 await avatar.transfer.advanced('0xRecipient', 100, {

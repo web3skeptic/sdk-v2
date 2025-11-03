@@ -40,7 +40,7 @@ import type {
  * const avatar = await sdk.getAvatar('0xAvatarAddress');
  *
  * // Transfer tokens
- * await avatar.transfer.send('0xRecipient', 100);
+ * await avatar.transfer.direct('0xRecipient', 100);
  *
  * // Mint personal tokens
  * await avatar.personalToken.mint();

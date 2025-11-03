@@ -199,13 +199,13 @@ export class OrganisationAvatar {
      * @example
      * ```typescript
      * // Send 100 of your personal CRC directly
-     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18));
+     * const receipt = await avatar.transfer.direct('0x123...', BigInt(100e18));
      *
      * // Send wrapped tokens
-     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
+     * const receipt = await avatar.transfer.direct('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
      * ```
      */
-    send: async (
+    direct: async (
       to: Address,
       amount: bigint,
       tokenAddress?: Address,

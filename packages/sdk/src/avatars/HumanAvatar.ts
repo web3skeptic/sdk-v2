@@ -159,7 +159,6 @@ export class HumanAvatar {
      * console.log('Replenished personal tokens, tx hash:', receipt.hash);
      * ```
      */
-    //@todo double check
     //@todo add amount to replenish
     replenish: async (options?: PathfindingOptions): Promise<TransactionReceipt> => {
       // Construct replenish transactions using TransferBuilder
@@ -199,14 +198,13 @@ export class HumanAvatar {
      * @example
      * ```typescript
      * // Send 100 of your personal CRC directly
-     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18));
+     * const receipt = await avatar.transfer.direct('0x123...', BigInt(100e18));
      *
      * // Send wrapped tokens
-     * const receipt = await avatar.transfer.send('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
+     * const receipt = await avatar.transfer.direct('0x123...', BigInt(100e18), '0xWrappedTokenAddress...');
      * ```
      */
-    // @todo rename to direct transfer smth like that
-    send: async (
+    direct: async (
       to: Address,
       amount: bigint,
       tokenAddress?: Address,
@@ -265,7 +263,7 @@ export class HumanAvatar {
         amount,
         options
       );
-
+      // throw new Error('minor error');
       // Execute the constructed transactions
       return await this.runner.sendTransaction!(transactions);
     },
