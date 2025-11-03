@@ -12,6 +12,7 @@ export interface SimulatedBalance {
   token: Address;
   amount: bigint;
   isWrapped: boolean;
+  isStatic: boolean;
 }
 
 /**
@@ -27,6 +28,7 @@ export interface FindPathParams {
   excludeFromTokens?: Address[];
   excludeToTokens?: Address[];
   simulatedBalances?: SimulatedBalance[];
+  maxTransfers?: number;
 }
 
 /**

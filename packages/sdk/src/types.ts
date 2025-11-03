@@ -10,7 +10,7 @@ import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
 export type { Observable, CirclesEvent, CirclesEventType } from '@circles-sdk/rpc';
 
 // Re-export types from types package
-export type { TransactionHistoryRow, TransactionHistoryRowWithCircles } from '@circles-sdk/types';
+export type { TransactionHistoryRow } from '@circles-sdk/types';
 
 /**
  * Avatar row data from RPC

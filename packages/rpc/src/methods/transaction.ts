@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, TransactionHistoryRowWithCircles } from '@circles-sdk/types';
+import type { Address, TransactionHistoryRow } from '@circles-sdk/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { CirclesConverter } from '@circles-sdk/utils';
 
@@ -67,7 +67,7 @@ export class TransactionMethods {
   async getTransactionHistory(
     avatar: Address,
     limit: number = 50
-  ): Promise<TransactionHistoryRowWithCircles[]> {
+  ): Promise<TransactionHistoryRow[]> {
     const normalized = normalizeAddress(avatar);
 
     const response = await this.client.call<[any], QueryResponse>('circles_query', [
@@ -132,7 +132,7 @@ export class TransactionMethods {
       return {
         ...obj,
         ...amounts,
-      } as TransactionHistoryRowWithCircles;
+      } as TransactionHistoryRow;
     });
 
     return checksumAddresses(result);

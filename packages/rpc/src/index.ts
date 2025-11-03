@@ -20,7 +20,7 @@ export {
 
 // Types
 export type { TrustRelationType, AggregatedTrustRelation } from './methods';
-export type { TransactionHistoryRowWithCircles } from '@circles-sdk/types';
+export type { TransactionHistoryRow } from '@circles-sdk/types';
 
 // Error handling
 export { RpcError } from './errors';

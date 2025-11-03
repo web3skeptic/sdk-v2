@@ -40,8 +40,7 @@ export type { TokenBalance, TokenInfo } from './token';
 export type { TrustRelation } from './trust';
 
 // Transaction types
-// @todo remove TransactionHistoryRowWithCircles
-export type { TransactionHistoryRow, TransactionHistoryRowWithCircles } from './transaction';
+export type { TransactionHistoryRow } from './transaction';
 
 // Group types
 export type { GroupRow, GroupMembershipRow, GroupQueryParams } from './group';

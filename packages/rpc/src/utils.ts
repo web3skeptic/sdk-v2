@@ -84,7 +84,9 @@ export function normalizeFindPathParams(params: FindPathParams): Record<string, 
       Token: normalizeAddress(balance.token),
       Amount: balance.amount.toString(),
       IsWrapped: balance.isWrapped,
+      IsStatic: balance.isStatic,
     })),
+    MaxTransfers: params.maxTransfers,
   };
 }
 
