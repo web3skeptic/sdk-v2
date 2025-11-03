@@ -32,25 +32,25 @@ export async function getTokenInfoMapFromPath(
   return tokenInfoMap;
 }
 
-export function getWrappedTokenTotalsFromPath(
+export function getWrappedTokensFromPath(
   transferPath: PathfindingResult,
   tokenInfoMap: Map<string, TokenInfo>
 ): Record<string, [bigint, string]> {
-  const wrappedEdgeTotals: Record<string, [bigint, string]> = {};
+  const wrappedTokensInPath: Record<string, [bigint, string]> = {};
 
   transferPath.transfers.forEach((t) => {
     const info = tokenInfoMap.get(t.tokenOwner.toLowerCase());
     const isWrapper = info && info.tokenType.startsWith('CrcV2_ERC20WrapperDeployed');
 
     if (isWrapper) {
-      if (!wrappedEdgeTotals[t.tokenOwner]) {
-        wrappedEdgeTotals[t.tokenOwner] = [BigInt(0), info!.tokenType];
+      if (!wrappedTokensInPath[t.tokenOwner]) {
+        wrappedTokensInPath[t.tokenOwner] = [BigInt(0), info!.tokenType];
       }
-      wrappedEdgeTotals[t.tokenOwner][0] += BigInt(t.value);
+      wrappedTokensInPath[t.tokenOwner][0] += BigInt(t.value);
     }
   });
 
-  return wrappedEdgeTotals;
+  return wrappedTokensInPath;
 }
 
 export function getExpectedUnwrappedTokenTotals(
@@ -81,13 +81,13 @@ export function getExpectedUnwrappedTokenTotals(
  */
 export function replaceWrappedTokensWithAvatars(
   path: PathfindingResult,
-  wrappedTotals: Record<string, [bigint, string]>,
+  wrappedTokensInPath: Record<string, [bigint, string]>,
   tokenInfoMap: Map<string, TokenInfo>
 ): PathfindingResult {
   // Create a mapping from wrapped token addresses to avatar addresses
   const wrapperToAvatar: Record<string, string> = {};
 
-  Object.entries(wrappedTotals).forEach(([wrapperAddr, [, type]]) => {
+  Object.entries(wrappedTokensInPath).forEach(([wrapperAddr, [, type]]) => {
     const info = tokenInfoMap.get(wrapperAddr.toLowerCase());
     if (!info) return;
 
