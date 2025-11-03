@@ -47,6 +47,7 @@ import type {
  * ```
  */
 // @todo build common avatar inst
+// @todo implement methods to get the safe of some owner
 export class Sdk {
   public readonly circlesConfig: CirclesConfig;
   public readonly contractRunner?: ContractRunner;

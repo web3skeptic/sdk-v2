@@ -6,17 +6,13 @@ import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk/core';
 import type {
   AvatarRow,
-  TokenBalanceRow,
-  TransactionHistoryRow,
   ContractRunner,
 } from '../types';
-import type { Observable, CirclesEvent } from '@circles-sdk/rpc';
-import { Observable as ObservableClass } from '@circles-sdk/rpc';
-import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
-import { Profiles } from '@circles-sdk/profiles';
+import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
 import { BaseGroupContract } from '@circles-sdk/core';
-import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk/rpc';
+import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
 import { SdkError } from '../errors';
+import { CommonAvatar } from './CommonAvatar';
 
 /**
  * BaseGroupAvatar class implementation
@@ -25,18 +21,8 @@ import { SdkError } from '../errors';
  * This class represents a base group avatar in the Circles ecosystem and provides
  * methods for managing trust relationships, group properties, and metadata.
  */
-export class BaseGroupAvatar {
-  public readonly address: Address;
-  public readonly avatarInfo: AvatarRow | undefined;
-  public readonly core: Core;
-  public readonly contractRunner?: ContractRunner;
-  public readonly events: Observable<CirclesEvent>;
-  private readonly runner: ContractRunner;
-  private readonly profiles: Profiles;
-  private readonly rpc: CirclesRpc;
+export class BaseGroupAvatar extends CommonAvatar {
   private readonly baseGroup: BaseGroupContract;
-  private _cachedProfile?: Profile;
-  private _cachedProfileCid?: string;
 
   constructor(
     address: Address,
@@ -44,77 +30,55 @@ export class BaseGroupAvatar {
     contractRunner?: ContractRunner,
     avatarInfo?: AvatarRow
   ) {
-    // @todo the address is extractable from either contract runner or avatar info
-    this.address = address;
-    this.core = core;
-    this.contractRunner = contractRunner;
-    this.avatarInfo = avatarInfo;
-
-    // Validate contract runner is available
-    if (!contractRunner) {
-      throw SdkError.missingContractRunner('BaseGroupAvatar initialization');
-    }
-
-    if (!contractRunner.sendTransaction) {
-      throw SdkError.configError('Contract runner does not support sendTransaction');
-    }
-
-    this.runner = contractRunner;
-
-    // Initialize profiles client
-    this.profiles = new Profiles(core.config.profileServiceUrl);
-
-    // Initialize RPC client
-    this.rpc = new CirclesRpc(core.config.circlesRpcUrl);
+    super(address, core, contractRunner, avatarInfo);
 
     // Initialize BaseGroup contract
     this.baseGroup = new BaseGroupContract({
       address: this.address,
       rpcUrl: core.rpcUrl,
     });
-
-    // Event subscription is optional - initialize with stub observable
-    const stub = ObservableClass.create<CirclesEvent>();
-    this.events = stub.property;
   }
 
-  // Balance methods
+  // ============================================================================
+  // Override Balance Methods
+  // ============================================================================
+
   public readonly balances = {
     getTotal: async (): Promise<bigint> => {
       return await this.rpc.balance.getTotalBalance(this.address);
     },
 
-    getTokenBalances: async (): Promise<TokenBalanceRow[]> => {
-      return await this.rpc.balance.getTokenBalances(this.address) as unknown as TokenBalanceRow[];
+    getTokenBalances: async (): Promise<import('../types').TokenBalanceRow[]> => {
+      return await this.rpc.balance.getTokenBalances(this.address) as unknown as import('../types').TokenBalanceRow[];
     },
 
+    /**
+     * Get total supply of this group's token
+     */
     getTotalSupply: async (): Promise<bigint> => {
       const tokenId = await this.core.hubV2.toTokenId(this.address);
       return await this.core.hubV2.totalSupply(tokenId);
     },
   };
 
-  // Trust methods
-  public readonly trust = {
-    /**
-     * Trust another avatar or multiple avatars
-     *
-     * @param avatar Single avatar address or array of avatar addresses
-     * @param expiry Trust expiry timestamp. Defaults to max safe integer
-     * @returns Transaction response
-     */
+  // ============================================================================
+  // Extend Trust Methods with Group-Specific Features
+  // ============================================================================
+  // We override add/remove to use baseGroup.trust() instead of hubV2.trust()
+  // View methods (isTrusting, isTrustedBy, getAll) are inherited from CommonAvatar
+
+  public override readonly trust = {
     add: async (
       avatar: Address | Address[],
       expiry?: bigint
     ): Promise<TransactionReceipt> => {
-      const trustExpiry = expiry ?? BigInt(Number.MAX_SAFE_INTEGER);
+      const trustExpiry = expiry ?? BigInt('0xFFFFFFFFFFFFFFFFFFFFFFFF');
       const avatars = Array.isArray(avatar) ? avatar : [avatar];
 
       if (avatars.length === 0) {
-        throw ValidationError.invalidParameter('avatar', avatars, 'No avatars provided to trust');
+        throw ValidationError.missingParameter('avatar');
       }
 
-      // Create trust transactions for all avatars
       const transactions = avatars.map((trustee) =>
         this.baseGroup.trust(trustee, trustExpiry)
       );
@@ -122,12 +86,53 @@ export class BaseGroupAvatar {
       return await this.runner.sendTransaction!(transactions);
     },
 
+    remove: async (avatar: Address | Address[]): Promise<TransactionReceipt> => {
+      const avatars = Array.isArray(avatar) ? avatar : [avatar];
+
+      if (avatars.length === 0) {
+        throw ValidationError.missingParameter('avatar');
+      }
+
+      const untrustExpiry = BigInt(0);
+
+      const transactions = avatars.map((trustee) =>
+        this.baseGroup.trust(trustee, untrustExpiry)
+      );
+
+      return await this.runner.sendTransaction!(transactions);
+    },
+
+    // View methods - same implementation as CommonAvatar
+    isTrusting: async (otherAvatar: Address): Promise<boolean> => {
+      return await this.core.hubV2.isTrusted(this.address, otherAvatar);
+    },
+
+    isTrustedBy: async (otherAvatar: Address): Promise<boolean> => {
+      return await this.core.hubV2.isTrusted(otherAvatar, this.address);
+    },
+
+    getAll: async (): Promise<AggregatedTrustRelation[]> => {
+      return await this.rpc.trust.getAggregatedTrustRelations(this.address);
+    },
+
     /**
      * Trust a batch of members with membership condition checks
+     *
+     * This is a group-specific method that validates members against membership conditions
+     * before establishing trust.
      *
      * @param members Array of member addresses
      * @param expiry Trust expiry timestamp. Defaults to 0
      * @returns Transaction response
+     *
+     * @example
+     * ```typescript
+     * // Trust multiple members with condition checks
+     * await groupAvatar.trust.addBatchWithConditions(
+     *   ['0x123...', '0x456...', '0x789...'],
+     *   BigInt(Date.now() / 1000 + 31536000) // 1 year expiry
+     * );
+     * ```
      */
     addBatchWithConditions: async (
       members: Address[],
@@ -137,108 +142,18 @@ export class BaseGroupAvatar {
       const tx = this.baseGroup.trustBatchWithConditions(members, trustExpiry);
       return await this.runner.sendTransaction!([tx]);
     },
-
-    /**
-     * Remove trust from another avatar or multiple avatars
-     *
-     * @param avatar Single avatar address or array of avatar addresses
-     * @returns Transaction response
-     */
-    remove: async (avatar: Address | Address[]): Promise<TransactionReceipt> => {
-      const untrustExpiry = BigInt(0);
-      const avatars = Array.isArray(avatar) ? avatar : [avatar];
-
-      if (avatars.length === 0) {
-        throw ValidationError.invalidParameter('avatar', avatars, 'No avatars provided to untrust');
-      }
-
-      // Create untrust transactions for all avatars
-      const transactions = avatars.map((trustee) =>
-        this.baseGroup.trust(trustee, untrustExpiry)
-      );
-
-      return await this.runner.sendTransaction!(transactions);
-    },
-
-    /**
-     * Check if this avatar trusts another avatar
-     */
-    isTrusting: async (otherAvatar: Address): Promise<boolean> => {
-      return await this.core.hubV2.isTrusted(this.address, otherAvatar);
-    },
-
-    /**
-     * Check if another avatar trusts this avatar
-     */
-    isTrustedBy: async (otherAvatar: Address): Promise<boolean> => {
-      return await this.core.hubV2.isTrusted(otherAvatar, this.address);
-    },
-
-    getAll: async (): Promise<AggregatedTrustRelation[]> => {
-      return await this.rpc.trust.getAggregatedTrustRelations(this.address);
-    },
   };
 
-  // Group property methods
-  public readonly properties = {
-    owner: async (): Promise<Address> => {
-      return await this.baseGroup.owner();
-    },
+  // ============================================================================
+  // Override Profile Methods to use baseGroup instead of nameRegistry
+  // ============================================================================
+  // get() and update() methods are the same as CommonAvatar
+  // updateMetadata and registerShortName use baseGroup instead of nameRegistry
 
-    mintHandler: async (): Promise<Address> => {
-      return await this.baseGroup.BASE_MINT_HANDLER();
-    },
-
-    service: async (): Promise<Address> => {
-      return await this.baseGroup.service();
-    },
-
-    feeCollection: async (): Promise<Address> => {
-      return await this.baseGroup.feeCollection();
-    },
-
-    getMembershipConditions: async (): Promise<Address[]> => {
-      const conditions = await this.baseGroup.getMembershipConditions();
-      return Array.from(conditions);
-    },
-  };
-
-  // Group property setters
-  //@todo put inside the props and rename set
-  public readonly setProperties = {
-    owner: async (newOwner: Address): Promise<TransactionReceipt> => {
-      const tx = this.baseGroup.setOwner(newOwner);
-      return await this.runner.sendTransaction!([tx]);
-    },
-
-    service: async (newService: Address): Promise<TransactionReceipt> => {
-      const tx = this.baseGroup.setService(newService);
-      return await this.runner.sendTransaction!([tx]);
-    },
-
-    feeCollection: async (newFeeCollection: Address): Promise<TransactionReceipt> => {
-      const tx = this.baseGroup.setFeeCollection(newFeeCollection);
-      return await this.runner.sendTransaction!([tx]);
-    },
-
-    membershipCondition: async (
-      condition: Address,
-      enabled: boolean
-    ): Promise<TransactionReceipt> => {
-      const tx = this.baseGroup.setMembershipCondition(condition, enabled);
-      return await this.runner.sendTransaction!([tx]);
-    },
-  };
-
-  // Profile methods
-  public readonly profile = {
-    /**
-     * Get the profile for this avatar from IPFS
-     */
+  public override readonly profile = {
     get: async (): Promise<Profile | undefined> => {
       const profileCid = this.avatarInfo?.cidV0;
 
-      // Return cached profile if CID hasn't changed
       if (this._cachedProfile && this._cachedProfileCid === profileCid) {
         return this._cachedProfile;
       }
@@ -261,58 +176,119 @@ export class BaseGroupAvatar {
       return undefined;
     },
 
-    /**
-     * Update the profile for this avatar
-     */
     update: async (profile: Profile): Promise<string> => {
-      // Step 1: Pin the profile to IPFS and get CID
       const cid = await this.profiles.create(profile);
       if (!cid) {
-        throw SdkError.profileOperationFailed('create', 'The profile service did not return a CID');
+        throw SdkError.configError('Profile service did not return a CID', { profile });
       }
 
-      // Step 2: Update the metadata digest
       const updateReceipt = await this.profile.updateMetadata(cid);
       if (!updateReceipt) {
-        throw SdkError.profileOperationFailed('update', 'The CID was not updated');
+        throw SdkError.configError('Failed to update metadata digest in name registry', { cid });
       }
 
-      // Update local avatar info if available
       if (this.avatarInfo) {
         this.avatarInfo.cidV0 = cid;
       }
 
-      // Clear cache to force re-fetch
       this._cachedProfile = undefined;
       this._cachedProfileCid = undefined;
 
       return cid;
     },
 
-    /**
-     * Update the metadata digest (CID)
-     */
     updateMetadata: async (cid: string): Promise<TransactionReceipt> => {
       const cidHex = cidV0ToHex(cid);
-      const tx = this.baseGroup.updateMetadataDigest(cidHex);
-      return await this.runner.sendTransaction!([tx]);
+      const updateTx = this.baseGroup.updateMetadataDigest(cidHex as `0x${string}`);
+      return await this.runner.sendTransaction!([updateTx]);
     },
 
-    /**
-     * Register a short name for this avatar using a specific nonce
-     */
     registerShortName: async (nonce: number): Promise<TransactionReceipt> => {
-      const tx = this.baseGroup.registerShortNameWithNonce(BigInt(nonce));
-      return await this.runner.sendTransaction!([tx]);
+      const registerTx = this.baseGroup.registerShortNameWithNonce(BigInt(nonce));
+      return await this.runner.sendTransaction!([registerTx]);
     },
   };
 
-  // History methods
-  public readonly history = {
-    getTransactions: async (
-      limit: number = 50
-    ): Promise<TransactionHistoryRow[]> => {
-      return await this.rpc.transaction.getTransactionHistory(this.address, limit);
+  // ============================================================================
+  // Group-Specific Property Methods
+  // ============================================================================
+
+  public readonly properties = {
+    /**
+     * Get the owner of this group
+     */
+    owner: async (): Promise<Address> => {
+      return await this.baseGroup.owner();
+    },
+
+    /**
+     * Get the mint handler address
+     */
+    mintHandler: async (): Promise<Address> => {
+      return await this.baseGroup.BASE_MINT_HANDLER();
+    },
+
+    /**
+     * Get the service address
+     */
+    service: async (): Promise<Address> => {
+      return await this.baseGroup.service();
+    },
+
+    /**
+     * Get the fee collection address
+     */
+    feeCollection: async (): Promise<Address> => {
+      return await this.baseGroup.feeCollection();
+    },
+
+    /**
+     * Get all membership conditions
+     */
+    getMembershipConditions: async (): Promise<Address[]> => {
+      const conditions = await this.baseGroup.getMembershipConditions();
+      return Array.from(conditions);
+    },
+  };
+
+  // ============================================================================
+  // Group Property Setters
+  // ============================================================================
+
+  public readonly setProperties = {
+    /**
+     * Set a new owner for this group
+     */
+    owner: async (newOwner: Address): Promise<TransactionReceipt> => {
+      const tx = this.baseGroup.setOwner(newOwner);
+      return await this.runner.sendTransaction!([tx]);
+    },
+
+    /**
+     * Set a new service address
+     */
+    service: async (newService: Address): Promise<TransactionReceipt> => {
+      const tx = this.baseGroup.setService(newService);
+      return await this.runner.sendTransaction!([tx]);
+    },
+
+    /**
+     * Set a new fee collection address
+     */
+    feeCollection: async (newFeeCollection: Address): Promise<TransactionReceipt> => {
+      const tx = this.baseGroup.setFeeCollection(newFeeCollection);
+      return await this.runner.sendTransaction!([tx]);
+    },
+
+    /**
+     * Enable or disable a membership condition
+     */
+    membershipCondition: async (
+      condition: Address,
+      enabled: boolean
+    ): Promise<TransactionReceipt> => {
+      const tx = this.baseGroup.setMembershipCondition(condition, enabled);
+      return await this.runner.sendTransaction!([tx]);
     },
   };
 }
