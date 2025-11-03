@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk/sdk",
+  "name": "@circles-sdk-v2/sdk",
   "version": "0.1.0",
   "description": "Simplified Circles SDK for non-crypto users with low entrance barrier",
   "type": "module",
@@ -28,14 +28,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk/types": "workspace:*",
-    "@circles-sdk/core": "workspace:*",
-    "@circles-sdk/rpc": "workspace:*",
-    "@circles-sdk/profiles": "workspace:*",
-    "@circles-sdk/utils": "workspace:*",
-    "@circles-sdk/runner": "workspace:*",
-    "@circles-sdk/pathfinder": "workspace:*",
-    "@circles-sdk/transfers": "workspace:*",
+    "@circles-sdk-v2/types": "*",
+    "@circles-sdk-v2/core": "*",
+    "@circles-sdk-v2/rpc": "*",
+    "@circles-sdk-v2/profiles": "*",
+    "@circles-sdk-v2/utils": "*",
+    "@circles-sdk-v2/runner": "*",
+    "@circles-sdk-v2/pathfinder": "*",
+    "@circles-sdk-v2/transfers": "*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

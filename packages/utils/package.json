@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk/utils",
+  "name": "@circles-sdk-v2/utils",
   "version": "0.1.0",
   "description": "Utility functions for Circles SDK including demurrage calculations and conversions",
   "type": "module",
