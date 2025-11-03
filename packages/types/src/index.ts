@@ -62,3 +62,11 @@ export type { EventType, NetworkSnapshot } from './network';
 
 // Configuration types
 export type { CirclesConfig } from './config';
+
+// Wrapper types
+export { CirclesType } from './wrapper';
+export type { WrappedTokenInfo, WrappedTokensRecord } from './wrapper';
+
+// SDK types
+export { GroupType } from './sdk';
+export type { AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery } from './sdk';

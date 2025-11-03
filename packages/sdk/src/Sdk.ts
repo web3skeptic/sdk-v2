@@ -13,13 +13,9 @@ import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 import { SdkError } from './errors';
 import { decodeEventLog } from 'viem';
 import { baseGroupFactoryAbi } from '@circles-sdk/abis';
-import type {
-  ContractRunner,
-  CirclesData,
-  HubV2,
-  V2Pathfinder,
-  GroupType,
-} from './types';
+import type { GroupType } from '@circles-sdk/types';
+import type { ContractRunner } from '@circles-sdk/runner';
+import type { CirclesData } from './types';
 
 
 /**

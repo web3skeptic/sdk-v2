@@ -7,6 +7,7 @@ export { BaseGroupFactoryContract } from './baseGroupFactory';
 export { NameRegistryContract } from './nameRegistry';
 export { InflationaryCirclesContract } from './inflationaryCircles';
 export { DemurrageCirclesContract } from './demurrageCircles';
-export { LiftERC20Contract, CirclesType } from './liftERC20';
+export { LiftERC20Contract } from './liftERC20';
+export { CirclesType } from '@circles-sdk/types';
 export { InvitationEscrowContract, type EscrowedAmountAndDays } from './invitationEscrow';
 export { Contract } from './contract';

@@ -10,23 +10,10 @@ export type { TransactionReceipt } from 'viem';
 export { SdkError } from './errors';
 export type { SdkErrorSource } from './errors';
 
-// Re-export trust relation types from RPC
-export type { AggregatedTrustRelation, TrustRelationType } from '@circles-sdk/rpc';
+// Re-export types from other packages for convenience
+export type { AggregatedTrustRelation, TrustRelationType, CirclesEvent, CirclesEventType, Observable } from '@circles-sdk/rpc';
+export type { TransactionHistoryRow, AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery, GroupType } from '@circles-sdk/types';
+export type { ContractRunner } from '@circles-sdk/runner';
 
-// All types (consolidated in types.ts)
-export type {
-  // Avatar types
-  AvatarRow,
-  TokenBalanceRow,
-  TransactionHistoryRow,
-  TrustRelationRow,
-  CirclesEvent,
-  CirclesQuery,
-  Observable,
-  // SDK types
-  ContractRunner,
-  CirclesData,
-  HubV2,
-  V2Pathfinder,
-  GroupType,
-} from './types';
+// SDK-specific types
+export type { CirclesData } from './types';

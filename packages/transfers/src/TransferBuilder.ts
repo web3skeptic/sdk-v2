@@ -34,7 +34,6 @@ export class TransferBuilder {
    * @param options Advanced transfer options
    * @returns Array of transactions to execute in order
    */
-  //@todo remove debug logs
   async constructAdvancedTransfer(
     from: Address,
     to: Address,
@@ -134,7 +133,6 @@ export class TransferBuilder {
     const tokenInfoMap = await getTokenInfoMapFromPath(fromAddr, this.core.config.circlesRpcUrl, path);
 
     // Get wrapped tokens found in the path with their amounts and types
-    // @dev `tokenOwner` is a misleading naming, it is actually the tokens address (either wrapper or avatar)
     // @dev returning a Record<string (wrapperAddress), [bigint (amount used in path), string (type)]>
     const wrappedTokensInPath = getWrappedTokensFromPath(path, tokenInfoMap);
     // @todo maybe there is an easier way to check if there are wrapped tokens
@@ -166,7 +164,7 @@ export class TransferBuilder {
       wrapCalls = inflationaryWrapCalls;
 
       // Replace wrapped token addresses with avatar addresses in the path
-      path = replaceWrappedTokensWithAvatars(path, wrappedTokensInPath, tokenInfoMap);
+      path = replaceWrappedTokensWithAvatars(path, tokenInfoMap);
     }
 
     // Create flow matrix from the (possibly rewritten) path

@@ -1,13 +1,12 @@
 import type {
   Address,
   Profile,
+  AvatarRow,
+  TokenBalanceRow,
 } from '@circles-sdk/types';
 import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk/core';
-import type {
-  AvatarRow,
-  ContractRunner,
-} from '../types';
+import type { ContractRunner } from '@circles-sdk/runner';
 import type { AggregatedTrustRelation } from '@circles-sdk/rpc';
 import { BaseGroupContract } from '@circles-sdk/core';
 import { cidV0ToHex, ValidationError } from '@circles-sdk/utils';
@@ -48,8 +47,8 @@ export class BaseGroupAvatar extends CommonAvatar {
       return await this.rpc.balance.getTotalBalance(this.address);
     },
 
-    getTokenBalances: async (): Promise<import('../types').TokenBalanceRow[]> => {
-      return await this.rpc.balance.getTokenBalances(this.address) as unknown as import('../types').TokenBalanceRow[];
+    getTokenBalances: async (): Promise<TokenBalanceRow[]> => {
+      return await this.rpc.balance.getTokenBalances(this.address) as unknown as TokenBalanceRow[];
     },
 
     /**

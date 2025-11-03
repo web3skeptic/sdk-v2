@@ -3,15 +3,13 @@ import type {
   Profile,
   AdvancedTransferOptions,
   FindPathParams,
-} from '@circles-sdk/types';
-import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk/core';
-import type {
   AvatarRow,
   TokenBalanceRow,
   TransactionHistoryRow,
-  ContractRunner,
-} from '../types';
+} from '@circles-sdk/types';
+import type { TransactionReceipt } from 'viem';
+import type { Core } from '@circles-sdk/core';
+import type { ContractRunner } from '@circles-sdk/runner';
 import type { Observable, CirclesEvent } from '@circles-sdk/rpc';
 import { Observable as ObservableClass } from '@circles-sdk/rpc';
 import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk/utils';

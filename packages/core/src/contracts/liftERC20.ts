@@ -1,15 +1,7 @@
 import { Contract } from './contract';
 import { liftERC20Abi } from '@circles-sdk/abis';
 import type { Address, TransactionRequest, Hex } from '@circles-sdk/types';
-
-/**
- * CirclesType enum
- * Represents the type of Circles ERC20 wrapper
- */
-export enum CirclesType {
-  Demurrage = 0,
-  Inflation = 1
-}
+import { CirclesType } from '@circles-sdk/types';
 
 /**
  * LiftERC20 Contract Wrapper

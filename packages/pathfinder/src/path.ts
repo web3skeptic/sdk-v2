@@ -1,4 +1,4 @@
-import type { PathfindingResult, TransferStep, Address, TokenInfo } from '@circles-sdk/types';
+import type { PathfindingResult, TransferStep, Address, TokenInfo, WrappedTokenInfo, WrappedTokensRecord } from '@circles-sdk/types';
 import { CirclesRpc } from '@circles-sdk/rpc';
 import { CirclesConverter } from '@circles-sdk/utils';
 
@@ -81,30 +81,19 @@ export function getExpectedUnwrappedTokenTotals(
  */
 export function replaceWrappedTokensWithAvatars(
   path: PathfindingResult,
-  wrappedTokensInPath: Record<string, [bigint, string]>,
   tokenInfoMap: Map<string, TokenInfo>
 ): PathfindingResult {
-  // Create a mapping from wrapped token addresses to avatar addresses
-  const wrapperToAvatar: Record<string, string> = {};
-
-  Object.entries(wrappedTokensInPath).forEach(([wrapperAddr, [, type]]) => {
-    const info = tokenInfoMap.get(wrapperAddr.toLowerCase());
-    if (!info) return;
-
-    // For both demurraged and inflationary wrappers, map to avatar address
-    if (type.startsWith('CrcV2_ERC20WrapperDeployed')) {
-      wrapperToAvatar[wrapperAddr.toLowerCase()] = info.tokenOwner;
-    }
-  });
-
   const rewritten: TransferStep[] = path.transfers.map((edge) => {
-    // Replace tokenOwner if it's a wrapped token address
-    // This changes which token is being transferred (from wrapped to underlying avatar token)
-    const tokenOwnerLower = edge.tokenOwner.toLowerCase();
-    const tokenOwner = (wrapperToAvatar[tokenOwnerLower] || edge.tokenOwner) as Address;
+    // Look up the token info for this tokenOwner
+    const tokenInfo = tokenInfoMap.get(edge.tokenOwner.toLowerCase());
 
-    // Keep from and to addresses unchanged - they represent the actual flow participants
-    return { ...edge, tokenOwner };
+    // If we have token info and it's a wrapped token, replace with the underlying avatar
+    if (tokenInfo && tokenInfo.tokenType.startsWith('CrcV2_ERC20WrapperDeployed')) {
+      return { ...edge, tokenOwner: tokenInfo.tokenOwner as Address };
+    }
+
+    // Keep the original tokenOwner if it's not wrapped
+    return edge;
   });
 
   return { ...path, transfers: rewritten };
