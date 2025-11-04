@@ -10,6 +10,7 @@ import { ValidationError } from '@circles-sdk-v2/utils';
 import { SdkError } from '../errors';
 import { BaseGroupContract } from '@circles-sdk-v2/core';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
+import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 
 /**
  * OrganisationAvatar class implementation
@@ -257,7 +258,7 @@ export class OrganisationAvatar extends CommonAvatar {
       // 1. Are mutually trusted or trusted by current avatar
       // 2. Exist in the treasury
       const expectedToTokens = trustRelationships
-        .filter((trustObject) => {
+        .filter((trustObject: AggregatedTrustRelation) => {
           if (
             (trustObject.relation === 'mutuallyTrusts' || trustObject.relation === 'trusts') &&
             treasuryTokens.includes(trustObject.objectAvatar.toLowerCase() as Address)
@@ -266,7 +267,7 @@ export class OrganisationAvatar extends CommonAvatar {
           }
           return false;
         })
-        .map((trustObject) => trustObject.objectAvatar.toLowerCase() as Address);
+        .map((trustObject: AggregatedTrustRelation) => trustObject.objectAvatar.toLowerCase() as Address);
 
       // Check if enough tokens as amount - validate max redeemable
       // Note: Organizations don't have personal tokens, so we use whatever tokens they hold

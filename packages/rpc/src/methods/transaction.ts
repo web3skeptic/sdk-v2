@@ -50,22 +50,30 @@ export class TransactionMethods {
    * Returns v2 transfers (incoming/outgoing/minting) with calculated circle amounts
    *
    * @param avatar - Avatar address to query transaction history for
+   * @param offset - Number of transactions to skip (default: 0)
    * @param limit - Maximum number of transactions to return (default: 50)
    * @returns Array of v2 transaction history rows with circle conversions
    *
    * @example
    * ```typescript
+   * // Get first 50 transactions
    * const history = await rpc.transaction.getTransactionHistory(
    *   '0xde374ece6fa50e781e81aac78e811b33d16912c7',
+   *   0,
    *   50
    * );
-   * history.forEach(tx => {
-   *   console.log(`${tx.from} -> ${tx.to}: ${tx.circles} CRC`);
-   * });
+   *
+   * // Get next 50 transactions (pagination)
+   * const nextPage = await rpc.transaction.getTransactionHistory(
+   *   '0xde374ece6fa50e781e81aac78e811b33d16912c7',
+   *   50,
+   *   50
+   * );
    * ```
    */
   async getTransactionHistory(
     avatar: Address,
+    offset: number = 0,
     limit: number = 50
   ): Promise<TransactionHistoryRow[]> {
     const normalized = normalizeAddress(avatar);
@@ -113,12 +121,13 @@ export class TransactionMethods {
             SortOrder: 'DESC',
           },
         ],
+        Limit: offset + limit,
       },
     ]);
 
     // Transform rows into objects
     const { columns, rows } = response;
-    const limitedRows = rows.slice(0, limit);
+    const limitedRows = rows.slice(offset, offset + limit);
 
     const result = limitedRows.map((row) => {
       const obj: any = {};

@@ -244,7 +244,8 @@ export class TransferBuilder {
   private async _getTokenBalanceMap(from: Address): Promise<Map<string, bigint>> {
     const allBalances = await this.rpc.balance.getTokenBalances(from);
     const balanceMap = new Map<string, bigint>();
-    allBalances.forEach(balance => {
+    // @todo remove any
+    allBalances.forEach((balance: any) => {
       balanceMap.set(balance.tokenAddress.toLowerCase(), balance.staticAttoCircles);
     });
     return balanceMap;

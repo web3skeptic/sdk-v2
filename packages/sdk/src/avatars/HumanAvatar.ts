@@ -2,6 +2,8 @@ import type {
   Address,
   AvatarRow,
   TokenBalanceRow,
+  GroupMembershipRow,
+  GroupRow,
 } from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk-v2/core';
@@ -11,6 +13,7 @@ import { SdkError } from '../errors';
 import { BaseGroupContract } from '@circles-sdk-v2/core';
 import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
+import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 
 /**
  * HumanAvatar class implementation
@@ -515,7 +518,7 @@ export class HumanAvatar extends CommonAvatar {
       // 1. Are mutually trusted or trusted by current avatar
       // 2. Exist in the treasury
       const expectedToTokens = trustRelationships
-        .filter((trustObject) => {
+        .filter((trustObject: AggregatedTrustRelation) => {
           if (
             (trustObject.relation === 'mutuallyTrusts' || trustObject.relation === 'trusts') &&
             treasuryTokens.includes(trustObject.objectAvatar.toLowerCase() as Address)
@@ -524,7 +527,7 @@ export class HumanAvatar extends CommonAvatar {
           }
           return false;
         })
-        .map((trustObject) => trustObject.objectAvatar.toLowerCase() as Address);
+        .map((trustObject: AggregatedTrustRelation) => trustObject.objectAvatar.toLowerCase() as Address);
 
       // Check if enough tokens as amount - validate max redeemable
       const maxRedeemableAmount = await this.rpc.pathfinder.findMaxFlow({
@@ -646,7 +649,80 @@ export class HumanAvatar extends CommonAvatar {
 
   // Group methods (alias for groupToken)
   public readonly group = {
-    properties: this.groupToken.properties
+    properties: this.groupToken.properties,
+
+    /**
+     * Get group memberships for this avatar
+     *
+     * Returns all groups that this avatar is a member of, including membership details
+     * such as expiry time and when the membership was created.
+     *
+     * @param limit Maximum number of memberships to return (default: 50)
+     * @returns Array of group membership rows containing group address, member info, and expiry time
+     *
+     * @example
+     * ```typescript
+     * // Get all group memberships for this avatar
+     * const memberships = await avatar.group.getGroupMemberships();
+     * console.log(`Member of ${memberships.length} groups`);
+     *
+     * // Check membership details
+     * memberships.forEach(membership => {
+     *   console.log(`Group: ${membership.group}`);
+     *   console.log(`Expiry: ${new Date(membership.expiryTime * 1000).toLocaleDateString()}`);
+     * });
+     * ```
+     */
+    getGroupMemberships: async (limit: number = 50): Promise<GroupMembershipRow[]> => {
+      return await this.rpc.group.getGroupMemberships(this.address, limit);
+    },
+
+    /**
+     * Get detailed information about all groups this avatar is a member of
+     *
+     * This method fetches group memberships and enriches them with full group details including
+     * name, symbol, owner, treasury, mint handler, member count, and other properties.
+     *
+     * @param limit Maximum number of memberships to return (default: 50)
+     * @returns Array of group detail rows
+     *
+     * @example
+     * ```typescript
+     * // Get detailed information about all group memberships
+     * const groups = await avatar.group.getGroupMembershipsWithDetails();
+     *
+     * groups.forEach(group => {
+     *   console.log(`Group: ${group.name} (${group.symbol})`);
+     *   console.log(`Owner: ${group.owner}`);
+     *   console.log(`Member count: ${group.memberCount}`);
+     *   console.log(`Treasury: ${group.treasury}`);
+     * });
+     * ```
+     */
+    getGroupMembershipsWithDetails: async (limit: number = 50): Promise<GroupRow[]> => {
+      // Get memberships for this avatar
+      const memberships = await this.rpc.group.getGroupMemberships(this.address, limit);
+
+      if (memberships.length === 0) {
+        return [];
+      }
+
+      // Extract group addresses
+      const groupAddresses = memberships.map((m: GroupMembershipRow) => m.group);
+
+      // WORKAROUND: groupAddressIn filter doesn't work, so fetch all groups and filter client-side
+      const allGroups = await this.rpc.group.findGroups(1000);
+
+      // Create a set of lowercase membership group addresses for fast lookup
+      const membershipSet = new Set(groupAddresses.map((addr: Address) => addr.toLowerCase()));
+
+      // Filter to only groups the user is a member of
+      const groups = allGroups.filter((group: GroupRow) =>
+        membershipSet.has(group.group.toLowerCase())
+      );
+
+      return groups;
+    }
   };
 
   // ============================================================================
