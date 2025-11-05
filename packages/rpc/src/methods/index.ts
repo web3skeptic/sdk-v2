@@ -3,7 +3,7 @@ export { QueryMethods } from './query';
 export { TrustMethods, type TrustRelationType, type AggregatedTrustRelation } from './trust';
 export { BalanceMethods } from './balance';
 export { AvatarMethods } from './avatar';
-export { ProfileMethods } from './profile';
+export { ProfileMethods, type SearchResultProfile } from './profile';
 export { TokenMethods } from './token';
 export { InvitationMethods } from './invitation';
 export { TransactionMethods } from './transaction';

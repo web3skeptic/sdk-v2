@@ -3,6 +3,17 @@ import type { Address, Profile } from '@circles-sdk-v2/types';
 import { normalizeAddress } from '../utils';
 
 /**
+ * Search result profile with additional metadata
+ */
+export interface SearchResultProfile extends Profile {
+  address: Address;
+  avatarType?: string;
+  CID?: string;
+  lastUpdatedAt?: number;
+  registeredName?: string | null;
+}
+
+/**
  * Profile RPC methods
  */
 export class ProfileMethods {
@@ -92,19 +103,104 @@ export class ProfileMethods {
    * @param query - Search query string
    * @param limit - Maximum number of results (default: 10)
    * @param offset - Offset for pagination (default: 0)
+   * @param avatarTypes - Optional array of avatar types to filter by (e.g., ['CrcV2_RegisterHuman', 'CrcV2_RegisterGroup'])
    * @returns Array of matching profiles
    *
    * @example
    * ```typescript
    * const results = await rpc.profile.searchProfiles('alice', 10, 0);
    * console.log(results);
+   *
+   * // Search only humans
+   * const humans = await rpc.profile.searchProfiles('alice', 10, 0, ['CrcV2_RegisterHuman']);
    * ```
    */
-  async searchProfiles(query: string, limit: number = 10, offset: number = 0): Promise<Profile[]> {
-    return this.client.call<[string, number, number], Profile[]>('circles_searchProfiles', [
-      query.toLowerCase(),
-      limit,
-      offset,
-    ]);
+  async searchProfiles(
+    query: string,
+    limit: number = 10,
+    offset: number = 0,
+    avatarTypes?: string[]
+  ): Promise<SearchResultProfile[]> {
+    return this.client.call<[string, number, number, string[] | undefined], SearchResultProfile[]>(
+      'circles_searchProfiles',
+      [
+        query.toLowerCase(),
+        limit,
+        offset,
+        avatarTypes
+      ]
+    );
+  }
+
+  /**
+   * Search profiles by address or username
+   * If the query is a valid address, it will search by address first,
+   * otherwise it will search by name/description
+   *
+   * @param query - Search query (address or username)
+   * @param limit - Maximum number of results (default: 10)
+   * @param offset - Offset for pagination (default: 0)
+   * @param avatarTypes - Optional array of avatar types to filter by
+   * @returns Array of matching profiles, with exact address match (if valid) at the top
+   *
+   * @example
+   * ```typescript
+   * // Search by username
+   * const results = await rpc.profile.searchByAddressOrName('alice', 20);
+   *
+   * // Search by address
+   * const results = await rpc.profile.searchByAddressOrName('0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb', 20);
+   * ```
+   */
+  async searchByAddressOrName(
+    query: string,
+    limit: number = 10,
+    offset: number = 0,
+    avatarTypes?: string[]
+  ): Promise<SearchResultProfile[]> {
+    const results: SearchResultProfile[] = [];
+
+    // Check if query is a valid address
+    const isAddress = /^0x[a-fA-F0-9]{40}$/.test(query);
+
+    if (isAddress) {
+      // Try to get profile by address first
+      try {
+        const profile = await this.getProfileByAddress(query as Address);
+        if (profile) {
+          // Convert Profile to SearchResultProfile by adding address
+          const searchResult: SearchResultProfile = {
+            ...profile,
+            address: query as Address
+          };
+          // Check if profile matches avatar type filter
+          if (!avatarTypes || !searchResult.avatarType || avatarTypes.includes(searchResult.avatarType)) {
+            results.push(searchResult);
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to get profile by address:', error);
+      }
+    }
+
+    // Always search by text as well
+    try {
+      const textResults = await this.searchProfiles(query, limit, offset, avatarTypes);
+
+      // If we already added an address match, filter it out from text results to avoid duplicates
+      if (isAddress && results.length > 0) {
+        const addressLower = query.toLowerCase();
+        const filteredResults = textResults.filter(
+          p => p.address?.toLowerCase() !== addressLower
+        );
+        results.push(...filteredResults);
+      } else {
+        results.push(...textResults);
+      }
+    } catch (error) {
+      console.warn('Failed to search profiles by text:', error);
+    }
+
+    return results.slice(0, limit);
   }
 }

@@ -170,12 +170,12 @@ export class GroupMethods {
       cursorColumns: [
         {
           name: 'holder',
-          sortOrder: 'ASC', // Cursor uses holder for pagination
+          sortOrder: 'ASC', // Use holder for cursor-based pagination
         },
       ],
       orderColumns: [
         { Column: 'totalBalance', SortOrder: 'DESC' },
-        { Column: 'holder', SortOrder: 'ASC' }, // Tie-breaker for same balance
+        { Column: 'holder', SortOrder: 'ASC' },
       ],
       filter: [
         {

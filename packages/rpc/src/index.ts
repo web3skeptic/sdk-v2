@@ -19,7 +19,7 @@ export {
 } from './methods';
 
 // Types
-export type { TrustRelationType, AggregatedTrustRelation, GroupTokenHolderRow } from './methods';
+export type { TrustRelationType, AggregatedTrustRelation, GroupTokenHolderRow, SearchResultProfile } from './methods';
 export type { TransactionHistoryRow } from '@circles-sdk-v2/types';
 
 // Error handling
