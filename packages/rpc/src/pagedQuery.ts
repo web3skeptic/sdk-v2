@@ -1,12 +1,11 @@
 import type { RpcClient } from './client';
 import type {
-  EventRow,
   Cursor,
-  PagedResult,
   PagedQueryParams,
   Filter,
   OrderBy,
   QueryParams,
+  SortOrder,
 } from '@circles-sdk-v2/types';
 
 interface QueryResponse {
@@ -15,350 +14,319 @@ interface QueryResponse {
 }
 
 /**
+ * Configuration for a cursor column in pagination
+ */
+export interface CursorColumn {
+  name: string;
+  sortOrder: SortOrder;
+  toValue?: (value: any) => string | number | boolean;
+}
+
+/**
+ * Flexible paged result that works with both event-based and custom cursors
+ */
+export interface FlexiblePagedResult<TRow> {
+  limit: number;
+  size: number;
+  firstCursor?: Cursor | Record<string, any>;
+  lastCursor?: Cursor | Record<string, any>;
+  sortOrder: SortOrder;
+  hasMore: boolean;
+  results: TRow[];
+}
+
+/**
+ * Cursor configuration for different table types
+ */
+const EVENT_CURSOR_COLUMNS: CursorColumn[] = [
+  { name: 'blockNumber', sortOrder: 'DESC' },
+  { name: 'transactionIndex', sortOrder: 'DESC' },
+  { name: 'logIndex', sortOrder: 'DESC' },
+];
+
+/**
  * A class for querying Circles RPC nodes with cursor-based pagination.
- * The class maintains the state of the current page and provides methods for querying the next pages.
+ * Supports both event-based pagination (default) and custom cursor pagination (for view tables).
  *
- * Usage:
- * 1. Create a new instance of PagedQuery with the RpcClient instance and the query parameters.
- * 2. Call queryNextPage() to get the next page of results.
- * 3. Access the results and cursors from the currentPage property.
- * 4. Repeat step 2 until there are no more results.
- *
- * @typeParam TRow The type of the rows returned by the query (must extend EventRow).
+ * @typeParam TRow The type of the rows returned by the query.
  *
  * @example
  * ```typescript
- * const query = new PagedQuery<TokenBalance>(rpc.client, {
+ * // Event-based pagination
+ * const query = new PagedQuery<GroupMembershipRow>(rpc.client, {
  *   namespace: 'V_CrcV2',
- *   table: 'TokenBalances',
+ *   table: 'GroupMemberships',
  *   sortOrder: 'DESC',
- *   columns: ['tokenAddress', 'tokenOwner', 'attoCircles', ...],
- *   filter: [{ Type: 'FilterPredicate', FilterType: 'Equals', Column: 'tokenAddress', Value: '0x...' }],
+ *   columns: ['blockNumber', 'transactionIndex', 'logIndex', 'group', 'member'],
+ *   filter: [{ Type: 'FilterPredicate', FilterType: 'Equals', Column: 'group', Value: '0x...' }],
  *   limit: 100
  * });
  *
- * // Get first page
- * await query.queryNextPage();
- * console.log(query.currentPage.results);
- *
- * // Get next page
- * if (query.currentPage.hasMore) {
- *   await query.queryNextPage();
- *   console.log(query.currentPage.results);
- * }
+ * // Custom cursor pagination (for view tables)
+ * const viewQuery = new PagedQuery<GroupTokenHolderRow>(rpc.client, {
+ *   namespace: 'V_CrcV2',
+ *   table: 'GroupTokenHoldersBalance',
+ *   sortOrder: 'ASC',
+ *   columns: ['group', 'holder', 'totalBalance'],
+ *   cursorColumns: [{ name: 'holder', sortOrder: 'ASC' }],
+ *   filter: [{ Type: 'FilterPredicate', FilterType: 'Equals', Column: 'group', Value: '0x...' }],
+ *   limit: 100
+ * });
  * ```
  */
-// @todo to be reviewed
-export class PagedQuery<TRow extends EventRow> {
-  private readonly params: PagedQueryParams;
+export class PagedQuery<TRow = any> {
+  private readonly params: PagedQueryParams & {
+    cursorColumns?: CursorColumn[];
+    orderColumns?: OrderBy[];
+    rowTransformer?: (row: any) => TRow
+  };
   private readonly client: RpcClient;
   private readonly rowTransformer?: (row: any) => TRow;
+  private readonly cursorColumns: CursorColumn[];
+  private readonly orderColumns?: OrderBy[];
 
-  /**
-   * The current page of the query (or undefined if no query has been executed yet).
-   */
-  get currentPage(): PagedResult<TRow> | undefined {
+  get currentPage(): FlexiblePagedResult<TRow> | undefined {
     return this._currentPage;
   }
 
-  private _currentPage?: PagedResult<TRow>;
+  private _currentPage?: FlexiblePagedResult<TRow>;
 
-  /**
-   * Creates a new PagedQuery instance.
-   *
-   * @param client - The RpcClient instance to use for queries
-   * @param params - The query parameters
-   * @param rowTransformer - Optional function to transform raw rows into TRow objects
-   */
   constructor(
     client: RpcClient,
-    params: PagedQueryParams,
+    params: PagedQueryParams & {
+      cursorColumns?: CursorColumn[];
+      orderColumns?: OrderBy[];
+      rowTransformer?: (row: any) => TRow
+    },
     rowTransformer?: (row: any) => TRow
   ) {
-    this.params = params;
     this.client = client;
-    this.rowTransformer = rowTransformer;
+    this.params = params;
+    this.rowTransformer = rowTransformer || params.rowTransformer;
+    this.orderColumns = params.orderColumns;
+
+    // Determine cursor columns based on table type
+    this.cursorColumns = params.cursorColumns || this.buildEventCursorColumns();
   }
 
   /**
-   * Builds the order by clause for a paged query.
-   * Always orders by blockNumber, transactionIndex, and logIndex.
-   * If the table is TransferBatch, also orders by batchIndex.
-   * @private
+   * Builds cursor columns for event-based tables
    */
-  private buildOrderBy(params: PagedQueryParams): OrderBy[] {
-    const order: OrderBy[] = [
-      {
-        Column: 'blockNumber',
-        SortOrder: params.sortOrder,
-      },
-      {
-        Column: 'transactionIndex',
-        SortOrder: params.sortOrder,
-      },
-      {
-        Column: 'logIndex',
-        SortOrder: params.sortOrder,
-      },
-    ];
+  private buildEventCursorColumns(): CursorColumn[] {
+    const columns = EVENT_CURSOR_COLUMNS.map(col => ({
+      ...col,
+      sortOrder: this.params.sortOrder
+    }));
 
-    if (params.table === 'TransferBatch') {
-      order.push({
-        Column: 'batchIndex',
-        SortOrder: params.sortOrder,
-      });
+    // Add batchIndex for TransferBatch table
+    if (this.params.table === 'TransferBatch') {
+      columns.push({ name: 'batchIndex', sortOrder: this.params.sortOrder });
     }
 
-    return order;
+    return columns;
   }
 
   /**
-   * Builds the cursor filter for a paged query.
-   * Depending on the sort order, the cursor filter will be either greater than or less than the existing cursor.
-   * @private
+   * Transforms a cursor value for use in query filters
    */
-  private buildCursorFilter(params: PagedQueryParams, cursor?: Cursor): Filter[] | undefined {
-    if (!cursor) {
-      return undefined;
-    }
+  private transformCursorValue(value: any, transformer?: (v: any) => string | number | boolean): string | number | boolean {
+    if (transformer) return transformer(value);
+    if (typeof value === 'bigint') return value.toString();
+    return value;
+  }
 
-    const sortOrder = params.sortOrder === 'ASC' ? 'GreaterThan' : 'LessThan';
-
-    // Add primary filter for blockNumber
-    const blockNumberFilter: Filter = {
+  /**
+   * Creates an equality predicate for a cursor column
+   */
+  private createEqualityPredicate(column: CursorColumn, value: any): Filter {
+    return {
       Type: 'FilterPredicate',
-      FilterType: sortOrder,
-      Column: 'blockNumber',
-      Value: cursor.blockNumber,
+      FilterType: 'Equals',
+      Column: column.name,
+      Value: this.transformCursorValue(value, column.toValue),
     };
+  }
 
-    // Create compound filter for transactionIndex, logIndex, and batchIndex
-    const subFilters: Filter[] = [];
+  /**
+   * Creates a comparison predicate for a cursor column (> or <)
+   */
+  private createComparisonPredicate(column: CursorColumn, value: any): Filter {
+    const filterType = column.sortOrder === 'ASC' ? 'GreaterThan' : 'LessThan';
 
-    // Filter for transactionIndex if blockNumber is equal
-    subFilters.push({
-      Type: 'Conjunction',
-      ConjunctionType: 'And',
-      Predicates: [
-        {
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'blockNumber',
-          Value: cursor.blockNumber,
-        },
-        {
-          Type: 'FilterPredicate',
-          FilterType: sortOrder,
-          Column: 'transactionIndex',
-          Value: cursor.transactionIndex,
-        },
-      ],
-    });
+    return {
+      Type: 'FilterPredicate',
+      FilterType: filterType,
+      Column: column.name,
+      Value: this.transformCursorValue(value, column.toValue),
+    };
+  }
 
-    // Filter for logIndex if blockNumber and transactionIndex are equal
-    subFilters.push({
-      Type: 'Conjunction',
-      ConjunctionType: 'And',
-      Predicates: [
-        {
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'blockNumber',
-          Value: cursor.blockNumber,
-        },
-        {
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'transactionIndex',
-          Value: cursor.transactionIndex,
-        },
-        {
-          Type: 'FilterPredicate',
-          FilterType: sortOrder,
-          Column: 'logIndex',
-          Value: cursor.logIndex,
-        },
-      ],
-    });
+  /**
+   * Builds cursor filter for pagination using composite cursor columns.
+   *
+   * Creates an OR conjunction of predicates for each cursor level:
+   * - First level: col1 > cursor.col1
+   * - Second level: col1 = cursor.col1 AND col2 > cursor.col2
+   * - Third level: col1 = cursor.col1 AND col2 = cursor.col2 AND col3 > cursor.col3
+   *
+   * This ensures correct pagination across all cursor columns.
+   */
+  private buildCursorFilter(cursor?: Record<string, any>): Filter[] {
+    if (!cursor) return [];
 
-    // Filter for batchIndex if applicable and all previous columns are equal
-    if (params.table === 'TransferBatch' && cursor.batchIndex !== undefined) {
-      subFilters.push({
-        Type: 'Conjunction',
-        ConjunctionType: 'And',
-        Predicates: [
-          {
-            Type: 'FilterPredicate',
-            FilterType: 'Equals',
-            Column: 'blockNumber',
-            Value: cursor.blockNumber,
-          },
-          {
-            Type: 'FilterPredicate',
-            FilterType: 'Equals',
-            Column: 'transactionIndex',
-            Value: cursor.transactionIndex,
-          },
-          {
-            Type: 'FilterPredicate',
-            FilterType: 'Equals',
-            Column: 'logIndex',
-            Value: cursor.logIndex,
-          },
-          {
-            Type: 'FilterPredicate',
-            FilterType: sortOrder,
-            Column: 'batchIndex',
-            Value: cursor.batchIndex,
-          },
-        ],
-      });
+    const orPredicates: Filter[] = [];
+
+    for (let level = 0; level < this.cursorColumns.length; level++) {
+      const currentColumn = this.cursorColumns[level];
+      const cursorValue = cursor[currentColumn.name];
+
+      if (cursorValue === undefined) continue;
+
+      if (level === 0) {
+        // First level: simple comparison (col > value)
+        orPredicates.push(this.createComparisonPredicate(currentColumn, cursorValue));
+      } else {
+        // Subsequent levels: equality for all previous + comparison for current
+        const andPredicates: Filter[] = [];
+
+        // Add equality predicates for all previous columns
+        for (let prevLevel = 0; prevLevel < level; prevLevel++) {
+          const prevColumn = this.cursorColumns[prevLevel];
+          const prevValue = cursor[prevColumn.name];
+
+          if (prevValue !== undefined) {
+            andPredicates.push(this.createEqualityPredicate(prevColumn, prevValue));
+          }
+        }
+
+        // Add comparison predicate for current column
+        andPredicates.push(this.createComparisonPredicate(currentColumn, cursorValue));
+
+        orPredicates.push({
+          Type: 'Conjunction',
+          ConjunctionType: 'And',
+          Predicates: andPredicates,
+        });
+      }
     }
 
-    // Combine the primary and compound filters into a single filter
-    const combinedFilter: Filter = {
+    if (orPredicates.length === 0) return [];
+
+    return [{
       Type: 'Conjunction',
       ConjunctionType: 'Or',
-      Predicates: [blockNumberFilter, ...subFilters],
-    };
-
-    return [combinedFilter];
+      Predicates: orPredicates,
+    }];
   }
 
   /**
-   * Combines two filters into a single filter.
-   * The filters are always combined with an 'And' conjunction.
-   * @private
+   * Builds the order by clause.
+   * If orderColumns are provided, uses those. Otherwise builds from cursor columns.
    */
-  private combineFilters(filter1?: Filter[], filter2?: Filter[]): Filter[] {
-    if (!filter1 && !filter2) {
-      return [];
+  private buildOrderBy(): OrderBy[] {
+    if (this.orderColumns && this.orderColumns.length > 0) {
+      return this.orderColumns;
     }
 
-    if (!filter1) {
-      return filter2 ?? [];
-    }
-
-    if (!filter2) {
-      return filter1;
-    }
-
-    return [
-      {
-        Type: 'Conjunction',
-        ConjunctionType: 'And',
-        Predicates: [...filter1, ...filter2],
-      },
-    ];
+    return this.cursorColumns.map(col => ({
+      Column: col.name,
+      SortOrder: col.sortOrder,
+    }));
   }
 
   /**
-   * Converts the rows from a Circles RPC response to an array of objects.
-   * @private
+   * Combines base filters with cursor filter
+   */
+  private combineFilters(baseFilters?: Filter[], cursorFilter?: Filter[]): Filter[] {
+    if (!baseFilters?.length && !cursorFilter?.length) return [];
+    if (!baseFilters?.length) return cursorFilter || [];
+    if (!cursorFilter?.length) return baseFilters;
+
+    return [{
+      Type: 'Conjunction',
+      ConjunctionType: 'And',
+      Predicates: [...baseFilters, ...cursorFilter],
+    }];
+  }
+
+  /**
+   * Converts query response rows to typed objects
    */
   private rowsToObjects(response: QueryResponse): TRow[] {
     const { columns, rows } = response;
 
-    return rows.map((row) => {
+    return rows.map(row => {
       const rowObj: any = {};
       columns.forEach((col, index) => {
         rowObj[col] = row[index];
       });
 
-      // Apply row transformer if provided
-      if (this.rowTransformer) {
-        return this.rowTransformer(rowObj);
-      }
-
-      return rowObj as TRow;
+      return this.rowTransformer ? this.rowTransformer(rowObj) : rowObj as TRow;
     });
   }
 
   /**
-   * Converts a row from a query result to a cursor.
-   * The cursor is an object with the blockNumber, transactionIndex, logIndex, and optional batchIndex properties.
-   * @private
+   * Extracts cursor values from a row
    */
-  private rowToCursor(resultElement: TRow): Cursor {
+  private rowToCursor(row: TRow): Record<string, any> {
+    const cursor: Record<string, any> = {};
+
+    for (const column of this.cursorColumns) {
+      cursor[column.name] = (row as any)[column.name];
+    }
+
+    return cursor;
+  }
+
+  /**
+   * Gets first and last cursors from result set
+   */
+  private getCursors(results: TRow[]): { first?: Record<string, any>; last?: Record<string, any> } {
+    if (results.length === 0) return {};
+
     return {
-      blockNumber: resultElement.blockNumber,
-      transactionIndex: resultElement.transactionIndex,
-      logIndex: resultElement.logIndex,
-      batchIndex: resultElement.batchIndex,
+      first: this.rowToCursor(results[0]),
+      last: this.rowToCursor(results[results.length - 1]),
     };
   }
 
   /**
-   * Builds a cursor from the first or last row of a query result.
-   * If the result is empty, returns null.
-   * @private
-   */
-  private getFirstAndLastCursor(result: TRow[]): {
-    first: Cursor;
-    last: Cursor;
-  } | null {
-    if (result.length === 0) {
-      return null;
-    }
-
-    const first = this.rowToCursor(result[0]);
-    const last = this.rowToCursor(result[result.length - 1]);
-
-    return { first, last };
-  }
-
-  /**
    * Queries the next page of results.
-   * Updates the currentPage property with the new page.
    *
-   * @returns True if the query returned rows, false if there are no more results.
-   *
-   * @example
-   * ```typescript
-   * const hasResults = await query.queryNextPage();
-   * if (hasResults) {
-   *   console.log('Got', query.currentPage.size, 'results');
-   * } else {
-   *   console.log('No more results');
-   * }
-   * ```
+   * @returns True if results were found, false otherwise
    */
   public async queryNextPage(): Promise<boolean> {
-    const orderBy = this.buildOrderBy(this.params);
-    const filter = this.buildCursorFilter(this.params, this._currentPage?.lastCursor);
-    const combinedFilter = this.combineFilters(this.params.filter, filter);
+    const cursorFilter = this.buildCursorFilter(this._currentPage?.lastCursor);
+    const combinedFilter = this.combineFilters(this.params.filter, cursorFilter);
 
     const queryParams: QueryParams = {
       Namespace: this.params.namespace,
       Table: this.params.table,
       Columns: this.params.columns,
       Filter: combinedFilter,
-      Order: orderBy,
+      Order: this.buildOrderBy(),
       Limit: this.params.limit,
     };
 
-    const response = await this.client.call<[QueryParams], QueryResponse>('circles_query', [
-      queryParams,
-    ]);
-    const result = this.rowsToObjects(response);
-    const cursors = this.getFirstAndLastCursor(result);
+    const response = await this.client.call<[QueryParams], QueryResponse>('circles_query', [queryParams]);
+    const results = this.rowsToObjects(response);
+    const cursors = this.getCursors(results);
 
     this._currentPage = {
       limit: this.params.limit,
-      size: result.length,
-      firstCursor: cursors?.first,
-      lastCursor: cursors?.last,
+      size: results.length,
+      firstCursor: cursors.first,
+      lastCursor: cursors.last,
       sortOrder: this.params.sortOrder,
-      hasMore: result.length === this.params.limit, // If we got a full page, there might be more
-      results: result,
+      hasMore: results.length === this.params.limit,
+      results,
     };
 
-    return result.length > 0;
+    return results.length > 0;
   }
 
   /**
-   * Resets the query to start from the beginning.
-   * Clears the current page state.
+   * Resets the query to start from the beginning
    */
   public reset(): void {
     this._currentPage = undefined;

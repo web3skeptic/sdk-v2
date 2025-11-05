@@ -11,7 +11,8 @@ export type FilterType =
   | 'GreaterThan'
   | 'LessThan'
   | 'GreaterOrEqualThan'
-  | 'LessOrEqualThan';
+  | 'LessOrEqualThan'
+  | 'Like';
 
 /**
  * Conjunction types for combining predicates

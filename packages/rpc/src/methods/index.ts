@@ -7,4 +7,4 @@ export { ProfileMethods } from './profile';
 export { TokenMethods } from './token';
 export { InvitationMethods } from './invitation';
 export { TransactionMethods } from './transaction';
-export { GroupMethods } from './group';
+export { GroupMethods, type GroupTokenHolderRow } from './group';

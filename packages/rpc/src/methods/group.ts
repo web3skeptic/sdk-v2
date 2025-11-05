@@ -1,11 +1,17 @@
 import type { RpcClient } from '../client';
-import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter, TokenBalance } from '@circles-sdk-v2/types';
+import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { PagedQuery } from '../pagedQuery';
 
-interface QueryResponse {
-  columns: string[];
-  rows: any[][];
+/**
+ * Row type for GroupTokenHoldersBalance view table
+ */
+export interface GroupTokenHolderRow {
+  group: Address;
+  holder: Address;
+  totalBalance: bigint;
+  demurragedTotalBalance: bigint;
+  fractionOwnership: number;
 }
 
 /**
@@ -14,19 +20,11 @@ interface QueryResponse {
 export class GroupMethods {
   constructor(private client: RpcClient) {}
 
-  private transformQueryResponse<T>(response: QueryResponse): T[] {
-    const { columns, rows } = response;
-    return rows.map((row) => {
-      const obj: any = {};
-      columns.forEach((col, index) => {
-        obj[col] = row[index];
-      });
-      return obj as T;
-    });
-  }
-
   /**
    * Find groups with optional filters
+   *
+   * This is a convenience method that fetches all pages using cursor-based pagination
+   * and returns the combined results up to the specified limit.
    *
    * @param limit - Maximum number of groups to return (default: 50)
    * @param params - Optional query parameters to filter groups
@@ -37,7 +35,7 @@ export class GroupMethods {
    * // Find all groups
    * const allGroups = await rpc.group.findGroups(50);
    *
-   * // Find groups by name prefix (client-side filtering)
+   * // Find groups by name prefix
    * const groups = await rpc.group.findGroups(50, {
    *   nameStartsWith: 'Community'
    * });
@@ -52,133 +50,27 @@ export class GroupMethods {
     limit: number = 50,
     params?: GroupQueryParams
   ): Promise<GroupRow[]> {
-    const filter: Filter[] = [];
+    // Create the paged query
+    const query = this.getGroups(limit, params, 'DESC');
+    const results: GroupRow[] = [];
 
-    // Client-side filters (not supported by RPC server)
-    const clientFilters = {
-      nameStartsWith: params?.nameStartsWith,
-      symbolStartsWith: params?.symbolStartsWith,
-    };
+    // Fetch all pages up to the limit
+    while (await query.queryNextPage()) {
+      results.push(...query.currentPage!.results);
 
-    // For client-side filters, fetch more results to account for filtering
-    const fetchLimit = (clientFilters.nameStartsWith || clientFilters.symbolStartsWith)
-      ? Math.max(limit * 5, 500) // Fetch 5x the limit or 500, whichever is larger
-      : limit;
-
-    if (params) {
-      // Server-side filters only
-
-      if (params.groupAddressIn && params.groupAddressIn.length > 0) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'group',
-          Value: params.groupAddressIn.map((addr) => normalizeAddress(addr)).join(','),
-        });
+      // If we have enough results, break
+      if (results.length >= limit) {
+        break;
       }
 
-      if (params.groupTypeIn && params.groupTypeIn.length > 0) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'type',
-          Value: params.groupTypeIn.join(','),
-        });
-      }
-
-      if (params.ownerEquals) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'owner',
-          Value: normalizeAddress(params.ownerEquals),
-        });
-      }
-
-      if (params.mintHandlerEquals) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'mintHandler',
-          Value: normalizeAddress(params.mintHandlerEquals),
-        });
-      }
-
-      if (params.treasuryEquals) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'treasury',
-          Value: normalizeAddress(params.treasuryEquals),
-        });
+      // If no more pages, break
+      if (!query.currentPage!.hasMore) {
+        break;
       }
     }
 
-    const finalFilter: Filter[] =
-      filter.length > 1
-        ? [
-            {
-              Type: 'Conjunction',
-              ConjunctionType: 'And',
-              Predicates: filter,
-            },
-          ]
-        : filter;
-
-    const response = await this.client.call<[any], QueryResponse>('circles_query', [
-      {
-        Namespace: 'V_CrcV2',
-        Table: 'Groups',
-        Columns: [
-          'blockNumber',
-          'timestamp',
-          'transactionIndex',
-          'logIndex',
-          'transactionHash',
-          'group',
-          'type',
-          'owner',
-          'mintPolicy',
-          'mintHandler',
-          'treasury',
-          'service',
-          'feeCollection',
-          'memberCount',
-          'name',
-          'symbol',
-          'cidV0Digest',
-          'erc20WrapperDemurraged',
-          'erc20WrapperStatic',
-        ],
-        Filter: finalFilter,
-        Order: [
-          {
-            Column: 'blockNumber',
-            SortOrder: 'DESC',
-          },
-        ],
-        Limit: fetchLimit,
-      },
-    ]);
-
-    let results = this.transformQueryResponse<GroupRow>(response);
-
-    // Apply client-side filters
-    if (clientFilters.nameStartsWith) {
-      results = results.filter(g =>
-        g.name && g.name.toLowerCase().startsWith(clientFilters.nameStartsWith!.toLowerCase())
-      );
-    }
-
-    if (clientFilters.symbolStartsWith) {
-      results = results.filter(g =>
-        g.symbol && g.symbol.toLowerCase().startsWith(clientFilters.symbolStartsWith!.toLowerCase())
-      );
-    }
-
-    // Apply limit after client-side filtering
-    const limited = results.slice(0, limit);
-    return checksumAddresses(limited);
+    // Apply limit
+    return results.slice(0, limit);
   }
 
   /**
@@ -237,85 +129,73 @@ export class GroupMethods {
   }
 
   /**
-   * Get all holders of a group token
+   * Get holders of a group token using cursor-based pagination
    *
-   * Returns all avatars that hold the specified group token, including their balance amounts.
+   * Returns a PagedQuery instance that can be used to fetch holders page by page.
+   * Results are ordered by totalBalance DESC (highest first), with holder address as tie-breaker.
+   *
+   * Note: Pagination uses holder address as cursor because totalBalance (BigInt) values
+   * cannot be reliably passed through JSON-RPC filters. This means pagination boundaries
+   * are based on holder addresses, not balances.
    *
    * @param groupAddress - The address of the group token
-   * @param limit - Maximum number of holders to return (default: 100)
-   * @returns Array of token balances showing who holds the group token
+   * @param limit - Number of holders per page (default: 100)
+   * @returns PagedQuery instance for iterating through group token holders
    *
    * @example
    * ```typescript
-   * // Get all holders of a group token
-   * const holders = await rpc.group.getGroupHolders('0xGroupAddress...', 100);
-   * console.log(`${holders.length} holders of this group token`);
+   * const query = rpc.group.getGroupHolders('0xGroupAddress...', 50);
    *
-   * holders.forEach(holder => {
-   *   console.log(`Holder: ${holder.tokenOwner}`);
-   *   console.log(`Balance: ${holder.circles} CRC`);
-   * });
+   * // Get first page (ordered by totalBalance DESC)
+   * await query.queryNextPage();
+   * console.log(query.currentPage.results[0]); // Holder with highest balance
+   *
+   * // Get next page if available
+   * if (query.currentPage.hasMore) {
+   *   await query.queryNextPage();
+   * }
    * ```
    */
-  async getGroupHolders(groupAddress: Address, limit: number = 100): Promise<TokenBalance[]> {
+  getGroupHolders(
+    groupAddress: Address,
+    limit: number = 100
+  ): PagedQuery<GroupTokenHolderRow> {
     const normalized = normalizeAddress(groupAddress);
 
-    const response = await this.client.call<[any], QueryResponse>('circles_query', [
-      {
-        Namespace: 'V_CrcV2',
-        Table: 'TokenBalances',
-        Columns: [
-          'tokenAddress',
-          'tokenId',
-          'tokenOwner',
-          'tokenType',
-          'version',
-          'attoCircles',
-          'circles',
-          'staticAttoCircles',
-          'staticCircles',
-          'attoCrc',
-          'crc',
-          'isErc20',
-          'isErc1155',
-          'isWrapped',
-          'isInflationary',
-          'isGroup',
-        ],
-        Filter: [
-          {
-            Type: 'FilterPredicate',
-            FilterType: 'Equals',
-            Column: 'tokenAddress',
-            Value: normalized,
-          },
-        ],
-        Order: [
-          {
-            Column: 'attoCircles',
-            SortOrder: 'DESC',
-          },
-        ],
-        Limit: limit,
-      },
-    ]);
-
-    // Transform the query response
-    const { columns, rows } = response;
-    const results = rows.map((row: any[]) => {
-      const obj: any = {};
-      columns.forEach((col: string, index: number) => {
+    return new PagedQuery<GroupTokenHolderRow>(this.client, {
+      namespace: 'V_CrcV2',
+      table: 'GroupTokenHoldersBalance',
+      sortOrder: 'DESC',
+      columns: ['group', 'holder', 'totalBalance', 'demurragedTotalBalance', 'fractionOwnership'],
+      cursorColumns: [
+        {
+          name: 'holder',
+          sortOrder: 'ASC', // Cursor uses holder for pagination
+        },
+      ],
+      orderColumns: [
+        { Column: 'totalBalance', SortOrder: 'DESC' },
+        { Column: 'holder', SortOrder: 'ASC' }, // Tie-breaker for same balance
+      ],
+      filter: [
+        {
+          Type: 'FilterPredicate',
+          FilterType: 'Equals',
+          Column: 'group',
+          Value: normalized,
+        },
+      ],
+      limit,
+      rowTransformer: (row: any) => {
         // Convert string values to bigint for specific fields
-        if (['tokenId', 'attoCircles', 'staticAttoCircles', 'attoCrc'].includes(col)) {
-          obj[col] = BigInt(row[index]);
-        } else {
-          obj[col] = row[index];
-        }
-      });
-      return obj as TokenBalance;
+        const transformed = {
+          ...row,
+          totalBalance: BigInt(row.totalBalance),
+          demurragedTotalBalance: BigInt(row.demurragedTotalBalance),
+        };
+        return checksumAddresses(transformed) as GroupTokenHolderRow;
+      },
     });
-
-    return checksumAddresses(results);
   }
 
   /**
@@ -414,25 +294,62 @@ export class GroupMethods {
     const filter: Filter[] = [];
 
     if (params) {
-      // Note: Client-side filters (nameStartsWith, symbolStartsWith) are not supported in PagedQuery
-      // Only server-side filters are included
-
-      if (params.groupAddressIn && params.groupAddressIn.length > 0) {
+      if (params.nameStartsWith) {
         filter.push({
           Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'group',
-          Value: params.groupAddressIn.map((addr) => normalizeAddress(addr)).join(','),
+          FilterType: 'Like',
+          Column: 'name',
+          Value: params.nameStartsWith + '%',
         });
       }
 
-      if (params.groupTypeIn && params.groupTypeIn.length > 0) {
+      if (params.symbolStartsWith) {
         filter.push({
           Type: 'FilterPredicate',
-          FilterType: 'Equals',
-          Column: 'type',
-          Value: params.groupTypeIn.join(','),
+          FilterType: 'Like',
+          Column: 'symbol',
+          Value: params.symbolStartsWith + '%',
         });
+      }
+
+      if (params.groupAddressIn && params.groupAddressIn.length > 0) {
+        // Create an OR conjunction for matching any of the group addresses
+        const addressPredicates = params.groupAddressIn.map((addr) => ({
+          Type: 'FilterPredicate' as const,
+          FilterType: 'Equals' as const,
+          Column: 'group',
+          Value: normalizeAddress(addr),
+        }));
+
+        if (addressPredicates.length === 1) {
+          filter.push(addressPredicates[0]);
+        } else {
+          filter.push({
+            Type: 'Conjunction',
+            ConjunctionType: 'Or',
+            Predicates: addressPredicates,
+          });
+        }
+      }
+
+      if (params.groupTypeIn && params.groupTypeIn.length > 0) {
+        // Create an OR conjunction for matching any of the group types
+        const typePredicates = params.groupTypeIn.map((type) => ({
+          Type: 'FilterPredicate' as const,
+          FilterType: 'Equals' as const,
+          Column: 'type',
+          Value: type,
+        }));
+
+        if (typePredicates.length === 1) {
+          filter.push(typePredicates[0]);
+        } else {
+          filter.push({
+            Type: 'Conjunction',
+            ConjunctionType: 'Or',
+            Predicates: typePredicates,
+          });
+        }
       }
 
       if (params.ownerEquals) {

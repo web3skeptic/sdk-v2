@@ -14,7 +14,8 @@ import { SdkError } from '../errors';
 import { BaseGroupContract } from '@circles-sdk-v2/core';
 import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
-import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
+import type { AggregatedTrustRelation, GroupTokenHolderRow } from '@circles-sdk-v2/rpc';
+import { PagedQuery } from '@circles-sdk-v2/rpc';
 
 /**
  * HumanAvatar class implementation
@@ -723,16 +724,10 @@ export class HumanAvatar extends CommonAvatar {
       // Extract group addresses
       const groupAddresses = memberships.map((m: GroupMembershipRow) => m.group);
 
-      // WORKAROUND: groupAddressIn filter doesn't work, so fetch all groups and filter client-side
-      const allGroups = await this.rpc.group.findGroups(1000);
-
-      // Create a set of lowercase membership group addresses for fast lookup
-      const membershipSet = new Set(groupAddresses.map((addr: Address) => addr.toLowerCase()));
-
-      // Filter to only groups the user is a member of
-      const groups = allGroups.filter((group: GroupRow) =>
-        membershipSet.has(group.group.toLowerCase())
-      );
+      // Fetch group details using groupAddressIn filter
+      const groups = await this.rpc.group.findGroups(groupAddresses.length, {
+        groupAddressIn: groupAddresses,
+      });
 
       return groups;
     },
@@ -808,28 +803,37 @@ export class HumanAvatar extends CommonAvatar {
     },
 
     /**
-     * Get all holders of a group token
+     * Get all holders of a group token using cursor-based pagination
      *
-     * Returns all avatars that hold the specified group token, including their balance amounts.
+     * Returns all avatars that hold the specified group token, ordered by balance (highest first),
+     * including balance amounts and ownership fractions.
      *
      * @param groupAddress The address of the group token
      * @param limit Maximum number of holders to return (default: 100)
-     * @returns Array of token balances showing who holds the group token
+     * @returns PagedQuery instance for iterating through group token holders
      *
      * @example
      * ```typescript
      * // Get all holders of a group token
-     * const holders = await avatar.group.getHolders('0xGroupAddress...');
-     * console.log(`${holders.length} holders of this group token`);
+     * const query = avatar.group.getHolders('0xGroupAddress...');
      *
-     * holders.forEach(holder => {
-     *   console.log(`Holder: ${holder.tokenOwner}`);
-     *   console.log(`Balance: ${holder.circles} CRC`);
-     * });
+     * // Get first page (ordered by balance DESC)
+     * await query.queryNextPage();
+     * console.log(`${query.currentPage.size} holders of this group token`);
+     *
+     * // Iterate through all holders
+     * while (await query.queryNextPage()) {
+     *   query.currentPage.results.forEach(holder => {
+     *     const balanceInCrc = Number(holder.totalBalance) / 1e18;
+     *     console.log(`Holder: ${holder.holder}`);
+     *     console.log(`Balance: ${balanceInCrc.toFixed(2)} CRC`);
+     *     console.log(`Ownership: ${(holder.fractionOwnership * 100).toFixed(2)}%`);
+     *   });
+     * }
      * ```
      */
-    getHolders: async (groupAddress: Address, limit: number = 100): Promise<TokenBalance[]> => {
-      return await this.rpc.group.getGroupHolders(groupAddress, limit);
+    getHolders: (groupAddress: Address, limit: number = 100): PagedQuery<GroupTokenHolderRow> => {
+      return this.rpc.group.getGroupHolders(groupAddress, limit);
     }
   };
 
