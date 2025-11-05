@@ -1,12 +1,8 @@
 import type { RpcClient } from '../client';
-import type { Address, TransactionHistoryRow } from '@circles-sdk-v2/types';
+import type { Address, TransactionHistoryRow, Filter } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { CirclesConverter } from '@circles-sdk-v2/utils';
-
-interface QueryResponse {
-  columns: string[];
-  rows: any[][];
-}
+import { PagedQuery } from '../pagedQuery';
 
 /**
  * Calculate circle amounts for v2 transactions
@@ -46,104 +42,92 @@ export class TransactionMethods {
   constructor(private client: RpcClient) {}
 
   /**
-   * Get v2 transaction history for an address
-   * Returns v2 transfers (incoming/outgoing/minting) with calculated circle amounts
+   * Get transaction history for an address using cursor-based pagination
+   *
+   * Returns a PagedQuery instance that can be used to fetch transaction history page by page.
+   * Automatically calculates circle amounts for each v2 transaction.
    *
    * @param avatar - Avatar address to query transaction history for
-   * @param offset - Number of transactions to skip (default: 0)
-   * @param limit - Maximum number of transactions to return (default: 50)
-   * @returns Array of v2 transaction history rows with circle conversions
+   * @param limit - Number of transactions per page (default: 50)
+   * @param sortOrder - Sort order for results (default: 'DESC')
+   * @returns PagedQuery instance for iterating through transaction history
    *
    * @example
    * ```typescript
-   * // Get first 50 transactions
-   * const history = await rpc.transaction.getTransactionHistory(
-   *   '0xde374ece6fa50e781e81aac78e811b33d16912c7',
-   *   0,
-   *   50
-   * );
+   * const query = rpc.transaction.getTransactionHistory('0xAvatar...', 50);
    *
-   * // Get next 50 transactions (pagination)
-   * const nextPage = await rpc.transaction.getTransactionHistory(
-   *   '0xde374ece6fa50e781e81aac78e811b33d16912c7',
-   *   50,
-   *   50
-   * );
+   * // Get first page
+   * await query.queryNextPage();
+   * query.currentPage.results.forEach(tx => {
+   *   console.log(`${tx.from} -> ${tx.to}: ${tx.circles} CRC`);
+   * });
+   *
+   * // Get next page if available
+   * if (query.currentPage.hasMore) {
+   *   await query.queryNextPage();
+   *   // Process next page...
+   * }
    * ```
    */
-  async getTransactionHistory(
+  getTransactionHistory(
     avatar: Address,
-    offset: number = 0,
-    limit: number = 50
-  ): Promise<TransactionHistoryRow[]> {
+    limit: number = 50,
+    sortOrder: 'ASC' | 'DESC' = 'DESC'
+  ): PagedQuery<TransactionHistoryRow> {
     const normalized = normalizeAddress(avatar);
 
-    const response = await this.client.call<[any], QueryResponse>('circles_query', [
+    const filter: Filter[] = [
       {
-        Namespace: 'V_Crc',
-        Table: 'TransferSummary',
-        Columns: [],
-        Filter: [
+        Type: 'Conjunction',
+        ConjunctionType: 'And',
+        Predicates: [
+          {
+            Type: 'FilterPredicate',
+            FilterType: 'Equals',
+            Column: 'version',
+            Value: 2,
+          },
           {
             Type: 'Conjunction',
-            ConjunctionType: 'And',
+            ConjunctionType: 'Or',
             Predicates: [
               {
                 Type: 'FilterPredicate',
                 FilterType: 'Equals',
-                Column: 'version',
-                Value: 2,
+                Column: 'from',
+                Value: normalized,
               },
               {
-                Type: 'Conjunction',
-                ConjunctionType: 'Or',
-                Predicates: [
-                  {
-                    Type: 'FilterPredicate',
-                    FilterType: 'Equals',
-                    Column: 'from',
-                    Value: normalized,
-                  },
-                  {
-                    Type: 'FilterPredicate',
-                    FilterType: 'Equals',
-                    Column: 'to',
-                    Value: normalized,
-                  },
-                ],
+                Type: 'FilterPredicate',
+                FilterType: 'Equals',
+                Column: 'to',
+                Value: normalized,
               },
             ],
           },
         ],
-        Order: [
-          {
-            Column: 'blockNumber',
-            SortOrder: 'DESC',
-          },
-        ],
-        Limit: offset + limit,
       },
-    ]);
+    ];
 
-    // Transform rows into objects
-    const { columns, rows } = response;
-    const limitedRows = rows.slice(offset, offset + limit);
-
-    const result = limitedRows.map((row) => {
-      const obj: any = {};
-      columns.forEach((col, index) => {
-        obj[col] = row[index];
-      });
-
-      // Calculate circle amounts
-      const amounts = calculateCircleAmounts(obj.value, obj.timestamp);
-
-      return {
-        ...obj,
-        ...amounts,
-      } as TransactionHistoryRow;
-    });
-
-    return checksumAddresses(result);
+    return new PagedQuery<TransactionHistoryRow>(
+      this.client,
+      {
+        namespace: 'V_Crc',
+        table: 'TransferSummary',
+        sortOrder,
+        columns: [], // Empty array returns all columns
+        filter,
+        limit,
+      },
+      (row) => {
+        // Calculate circle amounts
+        const amounts = calculateCircleAmounts(row.value, row.timestamp);
+        const result = {
+          ...row,
+          ...amounts,
+        };
+        return checksumAddresses(result) as TransactionHistoryRow;
+      }
+    );
   }
 }

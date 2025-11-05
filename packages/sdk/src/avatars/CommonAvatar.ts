@@ -406,24 +406,31 @@ export abstract class CommonAvatar {
 
   public readonly history = {
     /**
-     * Get transaction history for this avatar
+     * Get transaction history for this avatar using cursor-based pagination
      * Returns incoming/outgoing transactions and minting events
      *
-     * @param limit Maximum number of transactions to return (default: 50)
-     * @returns Array of transaction history entries
+     * @param limit Number of transactions per page (default: 50)
+     * @param sortOrder Sort order for results (default: 'DESC')
+     * @returns PagedQuery instance for iterating through transactions
      *
      * @example
      * ```typescript
-     * const txHistory = await avatar.history.getTransactions(20);
-     * txHistory.forEach(tx => {
-     *   console.log(`${tx.from} -> ${tx.to}: ${tx.value}`);
+     * const query = avatar.history.getTransactions(20);
+     *
+     * // Get first page
+     * await query.queryNextPage();
+     * query.currentPage.results.forEach(tx => {
+     *   console.log(`${tx.from} -> ${tx.to}: ${tx.circles} CRC`);
      * });
+     *
+     * // Get next page if available
+     * if (query.currentPage.hasMore) {
+     *   await query.queryNextPage();
+     * }
      * ```
      */
-    getTransactions: async (
-      limit: number = 50
-    ): Promise<TransactionHistoryRow[]> => {
-      return await this.rpc.transaction.getTransactionHistory(this.address, limit);
+    getTransactions: (limit: number = 50, sortOrder: 'ASC' | 'DESC' = 'DESC') => {
+      return this.rpc.transaction.getTransactionHistory(this.address, limit, sortOrder);
     },
   };
 

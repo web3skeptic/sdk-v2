@@ -28,6 +28,10 @@ export type {
   OrderBy,
   QueryParams,
   TableInfo,
+  EventRow,
+  Cursor,
+  PagedResult,
+  PagedQueryParams,
 } from './query';
 
 // Avatar and profile types

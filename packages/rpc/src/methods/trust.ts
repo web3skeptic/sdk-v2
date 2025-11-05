@@ -1,6 +1,7 @@
 import type { RpcClient } from '../client';
-import type { Address, TrustRelation } from '@circles-sdk-v2/types';
+import type { Address, TrustRelation, Filter } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
+import { PagedQuery } from '../pagedQuery';
 
 interface QueryResponse {
   columns: string[];
@@ -59,27 +60,73 @@ export class TrustMethods {
   }
 
   /**
-   * Get all v2 trust relations for an address
-   * Returns raw trust relations from the database
+   * Get trust relations for an address using cursor-based pagination
+   *
+   * Returns a PagedQuery instance for iterating through all v2 trust relations for the given avatar.
    *
    * @param avatar - Avatar address to query trust relations for
-   * @returns Array of trust relations (both incoming and outgoing)
+   * @param limit - Number of trust relations per page (default: 100)
+   * @param sortOrder - Sort order for results (default: 'DESC')
+   * @returns PagedQuery instance for iterating through trust relations
    *
    * @example
    * ```typescript
-   * const relations = await rpc.trust.getTrustRelations(
-   *   '0xde374ece6fa50e781e81aac78e811b33d16912c7'
-   * );
+   * const query = rpc.trust.getTrustRelations('0xAvatar...', 100);
+   *
+   * // Get first page
+   * await query.queryNextPage();
+   * query.currentPage.results.forEach(relation => {
+   *   console.log(`${relation.truster} trusts ${relation.trustee}`);
+   * });
    * ```
    */
-  async getTrustRelations(avatar: Address): Promise<TrustRelation[]> {
+  getTrustRelations(
+    avatar: Address,
+    limit: number = 100,
+    sortOrder: 'ASC' | 'DESC' = 'DESC'
+  ): PagedQuery<TrustRelation> {
     const normalized = normalizeAddress(avatar);
 
-    const response = await this.client.call<[any], QueryResponse>('circles_query', [
+    const filter: Filter[] = [
       {
-        Namespace: 'V_Crc',
-        Table: 'TrustRelations',
-        Columns: [
+        Type: 'Conjunction',
+        ConjunctionType: 'And',
+        Predicates: [
+          {
+            Type: 'FilterPredicate',
+            FilterType: 'Equals',
+            Column: 'version',
+            Value: 2,
+          },
+          {
+            Type: 'Conjunction',
+            ConjunctionType: 'Or',
+            Predicates: [
+              {
+                Type: 'FilterPredicate',
+                FilterType: 'Equals',
+                Column: 'trustee',
+                Value: normalized,
+              },
+              {
+                Type: 'FilterPredicate',
+                FilterType: 'Equals',
+                Column: 'truster',
+                Value: normalized,
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    return new PagedQuery<TrustRelation>(
+      this.client,
+      {
+        namespace: 'V_Crc',
+        table: 'TrustRelations',
+        sortOrder,
+        columns: [
           'blockNumber',
           'timestamp',
           'transactionIndex',
@@ -90,54 +137,18 @@ export class TrustMethods {
           'truster',
           'expiryTime',
         ],
-        Filter: [
-          {
-            Type: 'Conjunction',
-            ConjunctionType: 'And',
-            Predicates: [
-              {
-                Type: 'FilterPredicate',
-                FilterType: 'Equals',
-                Column: 'version',
-                Value: 2,
-              },
-              {
-                Type: 'Conjunction',
-                ConjunctionType: 'Or',
-                Predicates: [
-                  {
-                    Type: 'FilterPredicate',
-                    FilterType: 'Equals',
-                    Column: 'trustee',
-                    Value: normalized,
-                  },
-                  {
-                    Type: 'FilterPredicate',
-                    FilterType: 'Equals',
-                    Column: 'truster',
-                    Value: normalized,
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-        Order: [
-          {
-            Column: 'blockNumber',
-            SortOrder: 'DESC',
-          },
-        ],
+        filter,
+        limit,
       },
-    ]);
-
-    const result = this.transformQueryResponse<TrustRelation>(response);
-    return checksumAddresses(result);
+      (row) => checksumAddresses(row) as TrustRelation
+    );
   }
 
   /**
    * Get aggregated trust relations for an address
    * Groups trust relations by counterpart and determines relationship type
+   *
+   * Note: This method fetches ALL trust relations for aggregation.
    *
    * @param avatar - Avatar address to query trust relations for
    * @returns Aggregated trust relations with relationship types
@@ -155,7 +166,15 @@ export class TrustMethods {
    */
   async getAggregatedTrustRelations(avatar: Address): Promise<AggregatedTrustRelation[]> {
     const normalized = normalizeAddress(avatar);
-    const trustListRows = await this.getTrustRelations(normalized);
+
+    // Fetch all trust relations by paginating
+    const query = this.getTrustRelations(normalized, 1000);
+    const trustListRows: TrustRelation[] = [];
+
+    while (await query.queryNextPage()) {
+      trustListRows.push(...query.currentPage!.results);
+      if (!query.currentPage!.hasMore) break;
+    }
 
     // Group trust list rows by counterpart avatar
     const trustBucket: Record<Address, TrustRelation[]> = {};

@@ -4,6 +4,7 @@ import type {
   TokenBalanceRow,
   GroupMembershipRow,
   GroupRow,
+  TokenBalance,
 } from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk-v2/core';
@@ -652,29 +653,34 @@ export class HumanAvatar extends CommonAvatar {
     properties: this.groupToken.properties,
 
     /**
-     * Get group memberships for this avatar
+     * Get group memberships for this avatar using cursor-based pagination
      *
-     * Returns all groups that this avatar is a member of, including membership details
-     * such as expiry time and when the membership was created.
+     * Returns a PagedQuery instance for iterating through all groups that this avatar is a member of,
+     * including membership details such as expiry time and when the membership was created.
      *
-     * @param limit Maximum number of memberships to return (default: 50)
-     * @returns Array of group membership rows containing group address, member info, and expiry time
+     * @param limit Number of memberships per page (default: 50)
+     * @param sortOrder Sort order for results (default: 'DESC')
+     * @returns PagedQuery instance for iterating through memberships
      *
      * @example
      * ```typescript
-     * // Get all group memberships for this avatar
-     * const memberships = await avatar.group.getGroupMemberships();
-     * console.log(`Member of ${memberships.length} groups`);
+     * const query = avatar.group.getGroupMemberships();
      *
-     * // Check membership details
-     * memberships.forEach(membership => {
-     *   console.log(`Group: ${membership.group}`);
-     *   console.log(`Expiry: ${new Date(membership.expiryTime * 1000).toLocaleDateString()}`);
-     * });
+     * // Get first page
+     * await query.queryNextPage();
+     * console.log(`Member of ${query.currentPage.size} groups (page 1)`);
+     *
+     * // Iterate through all memberships
+     * while (await query.queryNextPage()) {
+     *   query.currentPage.results.forEach(membership => {
+     *     console.log(`Group: ${membership.group}`);
+     *     console.log(`Expiry: ${new Date(membership.expiryTime * 1000).toLocaleDateString()}`);
+     *   });
+     * }
      * ```
      */
-    getGroupMemberships: async (limit: number = 50): Promise<GroupMembershipRow[]> => {
-      return await this.rpc.group.getGroupMemberships(this.address, limit);
+    getGroupMemberships: (limit: number = 50, sortOrder: 'ASC' | 'DESC' = 'DESC') => {
+      return this.rpc.group.getGroupMemberships(this.address, limit, sortOrder);
     },
 
     /**
@@ -700,8 +706,15 @@ export class HumanAvatar extends CommonAvatar {
      * ```
      */
     getGroupMembershipsWithDetails: async (limit: number = 50): Promise<GroupRow[]> => {
-      // Get memberships for this avatar
-      const memberships = await this.rpc.group.getGroupMemberships(this.address, limit);
+      // Get memberships for this avatar using pagination
+      const query = this.rpc.group.getGroupMemberships(this.address, limit);
+      const memberships: GroupMembershipRow[] = [];
+
+      // Fetch all memberships
+      while (await query.queryNextPage()) {
+        memberships.push(...query.currentPage!.results);
+        if (!query.currentPage!.hasMore) break;
+      }
 
       if (memberships.length === 0) {
         return [];
@@ -722,6 +735,101 @@ export class HumanAvatar extends CommonAvatar {
       );
 
       return groups;
+    },
+
+    /**
+     * Get all members of a specific group using cursor-based pagination
+     *
+     * Returns a PagedQuery instance for iterating through members of the specified group,
+     * including membership details such as expiry time and when the membership was created.
+     *
+     * @param groupAddress The address of the group to query members for
+     * @param limit Number of members per page (default: 100)
+     * @param sortOrder Sort order for results (default: 'DESC')
+     * @returns PagedQuery instance for iterating through group members
+     *
+     * @example
+     * ```typescript
+     * const query = avatar.group.getMembers('0xGroupAddress...');
+     *
+     * // Get first page
+     * await query.queryNextPage();
+     * console.log(`${query.currentPage.size} members in the group`);
+     *
+     * // Iterate through all members
+     * while (await query.queryNextPage()) {
+     *   query.currentPage.results.forEach(membership => {
+     *     console.log(`Member: ${membership.member}`);
+     *     console.log(`Expiry: ${new Date(membership.expiryTime * 1000).toLocaleDateString()}`);
+     *   });
+     * }
+     * ```
+     */
+    getMembers: (
+      groupAddress: Address,
+      limit: number = 100,
+      sortOrder: 'ASC' | 'DESC' = 'DESC'
+    ) => {
+      return this.rpc.group.getGroupMembers(groupAddress, limit, sortOrder);
+    },
+
+    /**
+     * Get collateral tokens in a group's treasury
+     *
+     * This convenience method fetches the treasury address of a group and returns
+     * all token balances held in the treasury.
+     *
+     * @param groupAddress The address of the group
+     * @returns Array of token balances in the treasury
+     *
+     * @example
+     * ```typescript
+     * // Get collateral tokens in a group treasury
+     * const collateral = await avatar.group.getCollateral('0xGroupAddress...');
+     *
+     * collateral.forEach(balance => {
+     *   console.log(`Token: ${balance.tokenAddress}`);
+     *   console.log(`Balance: ${balance.circles} CRC`);
+     * });
+     * ```
+     */
+    getCollateral: async (groupAddress: Address): Promise<TokenBalance[]> => {
+      // Get the treasury address for this group
+      const groupContract = new BaseGroupContract({
+        address: groupAddress,
+        rpcUrl: this.core.rpcUrl,
+      });
+
+      const treasuryAddress = await groupContract.BASE_TREASURY();
+
+      // Get all token balances in the treasury
+      // @todo filter out the erc20 tokens
+      return await this.rpc.balance.getTokenBalances(treasuryAddress);
+    },
+
+    /**
+     * Get all holders of a group token
+     *
+     * Returns all avatars that hold the specified group token, including their balance amounts.
+     *
+     * @param groupAddress The address of the group token
+     * @param limit Maximum number of holders to return (default: 100)
+     * @returns Array of token balances showing who holds the group token
+     *
+     * @example
+     * ```typescript
+     * // Get all holders of a group token
+     * const holders = await avatar.group.getHolders('0xGroupAddress...');
+     * console.log(`${holders.length} holders of this group token`);
+     *
+     * holders.forEach(holder => {
+     *   console.log(`Holder: ${holder.tokenOwner}`);
+     *   console.log(`Balance: ${holder.circles} CRC`);
+     * });
+     * ```
+     */
+    getHolders: async (groupAddress: Address, limit: number = 100): Promise<TokenBalance[]> => {
+      return await this.rpc.group.getGroupHolders(groupAddress, limit);
     }
   };
 

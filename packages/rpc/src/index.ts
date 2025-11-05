@@ -29,6 +29,9 @@ export type { RpcErrorSource } from './errors';
 // Utils
 export { normalizeAddress, normalizeAddresses, parseStringsToBigInt } from './utils';
 
+// Pagination
+export { PagedQuery } from './pagedQuery';
+
 // Events (subscription and observation)
 export {
   Observable,

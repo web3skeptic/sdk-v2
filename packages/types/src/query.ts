@@ -78,3 +78,89 @@ export interface TableInfo {
     Type: string;
   }[];
 }
+
+/**
+ * Pagination types
+ */
+
+/**
+ * Defines the minimum columns any event row must have for cursor-based pagination.
+ * These values are important for determining cursor position in result sets.
+ */
+export interface EventRow {
+  blockNumber: number;
+  transactionIndex: number;
+  logIndex: number;
+  batchIndex?: number;
+  timestamp?: number;
+}
+
+/**
+ * A cursor is a sortable unique identifier for a specific log entry.
+ * Used to paginate through query results efficiently.
+ */
+export interface Cursor extends EventRow {}
+
+/**
+ * Result of a paginated query
+ */
+export interface PagedResult<TRow extends EventRow> {
+  /**
+   * The number of results that were requested
+   */
+  limit: number;
+  /**
+   * The number of results that were returned
+   */
+  size: number;
+  /**
+   * If the query returned results, this will be the cursor for the first result
+   */
+  firstCursor?: Cursor;
+  /**
+   * If the query returned results, this will be the cursor for the last result
+   */
+  lastCursor?: Cursor;
+  /**
+   * The sort order of the results
+   */
+  sortOrder: SortOrder;
+  /**
+   * Whether there are more results available
+   */
+  hasMore: boolean;
+  /**
+   * The results of the query
+   */
+  results: TRow[];
+}
+
+/**
+ * Parameters for a paginated query
+ */
+export interface PagedQueryParams {
+  /**
+   * The namespace of the table to query
+   */
+  namespace: string;
+  /**
+   * The name of the table to query
+   */
+  table: string;
+  /**
+   * The order to sort the results
+   */
+  sortOrder: SortOrder;
+  /**
+   * The columns to return in the results
+   */
+  columns: string[];
+  /**
+   * The filters to apply to the query
+   */
+  filter?: Filter[];
+  /**
+   * The number of results to return per page
+   */
+  limit: number;
+}
