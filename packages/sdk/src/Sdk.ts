@@ -3,7 +3,8 @@ import type {
   CirclesConfig,
   Profile,
   AvatarInfo,
-  TokenBalance
+  TokenBalance,
+  SortOrder
 } from '@circles-sdk-v2/types';
 import { circlesConfig, Core, CirclesType } from '@circles-sdk-v2/core';
 import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
@@ -49,7 +50,7 @@ export class Sdk {
   public readonly contractRunner?: ContractRunner;
   public readonly senderAddress?: Address;
   public readonly core: Core;
-  private readonly rpc: CirclesRpc;
+  public readonly rpc: CirclesRpc;
   private readonly profilesClient: Profiles;
 
   public readonly data: CirclesData = {
@@ -460,6 +461,34 @@ export class Sdk {
      */
     getDemurragedWrapper: async (address: Address): Promise<Address> => {
       return await this.core.liftERC20.erc20Circles(CirclesType.Demurrage, address);
+    },
+
+    /**
+     * Get token holders for a specific token address with pagination
+     * @param tokenAddress The token address to query holders for
+     * @param limit Maximum number of results per page (default: 100)
+     * @param sortOrder Sort order for results (default: 'DESC' - highest balance first)
+     * @returns PagedQuery instance for token holders
+     *
+     * @example
+     * ```typescript
+     * const holdersQuery = sdk.tokens.getHolders('0x42cedde51198d1773590311e2a340dc06b24cb37', 10);
+     *
+     * while (await holdersQuery.queryNextPage()) {
+     *   const page = holdersQuery.currentPage!;
+     *   console.log(`Found ${page.size} holders`);
+     *   page.results.forEach(holder => {
+     *     console.log(`${holder.account}: ${holder.demurragedTotalBalance}`);
+     *   });
+     * }
+     * ```
+     */
+    getHolders: (
+      tokenAddress: Address,
+      limit: number = 100,
+      sortOrder: SortOrder = 'DESC'
+    ) => {
+      return this.rpc.token.getTokenHolders(tokenAddress, limit, sortOrder);
     },
   };
 

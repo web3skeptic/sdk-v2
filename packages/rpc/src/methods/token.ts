@@ -1,6 +1,7 @@
 import type { RpcClient } from '../client';
-import type { Address, TokenInfo } from '@circles-sdk-v2/types';
+import type { Address, TokenInfo, TokenHolder, SortOrder } from '@circles-sdk-v2/types';
 import { normalizeAddress, parseStringsToBigInt, checksumAddresses } from '../utils';
+import { PagedQuery } from '../pagedQuery';
 
 /**
  * Token information RPC methods
@@ -52,5 +53,64 @@ export class TokenMethods {
 
     const parsed = result.map(item => parseStringsToBigInt(item)) as unknown as TokenInfo[];
     return checksumAddresses(parsed);
+  }
+
+  /**
+   * Get token holders for a specific token address with pagination
+   *
+   * @param tokenAddress - The token address to query holders for
+   * @param limit - Maximum number of results per page (default: 100)
+   * @param sortOrder - Sort order for results (default: 'DESC' - highest balance first)
+   * @returns PagedQuery instance for token holders
+   *
+   * @example
+   * ```typescript
+   * const holdersQuery = rpc.token.getTokenHolders('0x42cedde51198d1773590311e2a340dc06b24cb37', 10);
+   *
+   * while (await holdersQuery.queryNextPage()) {
+   *   const page = holdersQuery.currentPage!;
+   *   console.log(`Found ${page.size} holders`);
+   *   page.results.forEach(holder => {
+   *     console.log(`${holder.account}: ${holder.demurragedTotalBalance}`);
+   *   });
+   * }
+   * ```
+   */
+  getTokenHolders(
+    tokenAddress: Address,
+    limit: number = 100,
+    sortOrder: SortOrder = 'DESC'
+  ): PagedQuery<TokenHolder> {
+    const normalizedTokenAddress = normalizeAddress(tokenAddress);
+
+    return new PagedQuery<TokenHolder>(
+      this.client,
+      {
+        namespace: 'V_CrcV2',
+        table: 'BalancesByAccountAndToken',
+        columns: ['account', 'tokenAddress', 'demurragedTotalBalance'],
+        filter: [{
+          Type: 'FilterPredicate',
+          FilterType: 'Equals',
+          Column: 'tokenAddress',
+          Value: normalizedTokenAddress
+        }],
+        cursorColumns: [
+          { name: 'demurragedTotalBalance', sortOrder },
+          { name: 'account', sortOrder: 'ASC' } // Secondary sort for deterministic ordering
+        ],
+        orderColumns: [
+          { Column: 'demurragedTotalBalance', SortOrder: sortOrder },
+          { Column: 'account', SortOrder: 'ASC' }
+        ],
+        limit,
+        sortOrder
+      },
+      (row: any) => ({
+        account: row.account,
+        tokenAddress: row.tokenAddress,
+        demurragedTotalBalance: row.demurragedTotalBalance
+      })
+    );
   }
 }

@@ -51,7 +51,7 @@ export interface GroupQueryParams {
   symbolStartsWith?: string;
   groupAddressIn?: Address[];
   groupTypeIn?: string[];
-  ownerEquals?: Address;
+  ownerIn?: Address[];
   mintHandlerEquals?: Address;
   treasuryEquals?: Address;
 }

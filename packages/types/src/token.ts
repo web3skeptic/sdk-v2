@@ -41,3 +41,12 @@ export interface TokenInfo {
   token: Address;
   tokenOwner: Address;
 }
+
+/**
+ * Token holder information from V_CrcV2_BalancesByAccountAndToken
+ */
+export interface TokenHolder {
+  account: Address;
+  tokenAddress: Address;
+  demurragedTotalBalance: string;
+}

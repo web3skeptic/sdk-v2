@@ -38,7 +38,7 @@ export type {
 export type { AvatarInfo, Profile, GroupProfile } from './avatar';
 
 // Token types
-export type { TokenBalance, TokenInfo } from './token';
+export type { TokenBalance, TokenInfo, TokenHolder } from './token';
 
 // Trust relation types
 export type { TrustRelation } from './trust';

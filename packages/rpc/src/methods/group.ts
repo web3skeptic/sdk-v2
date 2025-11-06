@@ -40,9 +40,14 @@ export class GroupMethods {
    *   nameStartsWith: 'Community'
    * });
    *
-   * // Find groups by owner
+   * // Find groups by owner (single)
    * const myGroups = await rpc.group.findGroups(50, {
-   *   ownerEquals: '0xde374ece6fa50e781e81aac78e811b33d16912c7'
+   *   ownerIn: ['0xde374ece6fa50e781e81aac78e811b33d16912c7']
+   * });
+   *
+   * // Find groups by multiple owners (OR query)
+   * const multiOwnerGroups = await rpc.group.findGroups(50, {
+   *   ownerIn: ['0xOwner1...', '0xOwner2...']
    * });
    * ```
    */
@@ -277,9 +282,9 @@ export class GroupMethods {
    * // Query all groups
    * const query = rpc.group.getGroups(50);
    *
-   * // Query groups by owner
+   * // Query groups by owner(s)
    * const myGroupsQuery = rpc.group.getGroups(50, {
-   *   ownerEquals: '0xMyAddress...'
+   *   ownerIn: ['0xMyAddress...']
    * });
    *
    * await myGroupsQuery.queryNextPage();
@@ -352,13 +357,24 @@ export class GroupMethods {
         }
       }
 
-      if (params.ownerEquals) {
-        filter.push({
-          Type: 'FilterPredicate',
-          FilterType: 'Equals',
+      if (params.ownerIn && params.ownerIn.length > 0) {
+        // Create an OR conjunction for matching any of the owners
+        const ownerPredicates = params.ownerIn.map((addr) => ({
+          Type: 'FilterPredicate' as const,
+          FilterType: 'Equals' as const,
           Column: 'owner',
-          Value: normalizeAddress(params.ownerEquals),
-        });
+          Value: normalizeAddress(addr),
+        }));
+
+        if (ownerPredicates.length === 1) {
+          filter.push(ownerPredicates[0]);
+        } else {
+          filter.push({
+            Type: 'Conjunction',
+            ConjunctionType: 'Or',
+            Predicates: ownerPredicates,
+          });
+        }
       }
 
       if (params.mintHandlerEquals) {
