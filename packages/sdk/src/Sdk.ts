@@ -6,8 +6,8 @@ import type {
   TokenBalance,
   SortOrder
 } from '@circles-sdk-v2/types';
-import { circlesConfig, Core, CirclesType } from '@circles-sdk-v2/core';
-import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
+import { circlesConfig, Core, CirclesType, BaseGroupContract } from '@circles-sdk-v2/core';
+import { CirclesRpc, type AggregatedTrustRelation, PagedQuery, type GroupTokenHolderRow } from '@circles-sdk-v2/rpc';
 import { Profiles } from '@circles-sdk-v2/profiles';
 import { cidV0ToHex } from '@circles-sdk-v2/utils';
 import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
@@ -504,5 +504,109 @@ export class Sdk {
     getType: async (avatar: Address): Promise<GroupType | undefined> => {
       throw SdkError.unsupportedOperation('groups.getType', 'not yet implemented');
     },
+
+    /**
+     * Get all members of a specific group using cursor-based pagination
+     *
+     * Returns a PagedQuery instance for iterating through members of the specified group,
+     * including membership details such as expiry time and when the membership was created.
+     *
+     * @param groupAddress The address of the group to query members for
+     * @param limit Number of members per page (default: 100)
+     * @param sortOrder Sort order for results (default: 'DESC')
+     * @returns PagedQuery instance for iterating through group members
+     *
+     * @example
+     * ```typescript
+     * const query = sdk.groups.getMembers('0xGroupAddress...');
+     *
+     * // Get first page
+     * await query.queryNextPage();
+     * console.log(`${query.currentPage.size} members in the group`);
+     *
+     * // Iterate through all members
+     * while (await query.queryNextPage()) {
+     *   query.currentPage.results.forEach(membership => {
+     *     console.log(`Member: ${membership.member}`);
+     *     console.log(`Expiry: ${new Date(membership.expiryTime * 1000).toLocaleDateString()}`);
+     *   });
+     * }
+     * ```
+     */
+    getMembers: (
+      groupAddress: Address,
+      limit: number = 100,
+      sortOrder: 'ASC' | 'DESC' = 'DESC'
+    ) => {
+      return this.rpc.group.getGroupMembers(groupAddress, limit, sortOrder);
+    },
+
+    /**
+     * Get collateral tokens in a group's treasury
+     *
+     * This convenience method fetches the treasury address of a group and returns
+     * all token balances held in the treasury.
+     *
+     * @param groupAddress The address of the group
+     * @returns Array of token balances in the treasury
+     *
+     * @example
+     * ```typescript
+     * // Get collateral tokens in a group treasury
+     * const collateral = await sdk.groups.getCollateral('0xGroupAddress...');
+     *
+     * collateral.forEach(balance => {
+     *   console.log(`Token: ${balance.tokenAddress}`);
+     *   console.log(`Balance: ${balance.circles} CRC`);
+     * });
+     * ```
+     */
+    getCollateral: async (groupAddress: Address): Promise<TokenBalance[]> => {
+      // Get the treasury address for this group
+      const groupContract = new BaseGroupContract({
+        address: groupAddress,
+        rpcUrl: this.core.rpcUrl,
+      });
+
+      const treasuryAddress = await groupContract.BASE_TREASURY();
+
+      // Get all token balances in the treasury
+      // @todo filter out the erc20 tokens
+      return await this.rpc.balance.getTokenBalances(treasuryAddress);
+    },
+
+    /**
+     * Get all holders of a group token using cursor-based pagination
+     *
+     * Returns all avatars that hold the specified group token, ordered by balance (highest first),
+     * including balance amounts and ownership fractions.
+     *
+     * @param groupAddress The address of the group token
+     * @param limit Maximum number of holders to return (default: 100)
+     * @returns PagedQuery instance for iterating through group token holders
+     *
+     * @example
+     * ```typescript
+     * // Get all holders of a group token
+     * const query = sdk.groups.getHolders('0xGroupAddress...');
+     *
+     * // Get first page (ordered by balance DESC)
+     * await query.queryNextPage();
+     * console.log(`${query.currentPage.size} holders of this group token`);
+     *
+     * // Iterate through all holders
+     * while (await query.queryNextPage()) {
+     *   query.currentPage.results.forEach(holder => {
+     *     const balanceInCrc = Number(holder.totalBalance) / 1e18;
+     *     console.log(`Holder: ${holder.holder}`);
+     *     console.log(`Balance: ${balanceInCrc.toFixed(2)} CRC`);
+     *     console.log(`Ownership: ${(holder.fractionOwnership * 100).toFixed(2)}%`);
+     *   });
+     * }
+     * ```
+     */
+    getHolders: (groupAddress: Address, limit: number = 100): PagedQuery<GroupTokenHolderRow> => {
+      return this.rpc.group.getGroupHolders(groupAddress, limit);
+    }
   };
 }
