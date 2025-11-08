@@ -1,7 +1,8 @@
 import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
 import type { ContractRunner, BatchRun } from './runner';
-import type { PublicClient, TransactionReceipt } from 'viem';
+import type { PublicClient, TransactionReceipt, Chain } from 'viem';
 import type { EIP1193Provider } from 'viem';
+import { createPublicClient, http } from 'viem';
 import { type MetaTransactionData, OperationType } from '@safe-global/safe-core-sdk-types';
 import { RunnerError } from './errors';
 
@@ -61,6 +62,43 @@ export class SafeBrowserRunner implements ContractRunner {
     this.publicClient = publicClient;
     this.eip1193Provider = eip1193Provider;
     this.safeAddress = safeAddress;
+  }
+
+  /**
+   * Create and initialize a SafeBrowserRunner in one step
+   * @param rpcUrl - The RPC URL to connect to
+   * @param eip1193Provider - The EIP-1193 provider from the browser (e.g., window.ethereum)
+   * @param safeAddress - The address of the Safe wallet
+   * @param chain - The viem chain configuration (e.g., gnosis from 'viem/chains')
+   * @returns An initialized SafeBrowserRunner instance
+   *
+   * @example
+   * ```typescript
+   * import { gnosis } from 'viem/chains';
+   * import { SafeBrowserRunner } from '@circles-sdk-v2/runner';
+   *
+   * const runner = await SafeBrowserRunner.create(
+   *   'https://rpc.gnosischain.com',
+   *   window.ethereum,
+   *   '0xYourSafeAddress...',
+   *   gnosis
+   * );
+   * ```
+   */
+  static async create(
+    rpcUrl: string,
+    eip1193Provider: EIP1193Provider,
+    safeAddress: Address,
+    chain: Chain
+  ): Promise<SafeBrowserRunner> {
+    const publicClient = createPublicClient({
+      chain,
+      transport: http(rpcUrl),
+    });
+
+    const runner = new SafeBrowserRunner(publicClient, eip1193Provider, safeAddress);
+    await runner.init();
+    return runner;
   }
 
   /**

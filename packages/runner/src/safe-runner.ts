@@ -1,7 +1,8 @@
 import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
 import type { ContractRunner, BatchRun } from './runner';
-import type { PublicClient, TransactionReceipt } from 'viem';
+import type { PublicClient, TransactionReceipt, Chain } from 'viem';
 import type { SafeTransaction } from '@safe-global/types-kit';
+import { createPublicClient, http } from 'viem';
 import { type MetaTransactionData, OperationType } from '@safe-global/safe-core-sdk-types';
 import { RunnerError } from './errors';
 
@@ -111,6 +112,43 @@ export class SafeContractRunner implements ContractRunner {
     this.privateKey = privateKey;
     this.rpcUrl = rpcUrl;
     this.safeAddress = safeAddress;
+  }
+
+  /**
+   * Create and initialize a SafeContractRunner in one step
+   * @param rpcUrl - The RPC URL to connect to
+   * @param privateKey - The private key of one of the Safe signers
+   * @param safeAddress - The address of the Safe wallet
+   * @param chain - The viem chain configuration (e.g., gnosis from 'viem/chains')
+   * @returns An initialized SafeContractRunner instance
+   *
+   * @example
+   * ```typescript
+   * import { gnosis } from 'viem/chains';
+   * import { SafeContractRunner } from '@circles-sdk-v2/runner';
+   *
+   * const runner = await SafeContractRunner.create(
+   *   'https://rpc.gnosischain.com',
+   *   '0xYourPrivateKey...',
+   *   '0xYourSafeAddress...',
+   *   gnosis
+   * );
+   * ```
+   */
+  static async create(
+    rpcUrl: string,
+    privateKey: Hex,
+    safeAddress: Address,
+    chain: Chain
+  ): Promise<SafeContractRunner> {
+    const publicClient = createPublicClient({
+      chain,
+      transport: http(rpcUrl),
+    });
+
+    const runner = new SafeContractRunner(publicClient, privateKey, rpcUrl, safeAddress);
+    await runner.init();
+    return runner;
   }
 
   /**
