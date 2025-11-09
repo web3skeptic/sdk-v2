@@ -1,8 +1,10 @@
 export { CirclesConverter } from './circlesConverter';
 export { bytesToHex } from './bytes';
-export { encodeFunctionData, decodeFunctionResult, checksumAddress } from './abi';
+export { encodeFunctionData, decodeFunctionResult, decodeErrorResult, checksumAddress } from './abi';
 export { cidV0ToHex, cidV0ToUint8Array } from './cid';
 export { ZERO_ADDRESS } from './constants';
+export { parseContractError, ContractError } from './contractErrors';
+export type { DecodedContractError } from './contractErrors';
 
 // Error handling
 export {

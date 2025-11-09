@@ -542,3 +542,77 @@ export function decodeFunctionResult(config: {
 
   return results;
 }
+
+// ============================================================================
+// ERROR DECODING
+// ============================================================================
+
+/**
+ * Get error selector (first 4 bytes) from error ABI item
+ */
+function getErrorSelector(errorItem: any): string {
+  const inputs = errorItem.inputs || [];
+  const types = inputs.map((input: any) =>
+    getTypeString(input.type as AbiType, input.components)
+  );
+  const signature = `${errorItem.name}(${types.join(',')})`;
+  const hash = keccak_256(new TextEncoder().encode(signature));
+  return bytesToHex(hash.slice(0, 4));
+}
+
+/**
+ * Decode error data from a contract revert
+ * @param config - Configuration with ABI and error data
+ * @returns Decoded error with name and arguments
+ */
+export function decodeErrorResult(config: {
+  abi: Abi;
+  data: string;
+}): { errorName: string; args?: any[] } | null {
+  const { abi, data } = config;
+
+  if (!data || data.length < 10) {
+    return null; // Not enough data for a selector
+  }
+
+  // Extract the error selector (first 4 bytes)
+  const selector = data.slice(0, 10).toLowerCase();
+  const cleanData = strip0x(data.slice(10));
+
+  // Find matching error in ABI
+  const errors = abi.filter(item => item.type === 'error');
+
+  for (const errorItem of errors) {
+    const errorSelector = getErrorSelector(errorItem);
+
+    if (errorSelector.toLowerCase() === selector) {
+      const inputs = (errorItem as any).inputs || [];
+
+      if (inputs.length === 0) {
+        return { errorName: errorItem.name };
+      }
+
+      // Decode error parameters
+      const decodedArgs: any[] = [];
+      let offset = 0;
+
+      for (const input of inputs) {
+        const result = decodeParam(
+          input.type as AbiType,
+          cleanData,
+          offset,
+          input.components
+        );
+        decodedArgs.push(result.value);
+        offset += result.consumed;
+      }
+
+      return {
+        errorName: errorItem.name,
+        args: decodedArgs
+      };
+    }
+  }
+
+  return null; // No matching error found
+}
