@@ -7,5 +7,10 @@
     "declaration": true,
     "declarationMap": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../types" },
+    { "path": "../utils" },
+    { "path": "../rpc" }
+  ]
 }
