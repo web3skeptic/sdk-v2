@@ -15,9 +15,15 @@
   },
   "files": [],
   "references": [
+    { "path": "./packages/types" },
+    { "path": "./packages/abis" },
+    { "path": "./packages/utils" },
     { "path": "./packages/core" },
     { "path": "./packages/rpc" },
     { "path": "./packages/profiles" },
-    { "path": "./packages/sdk" }
+    { "path": "./packages/pathfinder" },
+    { "path": "./packages/transfers" },
+    { "path": "./packages/sdk" },
+    { "path": "./packages/runner" }
   ]
 }

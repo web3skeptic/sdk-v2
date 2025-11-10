@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "bun run --filter '@circles-sdk-v2/types' build && bun run --filter '@circles-sdk-v2/abis' build && bun run --filter '@circles-sdk-v2/utils' build && bun run --filter '@circles-sdk-v2/profiles' build && bun run --filter '@circles-sdk-v2/core' build && bun run --filter '@circles-sdk-v2/rpc' build && bun run --filter '@circles-sdk-v2/pathfinder' build && bun run --filter '@circles-sdk-v2/transfers' build && bun run --filter '@circles-sdk-v2/sdk' build && bun run --filter '@circles-sdk-v2/runner' build",
+    "build": "tsc --build && bun run --filter '@circles-sdk-v2/types' build && bun run --filter '@circles-sdk-v2/abis' build && bun run --filter '@circles-sdk-v2/utils' build && bun run --filter '@circles-sdk-v2/profiles' build && bun run --filter '@circles-sdk-v2/core' build && bun run --filter '@circles-sdk-v2/rpc' build && bun run --filter '@circles-sdk-v2/pathfinder' build && bun run --filter '@circles-sdk-v2/transfers' build && bun run --filter '@circles-sdk-v2/sdk' build && bun run --filter '@circles-sdk-v2/runner' build",
     "build:types": "bun run --filter '@circles-sdk-v2/types' build",
     "build:abis": "bun run --filter '@circles-sdk-v2/abis' build",
     "build:core": "bun run --filter '@circles-sdk-v2/core' build",
@@ -34,7 +34,7 @@
     "dev:utils": "bun run --filter '@circles-sdk-v2/utils' dev",
     "dev:profiles": "bun run --filter '@circles-sdk-v2/profiles' dev",
     "dev:sdk": "bun run --filter '@circles-sdk-v2/sdk' dev",
-    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules"
+    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules packages/*/tsconfig.tsbuildinfo tsconfig.tsbuildinfo"
   },
   "workspaces": [
     "packages/types",
