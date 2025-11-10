@@ -191,7 +191,14 @@ export class TransferBuilder {
     );
 
     // Check if self-approval is needed
-    const isApproved = await this.core.hubV2.isApprovedForAll(fromAddr, fromAddr);
+    // If the check fails (e.g., network error), we'll include the approval anyway to be safe
+    let isApproved = false;
+    try {
+      isApproved = await this.core.hubV2.isApprovedForAll(fromAddr, fromAddr);
+    } catch (error) {
+      // If checking approval fails, assume not approved and include the approval transaction
+      console.warn('Failed to check approval status, including approval transaction:', error);
+    }
 
     // Assemble all transactions in strict order:
     // 1. Self-approval (only if not already approved)

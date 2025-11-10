@@ -6,6 +6,10 @@ export { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 export type { PathfindingOptions } from './avatars';
 export type { TransactionReceipt } from 'viem';
 
+// Avatar union type for convenience
+import type { HumanAvatar, BaseGroupAvatar, OrganisationAvatar } from './avatars';
+export type Avatar = HumanAvatar | BaseGroupAvatar | OrganisationAvatar;
+
 // Error handling
 export { SdkError } from './errors';
 export type { SdkErrorSource } from './errors';
