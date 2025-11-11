@@ -6,8 +6,10 @@
 
 # Type Alias: PathfindingOptions
 
-> **PathfindingOptions** = `Omit`\<`FindPathParams`, `"from"` \| `"to"` \| `"targetFlow"`\>
+```ts
+type PathfindingOptions = Omit<FindPathParams, "from" | "to" | "targetFlow">;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:28](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L28)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:28](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L28)
 
 Advanced pathfinding options (reuses FindPathParams optional fields)

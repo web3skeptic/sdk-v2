@@ -6,7 +6,7 @@
 
 # Class: InvitationEscrowContract
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:12](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L12)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:12](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L12)
 
 InvitationEscrow Contract Wrapper
 Provides type-safe methods for interacting with the InvitationEscrow contract
@@ -22,9 +22,11 @@ applying demurrage over time and allowing redemption or revocation of invitation
 
 ### Constructor
 
-> **new InvitationEscrowContract**(`config`): `InvitationEscrowContract`
+```ts
+new InvitationEscrowContract(config): InvitationEscrowContract;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L13)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L13)
 
 #### Parameters
 
@@ -50,9 +52,11 @@ Defined in: [packages/core/src/contracts/invitationEscrow.ts:13](https://github.
 
 ### address
 
-> `readonly` **address**: `` `0x${string}` ``
+```ts
+readonly address: `0x${string}`;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L9)
+Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L9)
 
 #### Inherited from
 
@@ -62,9 +66,32 @@ Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/about
 
 ### abi
 
-> `readonly` **abi**: readonly \[\{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}, \{ \}\]
+```ts
+readonly abi: readonly [{
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}, {
+}];
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L10)
+Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L10)
 
 #### Inherited from
 
@@ -74,9 +101,11 @@ Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/abou
 
 ### rpcUrl
 
-> `protected` **rpcUrl**: `string`
+```ts
+protected rpcUrl: string;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L11)
+Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L11)
 
 #### Inherited from
 
@@ -86,9 +115,14 @@ Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/abou
 
 ### read()
 
-> **read**(`functionName`, `args?`, `options?`): `Promise`\<`unknown`\>
+```ts
+read(
+   functionName, 
+   args?, 
+options?): Promise<unknown>;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:29](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L29)
+Defined in: [packages/core/src/contracts/contract.ts:29](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L29)
 
 Read from contract (view/pure functions) using direct JSON-RPC call
 
@@ -126,9 +160,11 @@ Optional call options
 
 ### encodeWrite()
 
-> **encodeWrite**(`functionName`, `args?`): `` `0x${string}` ``
+```ts
+encodeWrite(functionName, args?): `0x${string}`;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:81](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L81)
+Defined in: [packages/core/src/contracts/contract.ts:81](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L81)
 
 Encode transaction data for write functions
 
@@ -154,9 +190,11 @@ readonly `unknown`[]
 
 ### redeemInvitation()
 
-> **redeemInvitation**(`inviter`): `TransactionRequest`
+```ts
+redeemInvitation(inviter): TransactionRequest;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:26](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L26)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:26](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L26)
 
 Redeem the invitation escrow from a specific inviter
 
@@ -178,9 +216,11 @@ Transaction request
 
 ### revokeInvitation()
 
-> **revokeInvitation**(`invitee`): `TransactionRequest`
+```ts
+revokeInvitation(invitee): TransactionRequest;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:39](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L39)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:39](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L39)
 
 Revoke a single invitation escrow
 
@@ -202,9 +242,11 @@ Transaction request
 
 ### revokeAllInvitations()
 
-> **revokeAllInvitations**(): `TransactionRequest`
+```ts
+revokeAllInvitations(): TransactionRequest;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:51](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L51)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:51](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L51)
 
 Revoke all active invitation escrows
 
@@ -218,9 +260,11 @@ Transaction request
 
 ### getInviters()
 
-> **getInviters**(`invitee`): `Promise`\<`` `0x${string}` ``[]\>
+```ts
+getInviters(invitee): Promise<`0x${string}`[]>;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:64](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L64)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:64](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L64)
 
 Get all active inviters for a given invitee
 
@@ -242,9 +286,11 @@ Array of inviter addresses
 
 ### getInvitees()
 
-> **getInvitees**(`inviter`): `Promise`\<`` `0x${string}` ``[]\>
+```ts
+getInvitees(inviter): Promise<`0x${string}`[]>;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:73](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L73)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:73](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L73)
 
 Get all active invitees for a given inviter
 
@@ -266,9 +312,11 @@ Array of invitee addresses
 
 ### getEscrowedAmountAndDays()
 
-> **getEscrowedAmountAndDays**(`inviter`, `invitee`): `Promise`\<`EscrowedAmountAndDays`\>
+```ts
+getEscrowedAmountAndDays(inviter, invitee): Promise<EscrowedAmountAndDays>;
+```
 
-Defined in: [packages/core/src/contracts/invitationEscrow.ts:83](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/invitationEscrow.ts#L83)
+Defined in: [packages/core/src/contracts/invitationEscrow.ts:83](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/invitationEscrow.ts#L83)
 
 Get the current escrowed amount (after demurrage) and days since last update
 

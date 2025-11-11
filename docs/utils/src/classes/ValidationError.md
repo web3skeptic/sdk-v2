@@ -6,7 +6,7 @@
 
 # Class: ValidationError
 
-Defined in: [packages/utils/src/errors.ts:97](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L97)
+Defined in: [packages/utils/src/errors.ts:97](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L97)
 
 Validation errors
 
@@ -18,9 +18,11 @@ Validation errors
 
 ### Constructor
 
-> **new ValidationError**(`message`, `options?`): `ValidationError`
+```ts
+new ValidationError(message, options?): ValidationError;
+```
 
-Defined in: [packages/utils/src/errors.ts:98](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L98)
+Defined in: [packages/utils/src/errors.ts:98](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L98)
 
 #### Parameters
 
@@ -54,9 +56,11 @@ Defined in: [packages/utils/src/errors.ts:98](https://github.com/aboutcircles/sd
 
 ### name
 
-> `readonly` **name**: `string`
+```ts
+readonly name: string;
+```
 
-Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L32)
+Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L32)
 
 #### Inherited from
 
@@ -66,9 +70,11 @@ Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sd
 
 ### code?
 
-> `readonly` `optional` **code**: `string` \| `number`
+```ts
+readonly optional code: string | number;
+```
 
-Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L33)
+Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L33)
 
 #### Inherited from
 
@@ -78,9 +84,11 @@ Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sd
 
 ### source
 
-> `readonly` **source**: [`UtilsErrorSource`](../type-aliases/UtilsErrorSource.md)
+```ts
+readonly source: UtilsErrorSource;
+```
 
-Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L34)
+Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L34)
 
 #### Inherited from
 
@@ -90,9 +98,11 @@ Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sd
 
 ### cause?
 
-> `readonly` `optional` **cause**: `unknown`
+```ts
+readonly optional cause: unknown;
+```
 
-Defined in: [packages/utils/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L35)
+Defined in: [packages/utils/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L35)
 
 The cause of the error.
 
@@ -104,9 +114,11 @@ The cause of the error.
 
 ### context?
 
-> `readonly` `optional` **context**: `Record`\<`string`, `any`\>
+```ts
+readonly optional context: Record<string, any>;
+```
 
-Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L36)
+Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L36)
 
 #### Inherited from
 
@@ -116,9 +128,11 @@ Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sd
 
 ### toJSON()
 
-> **toJSON**(): `object`
+```ts
+toJSON(): object;
+```
 
-Defined in: [packages/utils/src/errors.ts:64](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L64)
+Defined in: [packages/utils/src/errors.ts:64](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L64)
 
 Convert error to JSON for logging/debugging
 
@@ -128,31 +142,45 @@ Convert error to JSON for logging/debugging
 
 ##### name
 
-> **name**: `string`
+```ts
+name: string;
+```
 
 ##### message
 
-> **message**: `string`
+```ts
+message: string;
+```
 
 ##### code
 
-> **code**: `string` \| `number` \| `undefined`
+```ts
+code: string | number | undefined;
+```
 
 ##### source
 
-> **source**: [`UtilsErrorSource`](../type-aliases/UtilsErrorSource.md)
+```ts
+source: UtilsErrorSource;
+```
 
 ##### context
 
-> **context**: `Record`\<`string`, `any`\> \| `undefined`
+```ts
+context: Record<string, any> | undefined;
+```
 
 ##### cause
 
-> **cause**: `unknown`
+```ts
+cause: unknown;
+```
 
 ##### stack
 
-> **stack**: `string` \| `undefined`
+```ts
+stack: string | undefined;
+```
 
 #### Inherited from
 
@@ -162,9 +190,11 @@ Convert error to JSON for logging/debugging
 
 ### toString()
 
-> **toString**(): `string`
+```ts
+toString(): string;
+```
 
-Defined in: [packages/utils/src/errors.ts:82](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L82)
+Defined in: [packages/utils/src/errors.ts:82](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L82)
 
 Get formatted error message with context
 
@@ -180,9 +210,11 @@ Get formatted error message with context
 
 ### invalidAddress()
 
-> `static` **invalidAddress**(`address`): `ValidationError`
+```ts
+static invalidAddress(address): ValidationError;
+```
 
-Defined in: [packages/utils/src/errors.ts:113](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L113)
+Defined in: [packages/utils/src/errors.ts:113](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L113)
 
 Create error for invalid address
 
@@ -200,9 +232,11 @@ Create error for invalid address
 
 ### invalidAmount()
 
-> `static` **invalidAmount**(`amount`, `reason?`): `ValidationError`
+```ts
+static invalidAmount(amount, reason?): ValidationError;
+```
 
-Defined in: [packages/utils/src/errors.ts:123](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L123)
+Defined in: [packages/utils/src/errors.ts:123](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L123)
 
 Create error for invalid amount
 
@@ -224,9 +258,11 @@ Create error for invalid amount
 
 ### missingParameter()
 
-> `static` **missingParameter**(`paramName`): `ValidationError`
+```ts
+static missingParameter(paramName): ValidationError;
+```
 
-Defined in: [packages/utils/src/errors.ts:136](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L136)
+Defined in: [packages/utils/src/errors.ts:136](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L136)
 
 Create error for missing parameter
 
@@ -244,9 +280,14 @@ Create error for missing parameter
 
 ### invalidParameter()
 
-> `static` **invalidParameter**(`paramName`, `value`, `reason?`): `ValidationError`
+```ts
+static invalidParameter(
+   paramName, 
+   value, 
+   reason?): ValidationError;
+```
 
-Defined in: [packages/utils/src/errors.ts:146](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L146)
+Defined in: [packages/utils/src/errors.ts:146](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L146)
 
 Create error for invalid parameter
 

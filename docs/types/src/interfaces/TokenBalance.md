@@ -6,7 +6,7 @@
 
 # Interface: TokenBalance
 
-Defined in: [packages/types/src/token.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L10)
+Defined in: [packages/types/src/token.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L10)
 
 Token balance information
 
@@ -14,126 +14,158 @@ Token balance information
 
 ### tokenAddress
 
-> **tokenAddress**: `` `0x${string}` ``
+```ts
+tokenAddress: `0x${string}`;
+```
 
-Defined in: [packages/types/src/token.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L11)
+Defined in: [packages/types/src/token.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L11)
 
 ***
 
 ### tokenId
 
-> **tokenId**: `bigint`
+```ts
+tokenId: bigint;
+```
 
-Defined in: [packages/types/src/token.ts:12](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L12)
+Defined in: [packages/types/src/token.ts:12](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L12)
 
 ***
 
 ### tokenOwner
 
-> **tokenOwner**: `` `0x${string}` ``
+```ts
+tokenOwner: `0x${string}`;
+```
 
-Defined in: [packages/types/src/token.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L13)
+Defined in: [packages/types/src/token.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L13)
 
 ***
 
 ### tokenType
 
-> **tokenType**: `string`
+```ts
+tokenType: string;
+```
 
-Defined in: [packages/types/src/token.ts:14](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L14)
+Defined in: [packages/types/src/token.ts:14](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L14)
 
 ***
 
 ### version
 
-> **version**: `number`
+```ts
+version: number;
+```
 
-Defined in: [packages/types/src/token.ts:15](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L15)
+Defined in: [packages/types/src/token.ts:15](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L15)
 
 ***
 
 ### attoCircles
 
-> **attoCircles**: `bigint`
+```ts
+attoCircles: bigint;
+```
 
-Defined in: [packages/types/src/token.ts:16](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L16)
+Defined in: [packages/types/src/token.ts:16](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L16)
 
 ***
 
 ### circles
 
-> **circles**: `number`
+```ts
+circles: number;
+```
 
-Defined in: [packages/types/src/token.ts:17](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L17)
+Defined in: [packages/types/src/token.ts:17](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L17)
 
 ***
 
 ### staticAttoCircles
 
-> **staticAttoCircles**: `bigint`
+```ts
+staticAttoCircles: bigint;
+```
 
-Defined in: [packages/types/src/token.ts:18](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L18)
+Defined in: [packages/types/src/token.ts:18](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L18)
 
 ***
 
 ### staticCircles
 
-> **staticCircles**: `number`
+```ts
+staticCircles: number;
+```
 
-Defined in: [packages/types/src/token.ts:19](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L19)
+Defined in: [packages/types/src/token.ts:19](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L19)
 
 ***
 
 ### attoCrc
 
-> **attoCrc**: `bigint`
+```ts
+attoCrc: bigint;
+```
 
-Defined in: [packages/types/src/token.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L20)
+Defined in: [packages/types/src/token.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L20)
 
 ***
 
 ### crc
 
-> **crc**: `number`
+```ts
+crc: number;
+```
 
-Defined in: [packages/types/src/token.ts:21](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L21)
+Defined in: [packages/types/src/token.ts:21](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L21)
 
 ***
 
 ### isErc20
 
-> **isErc20**: `boolean`
+```ts
+isErc20: boolean;
+```
 
-Defined in: [packages/types/src/token.ts:22](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L22)
+Defined in: [packages/types/src/token.ts:22](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L22)
 
 ***
 
 ### isErc1155
 
-> **isErc1155**: `boolean`
+```ts
+isErc1155: boolean;
+```
 
-Defined in: [packages/types/src/token.ts:23](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L23)
+Defined in: [packages/types/src/token.ts:23](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L23)
 
 ***
 
 ### isWrapped
 
-> **isWrapped**: `boolean`
+```ts
+isWrapped: boolean;
+```
 
-Defined in: [packages/types/src/token.ts:24](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L24)
+Defined in: [packages/types/src/token.ts:24](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L24)
 
 ***
 
 ### isInflationary
 
-> **isInflationary**: `boolean`
+```ts
+isInflationary: boolean;
+```
 
-Defined in: [packages/types/src/token.ts:25](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L25)
+Defined in: [packages/types/src/token.ts:25](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L25)
 
 ***
 
 ### isGroup
 
-> **isGroup**: `boolean`
+```ts
+isGroup: boolean;
+```
 
-Defined in: [packages/types/src/token.ts:26](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/token.ts#L26)
+Defined in: [packages/types/src/token.ts:26](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/token.ts#L26)

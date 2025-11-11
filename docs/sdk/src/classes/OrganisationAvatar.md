@@ -6,7 +6,7 @@
 
 # Class: OrganisationAvatar
 
-Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:23](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/OrganisationAvatar.ts#L23)
+Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:23](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/OrganisationAvatar.ts#L23)
 
 OrganisationAvatar class implementation
 Provides a simplified, user-friendly wrapper around Circles protocol for organisation avatars
@@ -23,9 +23,15 @@ They can manage trust relationships, make transfers, and interact with group tok
 
 ### Constructor
 
-> **new OrganisationAvatar**(`address`, `core`, `contractRunner?`, `avatarInfo?`): `OrganisationAvatar`
+```ts
+new OrganisationAvatar(
+   address, 
+   core, 
+   contractRunner?, 
+   avatarInfo?): OrganisationAvatar;
+```
 
-Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:24](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/OrganisationAvatar.ts#L24)
+Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:24](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/OrganisationAvatar.ts#L24)
 
 #### Parameters
 
@@ -51,147 +57,195 @@ Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:24](https://github.c
 
 #### Overrides
 
-`CommonAvatar.constructor`
+```ts
+CommonAvatar.constructor
+```
 
 ## Properties
 
 ### address
 
-> `readonly` **address**: `` `0x${string}` ``
+```ts
+readonly address: `0x${string}`;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L42)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L42)
 
 #### Inherited from
 
-`CommonAvatar.address`
+```ts
+CommonAvatar.address
+```
 
 ***
 
 ### avatarInfo
 
-> `readonly` **avatarInfo**: `AvatarRow` \| `undefined`
+```ts
+readonly avatarInfo: AvatarRow | undefined;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L43)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L43)
 
 #### Inherited from
 
-`CommonAvatar.avatarInfo`
+```ts
+CommonAvatar.avatarInfo
+```
 
 ***
 
 ### core
 
-> `readonly` **core**: `Core`
+```ts
+readonly core: Core;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:44](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L44)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:44](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L44)
 
 #### Inherited from
 
-`CommonAvatar.core`
+```ts
+CommonAvatar.core
+```
 
 ***
 
 ### contractRunner?
 
-> `readonly` `optional` **contractRunner**: `ContractRunner`
+```ts
+readonly optional contractRunner: ContractRunner;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:45](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L45)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:45](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L45)
 
 #### Inherited from
 
-`CommonAvatar.contractRunner`
+```ts
+CommonAvatar.contractRunner
+```
 
 ***
 
 ### events
 
-> **events**: [`Observable`](../../../rpc/src/classes/Observable.md)\<`CirclesEvent`\>
+```ts
+events: Observable<CirclesEvent>;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:46](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L46)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:46](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L46)
 
 #### Inherited from
 
-`CommonAvatar.events`
+```ts
+CommonAvatar.events
+```
 
 ***
 
 ### runner
 
-> `protected` `readonly` **runner**: `ContractRunner`
+```ts
+protected readonly runner: ContractRunner;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:48](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L48)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:48](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L48)
 
 #### Inherited from
 
-`CommonAvatar.runner`
+```ts
+CommonAvatar.runner
+```
 
 ***
 
 ### profiles
 
-> `protected` `readonly` **profiles**: `Profiles`
+```ts
+protected readonly profiles: Profiles;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:49](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L49)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:49](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L49)
 
 #### Inherited from
 
-`CommonAvatar.profiles`
+```ts
+CommonAvatar.profiles
+```
 
 ***
 
 ### rpc
 
-> `protected` `readonly` **rpc**: `CirclesRpc`
+```ts
+protected readonly rpc: CirclesRpc;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:50](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L50)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:50](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L50)
 
 #### Inherited from
 
-`CommonAvatar.rpc`
+```ts
+CommonAvatar.rpc
+```
 
 ***
 
 ### transferBuilder
 
-> `protected` `readonly` **transferBuilder**: `TransferBuilder`
+```ts
+protected readonly transferBuilder: TransferBuilder;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:51](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L51)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:51](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L51)
 
 #### Inherited from
 
-`CommonAvatar.transferBuilder`
+```ts
+CommonAvatar.transferBuilder
+```
 
 ***
 
 ### \_cachedProfile?
 
-> `protected` `optional` **\_cachedProfile**: `Profile`
+```ts
+protected optional _cachedProfile: Profile;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:52](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L52)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:52](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L52)
 
 #### Inherited from
 
-`CommonAvatar._cachedProfile`
+```ts
+CommonAvatar._cachedProfile
+```
 
 ***
 
 ### \_cachedProfileCid?
 
-> `protected` `optional` **\_cachedProfileCid**: `string`
+```ts
+protected optional _cachedProfileCid: string;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:53](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L53)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:53](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L53)
 
 #### Inherited from
 
-`CommonAvatar._cachedProfileCid`
+```ts
+CommonAvatar._cachedProfileCid
+```
 
 ***
 
 ### \_eventSubscription()?
 
-> `protected` `optional` **\_eventSubscription**: () => `void`
+```ts
+protected optional _eventSubscription: () => void;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:54](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L54)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:54](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L54)
 
 #### Returns
 
@@ -199,19 +253,25 @@ Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:54](https://github.com/abo
 
 #### Inherited from
 
-`CommonAvatar._eventSubscription`
+```ts
+CommonAvatar._eventSubscription
+```
 
 ***
 
 ### trust
 
-> `readonly` **trust**: `object`
+```ts
+readonly trust: object;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:128](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L128)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:128](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L128)
 
 #### add()
 
-> **add**: (`avatar`, `expiry?`) => `Promise`\<`TransactionReceipt`\>
+```ts
+add: (avatar, expiry?) => Promise<TransactionReceipt>;
+```
 
 Trust another avatar or multiple avatars
 
@@ -254,7 +314,9 @@ await avatar.trust.add(['0x123...', '0x456...', '0x789...']);
 
 #### remove()
 
-> **remove**: (`avatar`) => `Promise`\<`TransactionReceipt`\>
+```ts
+remove: (avatar) => Promise<TransactionReceipt>;
+```
 
 Remove trust from another avatar or multiple avatars
 This is done by setting the trust expiry to 0
@@ -288,7 +350,9 @@ await avatar.trust.remove(['0x123...', '0x456...', '0x789...']);
 
 #### isTrusting()
 
-> **isTrusting**: (`otherAvatar`) => `Promise`\<`boolean`\>
+```ts
+isTrusting: (otherAvatar) => Promise<boolean>;
+```
 
 Check if this avatar trusts another avatar
 
@@ -317,7 +381,9 @@ if (trusting) {
 
 #### isTrustedBy()
 
-> **isTrustedBy**: (`otherAvatar`) => `Promise`\<`boolean`\>
+```ts
+isTrustedBy: (otherAvatar) => Promise<boolean>;
+```
 
 Check if another avatar trusts this avatar
 
@@ -346,7 +412,9 @@ if (trustedBy) {
 
 #### getAll()
 
-> **getAll**: () => `Promise`\<`AggregatedTrustRelation`[]\>
+```ts
+getAll: () => Promise<AggregatedTrustRelation[]>;
+```
 
 Get all trust relations for this avatar
 
@@ -356,19 +424,25 @@ Get all trust relations for this avatar
 
 #### Inherited from
 
-`CommonAvatar.trust`
+```ts
+CommonAvatar.trust
+```
 
 ***
 
 ### profile
 
-> `readonly` **profile**: `object`
+```ts
+readonly profile: object;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:267](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L267)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:267](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L267)
 
 #### get()
 
-> **get**: () => `Promise`\<`Profile` \| `undefined`\>
+```ts
+get: () => Promise<Profile | undefined>;
+```
 
 Get the profile for this avatar from IPFS
 Uses caching to avoid redundant fetches for the same CID
@@ -391,7 +465,9 @@ if (profile) {
 
 #### update()
 
-> **update**: (`profile`) => `Promise`\<`string`\>
+```ts
+update: (profile) => Promise<string>;
+```
 
 Update the profile for this avatar
 This will:
@@ -427,7 +503,9 @@ console.log('Profile updated with CID:', cid);
 
 #### updateMetadata()
 
-> **updateMetadata**: (`cid`) => `Promise`\<`TransactionReceipt`\>
+```ts
+updateMetadata: (cid) => Promise<TransactionReceipt>;
+```
 
 Update the metadata digest (CID) in the name registry
 This updates the on-chain pointer to the profile data stored on IPFS
@@ -455,7 +533,9 @@ console.log('Metadata updated, tx hash:', receipt.hash);
 
 #### registerShortName()
 
-> **registerShortName**: (`nonce`) => `Promise`\<`TransactionReceipt`\>
+```ts
+registerShortName: (nonce) => Promise<TransactionReceipt>;
+```
 
 Register a short name for this avatar using a specific nonce
 Short names are numeric identifiers that can be used instead of addresses
@@ -488,19 +568,25 @@ console.log('Short name registered, tx hash:', receipt.hash);
 
 #### Inherited from
 
-`CommonAvatar.profile`
+```ts
+CommonAvatar.profile
+```
 
 ***
 
 ### history
 
-> `readonly` **history**: `object`
+```ts
+readonly history: object;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:405](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L405)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:405](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L405)
 
 #### getTransactions()
 
-> **getTransactions**: (`limit`, `sortOrder`) => `PagedQuery`\<`TransactionHistoryRow`\>
+```ts
+getTransactions: (limit, sortOrder) => PagedQuery<TransactionHistoryRow>;
+```
 
 Get transaction history for this avatar using cursor-based pagination
 Returns incoming/outgoing transactions and minting events
@@ -544,19 +630,25 @@ if (query.currentPage.hasMore) {
 
 #### Inherited from
 
-`CommonAvatar.history`
+```ts
+CommonAvatar.history
+```
 
 ***
 
 ### transfer
 
-> `readonly` **transfer**: `object`
+```ts
+readonly transfer: object;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:439](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L439)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:439](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L439)
 
 #### direct()
 
-> **direct**: (`to`, `amount`, `tokenAddress?`, `txData?`) => `Promise`\<`TransactionReceipt`\>
+```ts
+direct: (to, amount, tokenAddress?, txData?) => Promise<TransactionReceipt>;
+```
 
 Send Circles tokens directly to another address
 This is a simple direct transfer without pathfinding
@@ -611,7 +703,9 @@ const receipt = await avatar.transfer.direct('0x123...', BigInt(100e18), '0xWrap
 
 #### advanced()
 
-> **advanced**: (`to`, `amount`, `options?`) => `Promise`\<`TransactionReceipt`\>
+```ts
+advanced: (to, amount, options?) => Promise<TransactionReceipt>;
+```
 
 Send tokens using pathfinding through the trust network
 This enables transfers even when you don't have the recipient's token
@@ -657,7 +751,9 @@ await avatar.transfer.advanced('0x123...', 100, {
 
 #### getMaxAmount()
 
-> **getMaxAmount**: (`to`) => `Promise`\<`bigint`\>
+```ts
+getMaxAmount: (to) => Promise<bigint>;
+```
 
 Get the maximum amount that can be transferred to an address using pathfinding
 
@@ -684,7 +780,9 @@ console.log(`Can transfer up to: ${maxAmount}`);
 
 #### getMaxAmountAdvanced()
 
-> **getMaxAmountAdvanced**: (`to`, `options?`) => `Promise`\<`bigint`\>
+```ts
+getMaxAmountAdvanced: (to, options?) => Promise<bigint>;
+```
 
 Get the maximum amount that can be transferred with custom pathfinding options
 
@@ -719,19 +817,25 @@ const maxAmount = await avatar.transfer.getMaxAmountAdvanced('0x123...', {
 
 #### Inherited from
 
-`CommonAvatar.transfer`
+```ts
+CommonAvatar.transfer
+```
 
 ***
 
 ### wrap
 
-> `readonly` **wrap**: `object`
+```ts
+readonly wrap: object;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:599](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L599)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:599](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L599)
 
 #### asDemurraged()
 
-> **asDemurraged**: (`avatarAddress`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+asDemurraged: (avatarAddress, amount) => Promise<TransactionReceipt>;
+```
 
 Wrap personal CRC tokens as demurraged ERC20 tokens
 
@@ -764,7 +868,9 @@ const receipt = await avatar.wrap.asDemurraged(avatar.address, BigInt(100e18));
 
 #### asInflationary()
 
-> **asInflationary**: (`avatarAddress`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+asInflationary: (avatarAddress, amount) => Promise<TransactionReceipt>;
+```
 
 Wrap personal CRC tokens as inflationary ERC20 tokens
 
@@ -797,7 +903,9 @@ const receipt = await avatar.wrap.asInflationary(avatar.address, BigInt(100e18))
 
 #### unwrapDemurraged()
 
-> **unwrapDemurraged**: (`tokenAddress`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+unwrapDemurraged: (tokenAddress, amount) => Promise<TransactionReceipt>;
+```
 
 Unwrap demurraged ERC20 tokens back to personal CRC
 
@@ -829,7 +937,9 @@ const receipt = await avatar.wrap.unwrapDemurraged('0xTokenAddress...', BigInt(1
 
 #### unwrapInflationary()
 
-> **unwrapInflationary**: (`tokenAddress`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+unwrapInflationary: (tokenAddress, amount) => Promise<TransactionReceipt>;
+```
 
 Unwrap inflationary ERC20 tokens back to personal CRC
 
@@ -861,19 +971,25 @@ const receipt = await avatar.wrap.unwrapInflationary('0xTokenAddress...', BigInt
 
 #### Inherited from
 
-`CommonAvatar.wrap`
+```ts
+CommonAvatar.wrap
+```
 
 ***
 
 ### balances
 
-> `readonly` **balances**: `object`
+```ts
+readonly balances: object;
+```
 
-Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:37](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/OrganisationAvatar.ts#L37)
+Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:37](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/OrganisationAvatar.ts#L37)
 
 #### getTotal()
 
-> **getTotal**: () => `Promise`\<`bigint`\>
+```ts
+getTotal: () => Promise<bigint>;
+```
 
 ##### Returns
 
@@ -881,7 +997,9 @@ Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:37](https://github.c
 
 #### getTokenBalances()
 
-> **getTokenBalances**: () => `Promise`\<`TokenBalanceRow`[]\>
+```ts
+getTokenBalances: () => Promise<TokenBalanceRow[]>;
+```
 
 ##### Returns
 
@@ -889,7 +1007,9 @@ Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:37](https://github.c
 
 #### getTotalSupply()
 
-> **getTotalSupply**: () => `Promise`\<`bigint`\>
+```ts
+getTotalSupply: () => Promise<bigint>;
+```
 
 ##### Returns
 
@@ -897,7 +1017,9 @@ Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:37](https://github.c
 
 #### getMaxReplenishable()
 
-> **getMaxReplenishable**: (`options?`) => `Promise`\<`bigint`\>
+```ts
+getMaxReplenishable: (options?) => Promise<bigint>;
+```
 
 Get the maximum amount that can be replenished (converted to unwrapped personal CRC)
 This calculates how much of your wrapped tokens and other tokens can be converted
@@ -926,7 +1048,9 @@ console.log('Can replenish:', CirclesConverter.attoCirclesToCircles(maxReplenish
 
 #### replenish()
 
-> **replenish**: (`options?`) => `Promise`\<`TransactionReceipt`\>
+```ts
+replenish: (options?) => Promise<TransactionReceipt>;
+```
 
 Replenish unwrapped personal CRC tokens by converting wrapped/other tokens
 
@@ -960,19 +1084,25 @@ console.log('Replenished personal tokens, tx hash:', receipt.hash);
 
 #### Overrides
 
-`CommonAvatar.balances`
+```ts
+CommonAvatar.balances
+```
 
 ***
 
 ### groupToken
 
-> `readonly` **groupToken**: `object`
+```ts
+readonly groupToken: object;
+```
 
-Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:127](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/OrganisationAvatar.ts#L127)
+Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:127](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/OrganisationAvatar.ts#L127)
 
 #### mint()
 
-> **mint**: (`group`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+mint: (group, amount) => Promise<TransactionReceipt>;
+```
 
 Mint group tokens by transferring collateral to the group's mint handler
 Uses pathfinding to transfer tokens along the trust network, including wrapped tokens
@@ -1006,7 +1136,9 @@ const receipt = await avatar.groupToken.mint('0xGroupAddress...', BigInt(100e18)
 
 #### getMaxMintableAmount()
 
-> **getMaxMintableAmount**: (`group`) => `Promise`\<`bigint`\>
+```ts
+getMaxMintableAmount: (group) => Promise<bigint>;
+```
 
 Get the maximum amount that can be minted for a group
 This calculates the maximum transferable amount to the group's mint handler
@@ -1035,7 +1167,9 @@ console.log('Can mint up to:', maxMintable.toString(), 'atto-circles');
 
 #### redeem()
 
-> **redeem**: (`group`, `amount`) => `Promise`\<`TransactionReceipt`\>
+```ts
+redeem: (group, amount) => Promise<TransactionReceipt>;
+```
 
 Automatically redeem collateral tokens from a Base Group's treasury
 
@@ -1075,11 +1209,15 @@ const receipt = await orgAvatar.groupToken.redeem('0xGroupAddress...', BigInt(10
 
 #### properties
 
-> **properties**: `object`
+```ts
+properties: object;
+```
 
 ##### properties.owner()
 
-> **owner**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+owner: (group) => Promise<`0x${string}`>;
+```
 
 Get the owner of a specific group
 
@@ -1099,7 +1237,9 @@ The owner address of the group
 
 ##### properties.mintHandler()
 
-> **mintHandler**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+mintHandler: (group) => Promise<`0x${string}`>;
+```
 
 Get the mint handler address of a specific group
 
@@ -1119,7 +1259,9 @@ The mint handler address
 
 ##### properties.treasury()
 
-> **treasury**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+treasury: (group) => Promise<`0x${string}`>;
+```
 
 Get the treasury (redemption handler) address of a specific group
 
@@ -1139,7 +1281,9 @@ The treasury address where redemptions are handled
 
 ##### properties.service()
 
-> **service**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+service: (group) => Promise<`0x${string}`>;
+```
 
 Get the service address of a specific group
 
@@ -1159,7 +1303,9 @@ The service address
 
 ##### properties.feeCollection()
 
-> **feeCollection**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+feeCollection: (group) => Promise<`0x${string}`>;
+```
 
 Get the fee collection address of a specific group
 
@@ -1179,7 +1325,9 @@ The fee collection address
 
 ##### properties.getMembershipConditions()
 
-> **getMembershipConditions**: (`group`) => `Promise`\<`` `0x${string}` ``[]\>
+```ts
+getMembershipConditions: (group) => Promise<`0x${string}`[]>;
+```
 
 Get all membership conditions for a specific group
 
@@ -1201,17 +1349,23 @@ Array of membership condition addresses
 
 ### group
 
-> `readonly` **group**: `object`
+```ts
+readonly group: object;
+```
 
-Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:391](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/OrganisationAvatar.ts#L391)
+Defined in: [packages/sdk/src/avatars/OrganisationAvatar.ts:391](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/OrganisationAvatar.ts#L391)
 
 #### properties
 
-> **properties**: `object`
+```ts
+properties: object;
+```
 
 ##### properties.owner()
 
-> **owner**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+owner: (group) => Promise<`0x${string}`>;
+```
 
 Get the owner of a specific group
 
@@ -1231,7 +1385,9 @@ The owner address of the group
 
 ##### properties.mintHandler()
 
-> **mintHandler**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+mintHandler: (group) => Promise<`0x${string}`>;
+```
 
 Get the mint handler address of a specific group
 
@@ -1251,7 +1407,9 @@ The mint handler address
 
 ##### properties.treasury()
 
-> **treasury**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+treasury: (group) => Promise<`0x${string}`>;
+```
 
 Get the treasury (redemption handler) address of a specific group
 
@@ -1271,7 +1429,9 @@ The treasury address where redemptions are handled
 
 ##### properties.service()
 
-> **service**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+service: (group) => Promise<`0x${string}`>;
+```
 
 Get the service address of a specific group
 
@@ -1291,7 +1451,9 @@ The service address
 
 ##### properties.feeCollection()
 
-> **feeCollection**: (`group`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+feeCollection: (group) => Promise<`0x${string}`>;
+```
 
 Get the fee collection address of a specific group
 
@@ -1311,7 +1473,9 @@ The fee collection address
 
 ##### properties.getMembershipConditions()
 
-> **getMembershipConditions**: (`group`) => `Promise`\<`` `0x${string}` ``[]\>
+```ts
+getMembershipConditions: (group) => Promise<`0x${string}`[]>;
+```
 
 Get all membership conditions for a specific group
 
@@ -1333,9 +1497,11 @@ Array of membership condition addresses
 
 ### subscribeToEvents()
 
-> **subscribeToEvents**(): `Promise`\<`void`\>
+```ts
+subscribeToEvents(): Promise<void>;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:709](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L709)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:709](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L709)
 
 Subscribe to Circles events for this avatar
 Events are filtered to only include events related to this avatar's address
@@ -1363,15 +1529,19 @@ avatar.events.subscribe((event) => {
 
 #### Inherited from
 
-`CommonAvatar.subscribeToEvents`
+```ts
+CommonAvatar.subscribeToEvents
+```
 
 ***
 
 ### unsubscribeFromEvents()
 
-> **unsubscribeFromEvents**(): `void`
+```ts
+unsubscribeFromEvents(): void;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:719](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L719)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:719](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L719)
 
 Unsubscribe from events
 Cleans up the WebSocket connection and event listeners
@@ -1382,15 +1552,23 @@ Cleans up the WebSocket connection and event listeners
 
 #### Inherited from
 
-`CommonAvatar.unsubscribeFromEvents`
+```ts
+CommonAvatar.unsubscribeFromEvents
+```
 
 ***
 
 ### \_transferErc1155()
 
-> `protected` **\_transferErc1155**(`tokenAddress`, `to`, `amount`, `txData?`): `Promise`\<`TransactionReceipt`\>
+```ts
+protected _transferErc1155(
+   tokenAddress, 
+   to, 
+   amount, 
+txData?): Promise<TransactionReceipt>;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:734](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L734)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:734](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L734)
 
 Transfer ERC1155 tokens using safeTransferFrom
 
@@ -1418,15 +1596,22 @@ Transfer ERC1155 tokens using safeTransferFrom
 
 #### Inherited from
 
-`CommonAvatar._transferErc1155`
+```ts
+CommonAvatar._transferErc1155
+```
 
 ***
 
 ### \_transferErc20()
 
-> `protected` **\_transferErc20**(`to`, `amount`, `tokenAddress`): `Promise`\<`TransactionReceipt`\>
+```ts
+protected _transferErc20(
+   to, 
+   amount, 
+tokenAddress): Promise<TransactionReceipt>;
+```
 
-Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:763](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/avatars/CommonAvatar.ts#L763)
+Defined in: [packages/sdk/src/avatars/CommonAvatar.ts:763](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/avatars/CommonAvatar.ts#L763)
 
 Transfer ERC20 tokens using the standard transfer function
 
@@ -1450,4 +1635,6 @@ Transfer ERC20 tokens using the standard transfer function
 
 #### Inherited from
 
-`CommonAvatar._transferErc20`
+```ts
+CommonAvatar._transferErc20
+```

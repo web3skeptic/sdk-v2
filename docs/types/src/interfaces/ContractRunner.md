@@ -6,7 +6,7 @@
 
 # Interface: ContractRunner
 
-Defined in: [packages/types/src/runner.ts:29](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L29)
+Defined in: [packages/types/src/runner.ts:29](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L29)
 
 Contract runner interface for executing blockchain operations
 This is the base interface that all contract runners must implement
@@ -15,9 +15,11 @@ This is the base interface that all contract runners must implement
 
 ### address?
 
-> `optional` **address**: `` `0x${string}` ``
+```ts
+optional address: `0x${string}`;
+```
 
-Defined in: [packages/types/src/runner.ts:33](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L33)
+Defined in: [packages/types/src/runner.ts:33](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L33)
 
 The address of the account (if available)
 
@@ -25,9 +27,11 @@ The address of the account (if available)
 
 ### publicClient
 
-> **publicClient**: `any`
+```ts
+publicClient: any;
+```
 
-Defined in: [packages/types/src/runner.ts:38](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L38)
+Defined in: [packages/types/src/runner.ts:38](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L38)
 
 The public client for reading blockchain state
 
@@ -35,9 +39,11 @@ The public client for reading blockchain state
 
 ### init()
 
-> **init**(): `Promise`\<`void`\>
+```ts
+init(): Promise<void>;
+```
 
-Defined in: [packages/types/src/runner.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L43)
+Defined in: [packages/types/src/runner.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L43)
 
 Initialize the runner
 
@@ -49,9 +55,11 @@ Initialize the runner
 
 ### estimateGas()?
 
-> `optional` **estimateGas**(`tx`): `Promise`\<`bigint`\>
+```ts
+optional estimateGas(tx): Promise<bigint>;
+```
 
-Defined in: [packages/types/src/runner.ts:48](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L48)
+Defined in: [packages/types/src/runner.ts:48](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L48)
 
 Estimate gas for a transaction
 
@@ -69,9 +77,11 @@ Estimate gas for a transaction
 
 ### call()?
 
-> `optional` **call**(`tx`): `Promise`\<`string`\>
+```ts
+optional call(tx): Promise<string>;
+```
 
-Defined in: [packages/types/src/runner.ts:53](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L53)
+Defined in: [packages/types/src/runner.ts:53](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L53)
 
 Call a contract (read-only)
 
@@ -89,9 +99,11 @@ Call a contract (read-only)
 
 ### resolveName()?
 
-> `optional` **resolveName**(`name`): `Promise`\<`string` \| `null`\>
+```ts
+optional resolveName(name): Promise<string | null>;
+```
 
-Defined in: [packages/types/src/runner.ts:58](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L58)
+Defined in: [packages/types/src/runner.ts:58](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L58)
 
 Resolve an ENS name to an address
 
@@ -109,9 +121,11 @@ Resolve an ENS name to an address
 
 ### sendTransaction()?
 
-> `optional` **sendTransaction**(`txs`): `Promise`\<`any`\>
+```ts
+optional sendTransaction(txs): Promise<any>;
+```
 
-Defined in: [packages/types/src/runner.ts:64](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L64)
+Defined in: [packages/types/src/runner.ts:64](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L64)
 
 Send one or more transactions
 - Safe: batches all transactions atomically and returns single TransactionReceipt
@@ -130,9 +144,11 @@ Send one or more transactions
 
 ### sendBatchTransaction()?
 
-> `optional` **sendBatchTransaction**(): [`BatchRun`](BatchRun.md)
+```ts
+optional sendBatchTransaction(): BatchRun;
+```
 
-Defined in: [packages/types/src/runner.ts:75](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/runner.ts#L75)
+Defined in: [packages/types/src/runner.ts:75](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/runner.ts#L75)
 
 Create a batch transaction runner (if supported)
 This allows multiple transactions to be executed atomically in a single on-chain transaction

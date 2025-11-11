@@ -6,7 +6,7 @@
 
 # Interface: PagedResult\<TRow\>
 
-Defined in: [packages/types/src/query.ts:108](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L108)
+Defined in: [packages/types/src/query.ts:108](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L108)
 
 Result of a paginated query
 
@@ -20,9 +20,11 @@ Result of a paginated query
 
 ### limit
 
-> **limit**: `number`
+```ts
+limit: number;
+```
 
-Defined in: [packages/types/src/query.ts:112](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L112)
+Defined in: [packages/types/src/query.ts:112](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L112)
 
 The number of results that were requested
 
@@ -30,9 +32,11 @@ The number of results that were requested
 
 ### size
 
-> **size**: `number`
+```ts
+size: number;
+```
 
-Defined in: [packages/types/src/query.ts:116](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L116)
+Defined in: [packages/types/src/query.ts:116](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L116)
 
 The number of results that were returned
 
@@ -40,9 +44,11 @@ The number of results that were returned
 
 ### firstCursor?
 
-> `optional` **firstCursor**: [`Cursor`](Cursor.md)
+```ts
+optional firstCursor: Cursor;
+```
 
-Defined in: [packages/types/src/query.ts:120](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L120)
+Defined in: [packages/types/src/query.ts:120](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L120)
 
 If the query returned results, this will be the cursor for the first result
 
@@ -50,9 +56,11 @@ If the query returned results, this will be the cursor for the first result
 
 ### lastCursor?
 
-> `optional` **lastCursor**: [`Cursor`](Cursor.md)
+```ts
+optional lastCursor: Cursor;
+```
 
-Defined in: [packages/types/src/query.ts:124](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L124)
+Defined in: [packages/types/src/query.ts:124](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L124)
 
 If the query returned results, this will be the cursor for the last result
 
@@ -60,9 +68,11 @@ If the query returned results, this will be the cursor for the last result
 
 ### sortOrder
 
-> **sortOrder**: [`SortOrder`](../type-aliases/SortOrder.md)
+```ts
+sortOrder: SortOrder;
+```
 
-Defined in: [packages/types/src/query.ts:128](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L128)
+Defined in: [packages/types/src/query.ts:128](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L128)
 
 The sort order of the results
 
@@ -70,9 +80,11 @@ The sort order of the results
 
 ### hasMore
 
-> **hasMore**: `boolean`
+```ts
+hasMore: boolean;
+```
 
-Defined in: [packages/types/src/query.ts:132](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L132)
+Defined in: [packages/types/src/query.ts:132](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L132)
 
 Whether there are more results available
 
@@ -80,8 +92,10 @@ Whether there are more results available
 
 ### results
 
-> **results**: `TRow`[]
+```ts
+results: TRow[];
+```
 
-Defined in: [packages/types/src/query.ts:136](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L136)
+Defined in: [packages/types/src/query.ts:136](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L136)
 
 The results of the query

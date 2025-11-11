@@ -6,6 +6,11 @@
 
 # Type Alias: Avatar
 
-> **Avatar** = [`HumanAvatar`](../classes/HumanAvatar.md) \| [`BaseGroupAvatar`](../classes/BaseGroupAvatar.md) \| [`OrganisationAvatar`](../classes/OrganisationAvatar.md)
+```ts
+type Avatar = 
+  | HumanAvatar
+  | BaseGroupAvatar
+  | OrganisationAvatar;
+```
 
-Defined in: [packages/sdk/src/index.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/index.ts#L11)
+Defined in: [packages/sdk/src/index.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/index.ts#L11)

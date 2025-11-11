@@ -6,9 +6,11 @@
 
 # Type Alias: CirclesBaseEvent
 
-> **CirclesBaseEvent** = `object`
+```ts
+type CirclesBaseEvent = object;
+```
 
-Defined in: [packages/types/src/events.ts:5](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L5)
+Defined in: [packages/types/src/events.ts:5](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L5)
 
 Events types
 
@@ -16,38 +18,48 @@ Events types
 
 ### blockNumber
 
-> **blockNumber**: `number`
+```ts
+blockNumber: number;
+```
 
-Defined in: [packages/types/src/events.ts:6](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L6)
+Defined in: [packages/types/src/events.ts:6](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L6)
 
 ***
 
 ### timestamp?
 
-> `optional` **timestamp**: `number`
+```ts
+optional timestamp: number;
+```
 
-Defined in: [packages/types/src/events.ts:7](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L7)
+Defined in: [packages/types/src/events.ts:7](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L7)
 
 ***
 
 ### transactionIndex
 
-> **transactionIndex**: `number`
+```ts
+transactionIndex: number;
+```
 
-Defined in: [packages/types/src/events.ts:8](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L8)
+Defined in: [packages/types/src/events.ts:8](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L8)
 
 ***
 
 ### logIndex
 
-> **logIndex**: `number`
+```ts
+logIndex: number;
+```
 
-Defined in: [packages/types/src/events.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L9)
+Defined in: [packages/types/src/events.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L9)
 
 ***
 
 ### transactionHash?
 
-> `optional` **transactionHash**: `string`
+```ts
+optional transactionHash: string;
+```
 
-Defined in: [packages/types/src/events.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/events.ts#L10)
+Defined in: [packages/types/src/events.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/events.ts#L10)

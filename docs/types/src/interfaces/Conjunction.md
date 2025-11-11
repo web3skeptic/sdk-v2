@@ -6,7 +6,7 @@
 
 # Interface: Conjunction
 
-Defined in: [packages/types/src/query.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L35)
+Defined in: [packages/types/src/query.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L35)
 
 Conjunction for combining multiple predicates
 
@@ -14,22 +14,28 @@ Conjunction for combining multiple predicates
 
 ### Type
 
-> **Type**: `"Conjunction"`
+```ts
+Type: "Conjunction";
+```
 
-Defined in: [packages/types/src/query.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L36)
+Defined in: [packages/types/src/query.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L36)
 
 ***
 
 ### ConjunctionType
 
-> **ConjunctionType**: [`ConjunctionType`](../type-aliases/ConjunctionType.md)
+```ts
+ConjunctionType: ConjunctionType;
+```
 
-Defined in: [packages/types/src/query.ts:37](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L37)
+Defined in: [packages/types/src/query.ts:37](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L37)
 
 ***
 
 ### Predicates
 
-> **Predicates**: ([`FilterPredicate`](FilterPredicate.md) \| `Conjunction`)[]
+```ts
+Predicates: (FilterPredicate | Conjunction)[];
+```
 
-Defined in: [packages/types/src/query.ts:38](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L38)
+Defined in: [packages/types/src/query.ts:38](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L38)

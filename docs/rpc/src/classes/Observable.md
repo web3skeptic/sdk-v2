@@ -6,7 +6,7 @@
 
 # Class: Observable\<TEvent\>
 
-Defined in: [packages/rpc/src/events/observable.ts:5](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/events/observable.ts#L5)
+Defined in: [packages/rpc/src/events/observable.ts:5](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/events/observable.ts#L5)
 
 Observable class for event streaming
 Provides a simple publish-subscribe pattern for Circles events
@@ -21,9 +21,11 @@ Provides a simple publish-subscribe pattern for Circles events
 
 ### Constructor
 
-> `protected` **new Observable**\<`TEvent`\>(): `Observable`\<`TEvent`\>
+```ts
+protected new Observable<TEvent>(): Observable<TEvent>;
+```
 
-Defined in: [packages/rpc/src/events/observable.ts:23](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/events/observable.ts#L23)
+Defined in: [packages/rpc/src/events/observable.ts:23](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/events/observable.ts#L23)
 
 #### Returns
 
@@ -33,9 +35,11 @@ Defined in: [packages/rpc/src/events/observable.ts:23](https://github.com/aboutc
 
 ### subscribe()
 
-> **subscribe**(`subscriber`): () => `void`
+```ts
+subscribe(subscriber): () => void;
+```
 
-Defined in: [packages/rpc/src/events/observable.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/events/observable.ts#L13)
+Defined in: [packages/rpc/src/events/observable.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/events/observable.ts#L13)
 
 Subscribe to events
 
@@ -51,7 +55,9 @@ Callback function to be called for each event
 
 Unsubscribe function to stop receiving events
 
-> (): `void`
+```ts
+(): void;
+```
 
 ##### Returns
 
@@ -61,9 +67,11 @@ Unsubscribe function to stop receiving events
 
 ### emit()
 
-> `protected` **emit**(`value`): `void`
+```ts
+protected emit(value): void;
+```
 
-Defined in: [packages/rpc/src/events/observable.ts:27](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/events/observable.ts#L27)
+Defined in: [packages/rpc/src/events/observable.ts:27](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/events/observable.ts#L27)
 
 #### Parameters
 
@@ -79,9 +87,11 @@ Defined in: [packages/rpc/src/events/observable.ts:27](https://github.com/aboutc
 
 ### create()
 
-> `static` **create**\<`T`\>(): `object`
+```ts
+static create<T>(): object;
+```
 
-Defined in: [packages/rpc/src/events/observable.ts:34](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/events/observable.ts#L34)
+Defined in: [packages/rpc/src/events/observable.ts:34](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/events/observable.ts#L34)
 
 Create a new Observable with an emitter
 
@@ -97,11 +107,15 @@ Create a new Observable with an emitter
 
 ##### property
 
-> **property**: `Observable`\<`T`\>
+```ts
+property: Observable<T>;
+```
 
 ##### emit()
 
-> **emit**: (`e`) => `void`
+```ts
+emit: (e) => void;
+```
 
 ###### Parameters
 

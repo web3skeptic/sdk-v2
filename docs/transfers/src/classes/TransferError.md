@@ -6,7 +6,7 @@
 
 # Class: TransferError
 
-Defined in: [packages/transfers/src/errors.ts:12](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L12)
+Defined in: [packages/transfers/src/errors.ts:12](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L12)
 
 Base error for transfers package
 
@@ -18,9 +18,11 @@ Base error for transfers package
 
 ### Constructor
 
-> **new TransferError**(`message`, `options?`): `TransferError`
+```ts
+new TransferError(message, options?): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L13)
+Defined in: [packages/transfers/src/errors.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L13)
 
 #### Parameters
 
@@ -52,15 +54,22 @@ Defined in: [packages/transfers/src/errors.ts:13](https://github.com/aboutcircle
 
 #### Overrides
 
-`CirclesError<TransfersErrorSource>.constructor`
+```ts
+CirclesError<TransfersErrorSource>.constructor
+```
 
 ## Methods
 
 ### noPathFound()
 
-> `static` **noPathFound**(`from`, `to`, `reason?`): `TransferError`
+```ts
+static noPathFound(
+   from, 
+   to, 
+   reason?): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:28](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L28)
+Defined in: [packages/transfers/src/errors.ts:28](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L28)
 
 Error when no valid transfer path is found
 
@@ -86,9 +95,15 @@ Error when no valid transfer path is found
 
 ### insufficientBalance()
 
-> `static` **insufficientBalance**(`requested`, `available`, `from`, `to`): `TransferError`
+```ts
+static insufficientBalance(
+   requested, 
+   available, 
+   from, 
+   to): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L42)
+Defined in: [packages/transfers/src/errors.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L42)
 
 Error when balance is insufficient for the requested transfer
 
@@ -118,9 +133,11 @@ Error when balance is insufficient for the requested transfer
 
 ### wrappedTokensRequired()
 
-> `static` **wrappedTokensRequired**(): `TransferError`
+```ts
+static wrappedTokensRequired(): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:66](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L66)
+Defined in: [packages/transfers/src/errors.ts:66](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L66)
 
 Error when wrapped tokens are needed but not enabled
 
@@ -132,9 +149,11 @@ Error when wrapped tokens are needed but not enabled
 
 ### unregisteredAvatars()
 
-> `static` **unregisteredAvatars**(`addresses`): `TransferError`
+```ts
+static unregisteredAvatars(addresses): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:79](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L79)
+Defined in: [packages/transfers/src/errors.ts:79](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L79)
 
 Error when flow matrix contains unregistered avatars
 
@@ -152,9 +171,11 @@ Error when flow matrix contains unregistered avatars
 
 ### flowMatrixMismatch()
 
-> `static` **flowMatrixMismatch**(`terminalSum`, `expected`): `TransferError`
+```ts
+static flowMatrixMismatch(terminalSum, expected): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:96](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L96)
+Defined in: [packages/transfers/src/errors.ts:96](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L96)
 
 Error when flow matrix terminal sum doesn't match expected amount
 
@@ -176,9 +197,11 @@ Error when flow matrix terminal sum doesn't match expected amount
 
 ### emptyPath()
 
-> `static` **emptyPath**(`from`, `to`): `TransferError`
+```ts
+static emptyPath(from, to): TransferError;
+```
 
-Defined in: [packages/transfers/src/errors.ts:113](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/transfers/src/errors.ts#L113)
+Defined in: [packages/transfers/src/errors.ts:113](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/transfers/src/errors.ts#L113)
 
 Error when transfer path is empty
 

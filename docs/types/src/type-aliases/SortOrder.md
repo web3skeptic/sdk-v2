@@ -6,8 +6,10 @@
 
 # Type Alias: SortOrder
 
-> **SortOrder** = `"ASC"` \| `"DESC"`
+```ts
+type SortOrder = "ASC" | "DESC";
+```
 
-Defined in: [packages/types/src/query.ts:49](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L49)
+Defined in: [packages/types/src/query.ts:49](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L49)
 
 Order direction for query results

@@ -6,7 +6,7 @@
 
 # Interface: Cursor
 
-Defined in: [packages/types/src/query.ts:103](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L103)
+Defined in: [packages/types/src/query.ts:103](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L103)
 
 A cursor is a sortable unique identifier for a specific log entry.
 Used to paginate through query results efficiently.
@@ -19,9 +19,11 @@ Used to paginate through query results efficiently.
 
 ### blockNumber
 
-> **blockNumber**: `number`
+```ts
+blockNumber: number;
+```
 
-Defined in: [packages/types/src/query.ts:92](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L92)
+Defined in: [packages/types/src/query.ts:92](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L92)
 
 #### Inherited from
 
@@ -31,9 +33,11 @@ Defined in: [packages/types/src/query.ts:92](https://github.com/aboutcircles/sdk
 
 ### transactionIndex
 
-> **transactionIndex**: `number`
+```ts
+transactionIndex: number;
+```
 
-Defined in: [packages/types/src/query.ts:93](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L93)
+Defined in: [packages/types/src/query.ts:93](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L93)
 
 #### Inherited from
 
@@ -43,9 +47,11 @@ Defined in: [packages/types/src/query.ts:93](https://github.com/aboutcircles/sdk
 
 ### logIndex
 
-> **logIndex**: `number`
+```ts
+logIndex: number;
+```
 
-Defined in: [packages/types/src/query.ts:94](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L94)
+Defined in: [packages/types/src/query.ts:94](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L94)
 
 #### Inherited from
 
@@ -55,9 +61,11 @@ Defined in: [packages/types/src/query.ts:94](https://github.com/aboutcircles/sdk
 
 ### batchIndex?
 
-> `optional` **batchIndex**: `number`
+```ts
+optional batchIndex: number;
+```
 
-Defined in: [packages/types/src/query.ts:95](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L95)
+Defined in: [packages/types/src/query.ts:95](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L95)
 
 #### Inherited from
 
@@ -67,9 +75,11 @@ Defined in: [packages/types/src/query.ts:95](https://github.com/aboutcircles/sdk
 
 ### timestamp?
 
-> `optional` **timestamp**: `number`
+```ts
+optional timestamp: number;
+```
 
-Defined in: [packages/types/src/query.ts:96](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L96)
+Defined in: [packages/types/src/query.ts:96](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L96)
 
 #### Inherited from
 

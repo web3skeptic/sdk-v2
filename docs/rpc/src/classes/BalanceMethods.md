@@ -6,7 +6,7 @@
 
 # Class: BalanceMethods
 
-Defined in: [packages/rpc/src/methods/balance.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/balance.ts#L9)
+Defined in: [packages/rpc/src/methods/balance.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/balance.ts#L9)
 
 Balance query RPC methods
 
@@ -14,9 +14,11 @@ Balance query RPC methods
 
 ### Constructor
 
-> **new BalanceMethods**(`client`): `BalanceMethods`
+```ts
+new BalanceMethods(client): BalanceMethods;
+```
 
-Defined in: [packages/rpc/src/methods/balance.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/balance.ts#L10)
+Defined in: [packages/rpc/src/methods/balance.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/balance.ts#L10)
 
 #### Parameters
 
@@ -32,9 +34,11 @@ Defined in: [packages/rpc/src/methods/balance.ts:10](https://github.com/aboutcir
 
 ### getTotalBalance()
 
-> **getTotalBalance**(`address`, `asTimeCircles`): `Promise`\<`bigint`\>
+```ts
+getTotalBalance(address, asTimeCircles): Promise<bigint>;
+```
 
-Defined in: [packages/rpc/src/methods/balance.ts:25](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/balance.ts#L25)
+Defined in: [packages/rpc/src/methods/balance.ts:25](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/balance.ts#L25)
 
 Get the total v2 Circles balance of an account
 
@@ -69,9 +73,11 @@ console.log(balance); // 1000000000000000000n (1 Circle in attoCircles)
 
 ### getTokenBalances()
 
-> **getTokenBalances**(`address`): `Promise`\<`TokenBalance`[]\>
+```ts
+getTokenBalances(address): Promise<TokenBalance[]>;
+```
 
-Defined in: [packages/rpc/src/methods/balance.ts:45](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/balance.ts#L45)
+Defined in: [packages/rpc/src/methods/balance.ts:45](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/balance.ts#L45)
 
 Query the balance breakdown of a specific avatar address
 

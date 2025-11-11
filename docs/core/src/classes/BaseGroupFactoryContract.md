@@ -6,7 +6,7 @@
 
 # Class: BaseGroupFactoryContract
 
-Defined in: [packages/core/src/contracts/baseGroupFactory.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/baseGroupFactory.ts#L11)
+Defined in: [packages/core/src/contracts/baseGroupFactory.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/baseGroupFactory.ts#L11)
 
 BaseGroupFactory Contract Wrapper
 Provides type-safe methods for creating and managing BaseGroup instances
@@ -21,9 +21,11 @@ This is a singleton contract deployed at a fixed address.
 
 ### Constructor
 
-> **new BaseGroupFactoryContract**(`config`): `BaseGroupFactoryContract`
+```ts
+new BaseGroupFactoryContract(config): BaseGroupFactoryContract;
+```
 
-Defined in: [packages/core/src/contracts/baseGroupFactory.ts:12](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/baseGroupFactory.ts#L12)
+Defined in: [packages/core/src/contracts/baseGroupFactory.ts:12](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/baseGroupFactory.ts#L12)
 
 #### Parameters
 
@@ -49,9 +51,11 @@ Defined in: [packages/core/src/contracts/baseGroupFactory.ts:12](https://github.
 
 ### address
 
-> `readonly` **address**: `` `0x${string}` ``
+```ts
+readonly address: `0x${string}`;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L9)
+Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L9)
 
 #### Inherited from
 
@@ -61,9 +65,17 @@ Defined in: [packages/core/src/contracts/contract.ts:9](https://github.com/about
 
 ### abi
 
-> `readonly` **abi**: (\{ \} \| \{ \} \| \{ \})[]
+```ts
+readonly abi: (
+  | {
+}
+  | {
+}
+  | {
+})[];
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L10)
+Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L10)
 
 #### Inherited from
 
@@ -73,9 +85,11 @@ Defined in: [packages/core/src/contracts/contract.ts:10](https://github.com/abou
 
 ### rpcUrl
 
-> `protected` **rpcUrl**: `string`
+```ts
+protected rpcUrl: string;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L11)
+Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L11)
 
 #### Inherited from
 
@@ -85,9 +99,11 @@ Defined in: [packages/core/src/contracts/contract.ts:11](https://github.com/abou
 
 ### deployedByFactory()
 
-> **deployedByFactory**(`group`): `Promise`\<`boolean`\>
+```ts
+deployedByFactory(group): Promise<boolean>;
+```
 
-Defined in: [packages/core/src/contracts/baseGroupFactory.ts:23](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/baseGroupFactory.ts#L23)
+Defined in: [packages/core/src/contracts/baseGroupFactory.ts:23](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/baseGroupFactory.ts#L23)
 
 Check if a group was deployed by this factory
 
@@ -105,9 +121,18 @@ Check if a group was deployed by this factory
 
 ### createBaseGroup()
 
-> **createBaseGroup**(`owner`, `service`, `feeCollection`, `initialConditions`, `name`, `symbol`, `metadataDigest`): `TransactionRequest`
+```ts
+createBaseGroup(
+   owner, 
+   service, 
+   feeCollection, 
+   initialConditions, 
+   name, 
+   symbol, 
+   metadataDigest): TransactionRequest;
+```
 
-Defined in: [packages/core/src/contracts/baseGroupFactory.ts:39](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/baseGroupFactory.ts#L39)
+Defined in: [packages/core/src/contracts/baseGroupFactory.ts:39](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/baseGroupFactory.ts#L39)
 
 Create a new BaseGroup instance
 
@@ -165,9 +190,14 @@ Transaction request object
 
 ### read()
 
-> **read**(`functionName`, `args?`, `options?`): `Promise`\<`unknown`\>
+```ts
+read(
+   functionName, 
+   args?, 
+options?): Promise<unknown>;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:29](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L29)
+Defined in: [packages/core/src/contracts/contract.ts:29](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L29)
 
 Read from contract (view/pure functions) using direct JSON-RPC call
 
@@ -205,9 +235,11 @@ Optional call options
 
 ### encodeWrite()
 
-> **encodeWrite**(`functionName`, `args?`): `` `0x${string}` ``
+```ts
+encodeWrite(functionName, args?): `0x${string}`;
+```
 
-Defined in: [packages/core/src/contracts/contract.ts:81](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/contracts/contract.ts#L81)
+Defined in: [packages/core/src/contracts/contract.ts:81](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/contracts/contract.ts#L81)
 
 Encode transaction data for write functions
 

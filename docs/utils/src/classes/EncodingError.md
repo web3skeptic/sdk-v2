@@ -6,7 +6,7 @@
 
 # Class: EncodingError
 
-Defined in: [packages/utils/src/errors.ts:160](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L160)
+Defined in: [packages/utils/src/errors.ts:160](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L160)
 
 Encoding/Conversion errors for utils package
 
@@ -18,9 +18,11 @@ Encoding/Conversion errors for utils package
 
 ### Constructor
 
-> **new EncodingError**(`message`, `options?`): `EncodingError`
+```ts
+new EncodingError(message, options?): EncodingError;
+```
 
-Defined in: [packages/utils/src/errors.ts:161](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L161)
+Defined in: [packages/utils/src/errors.ts:161](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L161)
 
 #### Parameters
 
@@ -54,9 +56,11 @@ Defined in: [packages/utils/src/errors.ts:161](https://github.com/aboutcircles/s
 
 ### name
 
-> `readonly` **name**: `string`
+```ts
+readonly name: string;
+```
 
-Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L32)
+Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L32)
 
 #### Inherited from
 
@@ -66,9 +70,11 @@ Defined in: [packages/utils/src/errors.ts:32](https://github.com/aboutcircles/sd
 
 ### code?
 
-> `readonly` `optional` **code**: `string` \| `number`
+```ts
+readonly optional code: string | number;
+```
 
-Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L33)
+Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L33)
 
 #### Inherited from
 
@@ -78,9 +84,11 @@ Defined in: [packages/utils/src/errors.ts:33](https://github.com/aboutcircles/sd
 
 ### source
 
-> `readonly` **source**: [`UtilsErrorSource`](../type-aliases/UtilsErrorSource.md)
+```ts
+readonly source: UtilsErrorSource;
+```
 
-Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L34)
+Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L34)
 
 #### Inherited from
 
@@ -90,9 +98,11 @@ Defined in: [packages/utils/src/errors.ts:34](https://github.com/aboutcircles/sd
 
 ### cause?
 
-> `readonly` `optional` **cause**: `unknown`
+```ts
+readonly optional cause: unknown;
+```
 
-Defined in: [packages/utils/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L35)
+Defined in: [packages/utils/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L35)
 
 The cause of the error.
 
@@ -104,9 +114,11 @@ The cause of the error.
 
 ### context?
 
-> `readonly` `optional` **context**: `Record`\<`string`, `any`\>
+```ts
+readonly optional context: Record<string, any>;
+```
 
-Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L36)
+Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L36)
 
 #### Inherited from
 
@@ -116,9 +128,11 @@ Defined in: [packages/utils/src/errors.ts:36](https://github.com/aboutcircles/sd
 
 ### toJSON()
 
-> **toJSON**(): `object`
+```ts
+toJSON(): object;
+```
 
-Defined in: [packages/utils/src/errors.ts:64](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L64)
+Defined in: [packages/utils/src/errors.ts:64](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L64)
 
 Convert error to JSON for logging/debugging
 
@@ -128,31 +142,45 @@ Convert error to JSON for logging/debugging
 
 ##### name
 
-> **name**: `string`
+```ts
+name: string;
+```
 
 ##### message
 
-> **message**: `string`
+```ts
+message: string;
+```
 
 ##### code
 
-> **code**: `string` \| `number` \| `undefined`
+```ts
+code: string | number | undefined;
+```
 
 ##### source
 
-> **source**: [`UtilsErrorSource`](../type-aliases/UtilsErrorSource.md)
+```ts
+source: UtilsErrorSource;
+```
 
 ##### context
 
-> **context**: `Record`\<`string`, `any`\> \| `undefined`
+```ts
+context: Record<string, any> | undefined;
+```
 
 ##### cause
 
-> **cause**: `unknown`
+```ts
+cause: unknown;
+```
 
 ##### stack
 
-> **stack**: `string` \| `undefined`
+```ts
+stack: string | undefined;
+```
 
 #### Inherited from
 
@@ -162,9 +190,11 @@ Convert error to JSON for logging/debugging
 
 ### toString()
 
-> **toString**(): `string`
+```ts
+toString(): string;
+```
 
-Defined in: [packages/utils/src/errors.ts:82](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L82)
+Defined in: [packages/utils/src/errors.ts:82](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L82)
 
 Get formatted error message with context
 
@@ -180,9 +210,11 @@ Get formatted error message with context
 
 ### abiEncoding()
 
-> `static` **abiEncoding**(`functionName`, `cause?`): `EncodingError`
+```ts
+static abiEncoding(functionName, cause?): EncodingError;
+```
 
-Defined in: [packages/utils/src/errors.ts:175](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L175)
+Defined in: [packages/utils/src/errors.ts:175](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L175)
 
 Create error for ABI encoding failures
 
@@ -204,9 +236,11 @@ Create error for ABI encoding failures
 
 ### cidConversion()
 
-> `static` **cidConversion**(`cid`, `cause?`): `EncodingError`
+```ts
+static cidConversion(cid, cause?): EncodingError;
+```
 
-Defined in: [packages/utils/src/errors.ts:186](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/errors.ts#L186)
+Defined in: [packages/utils/src/errors.ts:186](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/errors.ts#L186)
 
 Create error for CID conversion failures
 

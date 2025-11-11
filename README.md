@@ -4,19 +4,9 @@ A comprehensive TypeScript SDK for the Circles protocol.
 
 ## 📚 API Documentation
 
-**[View Complete API Documentation →](./docs/README.md)**
+**[View Complete API Documentation →](docs/modules.md)**
 
-Package documentation:
-- [@aboutcircles/sdk](./docs/sdk/src/README.md) - Main SDK package
-- [@aboutcircles/sdk-core](./docs/core/src/README.md) - Contract wrappers
-- [@aboutcircles/sdk-rpc](./docs/rpc/src/README.md) - RPC client
-- [@aboutcircles/sdk-types](./docs/types/src/README.md) - TypeScript types
-- [@aboutcircles/sdk-abis](./docs/abis/src/README.md) - Contract ABIs
-- [@aboutcircles/sdk-utils](./docs/utils/src/README.md) - Utilities
-- [@aboutcircles/sdk-profiles](./docs/profiles/src/README.md) - Profile management
-- [@aboutcircles/sdk-pathfinder](./docs/pathfinder/src/README.md) - Transfer pathfinding
-- [@aboutcircles/sdk-transfers](./docs/transfers/src/README.md) - Transitive transfer operations
-- [@aboutcircles/sdk-runner](./docs/runner/src/README.md) - Transaction execution
+Detailed API reference with types, classes, and interfaces for all packages.
 
 ## 🚀 Quick Start
 
@@ -80,7 +70,7 @@ const path = await rpc.circlesV2.findPath({
 Explore comprehensive examples in the [`examples/`](./examples/) directory:
 
 **Core SDK:**
-- [Basic Usage](./examples/core/01-basic-usage.ts) - SDK initialization
+- [Basic Usage ](./examples/core/01-basic-usage.ts) - Core initialization
 - [HubV2 Operations](./examples/core/02-hubv2-examples.ts) - Contract operations
 - [BaseGroup Management](./examples/core/03-basegroup-examples.ts) - Group creation
 

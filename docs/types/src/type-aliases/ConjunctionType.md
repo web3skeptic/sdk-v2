@@ -6,8 +6,10 @@
 
 # Type Alias: ConjunctionType
 
-> **ConjunctionType** = `"And"` \| `"Or"`
+```ts
+type ConjunctionType = "And" | "Or";
+```
 
-Defined in: [packages/types/src/query.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L20)
+Defined in: [packages/types/src/query.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L20)
 
 Conjunction types for combining predicates

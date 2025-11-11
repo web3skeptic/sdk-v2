@@ -6,9 +6,11 @@
 
 # Variable: circlesConfig
 
-> `const` **circlesConfig**: `object`
+```ts
+const circlesConfig: object;
+```
 
-Defined in: [packages/core/src/config.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/config.ts#L9)
+Defined in: [packages/core/src/config.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/config.ts#L9)
 
 Default Circles configurations by chain ID
 
@@ -17,4 +19,6 @@ Chain IDs:
 
 ## Index Signature
 
-\[`chainId`: `number`\]: `CirclesConfig`
+```ts
+[chainId: number]: CirclesConfig
+```

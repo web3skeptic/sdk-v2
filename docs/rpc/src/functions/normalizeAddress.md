@@ -6,9 +6,11 @@
 
 # Function: normalizeAddress()
 
-> **normalizeAddress**(`address`): `` `0x${string}` ``
+```ts
+function normalizeAddress(address): `0x${string}`;
+```
 
-Defined in: [packages/rpc/src/utils.ts:7](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/utils.ts#L7)
+Defined in: [packages/rpc/src/utils.ts:7](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/utils.ts#L7)
 
 Normalize an address to lowercase (required by the indexer)
 

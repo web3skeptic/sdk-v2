@@ -6,7 +6,7 @@
 
 # Class: RunnerError
 
-Defined in: [packages/runner/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L20)
+Defined in: [packages/runner/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L20)
 
 Runner and transaction execution errors
 
@@ -18,9 +18,11 @@ Runner and transaction execution errors
 
 ### Constructor
 
-> **new RunnerError**(`message`, `options?`): `RunnerError`
+```ts
+new RunnerError(message, options?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:21](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L21)
+Defined in: [packages/runner/src/errors.ts:21](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L21)
 
 #### Parameters
 
@@ -52,15 +54,19 @@ Defined in: [packages/runner/src/errors.ts:21](https://github.com/aboutcircles/s
 
 #### Overrides
 
-`CirclesError<RunnerErrorSource>.constructor`
+```ts
+CirclesError<RunnerErrorSource>.constructor
+```
 
 ## Methods
 
 ### initializationFailed()
 
-> `static` **initializationFailed**(`runnerType`, `cause?`): `RunnerError`
+```ts
+static initializationFailed(runnerType, cause?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L36)
+Defined in: [packages/runner/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L36)
 
 Create error for initialization failures
 
@@ -82,9 +88,11 @@ Create error for initialization failures
 
 ### executionFailed()
 
-> `static` **executionFailed**(`reason`, `cause?`): `RunnerError`
+```ts
+static executionFailed(reason, cause?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:48](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L48)
+Defined in: [packages/runner/src/errors.ts:48](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L48)
 
 Create error for transaction execution failures
 
@@ -106,9 +114,11 @@ Create error for transaction execution failures
 
 ### walletError()
 
-> `static` **walletError**(`message`, `cause?`): `RunnerError`
+```ts
+static walletError(message, cause?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:60](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L60)
+Defined in: [packages/runner/src/errors.ts:60](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L60)
 
 Create error for wallet-related issues
 
@@ -130,9 +140,14 @@ Create error for wallet-related issues
 
 ### safeError()
 
-> `static` **safeError**(`message`, `safeAddress`, `cause?`): `RunnerError`
+```ts
+static safeError(
+   message, 
+   safeAddress, 
+   cause?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:71](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L71)
+Defined in: [packages/runner/src/errors.ts:71](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L71)
 
 Create error for Safe-specific issues
 
@@ -158,9 +173,11 @@ Create error for Safe-specific issues
 
 ### missingSigner()
 
-> `static` **missingSigner**(): `RunnerError`
+```ts
+static missingSigner(): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:83](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L83)
+Defined in: [packages/runner/src/errors.ts:83](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L83)
 
 Create error for missing signer
 
@@ -172,9 +189,11 @@ Create error for missing signer
 
 ### timeout()
 
-> `static` **timeout**(`txHash`, `timeout`): `RunnerError`
+```ts
+static timeout(txHash, timeout): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:93](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L93)
+Defined in: [packages/runner/src/errors.ts:93](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L93)
 
 Create error for transaction timeout
 
@@ -196,9 +215,15 @@ Create error for transaction timeout
 
 ### transactionReverted()
 
-> `static` **transactionReverted**(`txHash`, `blockNumber`, `gasUsed`, `cause?`): `RunnerError`
+```ts
+static transactionReverted(
+   txHash, 
+   blockNumber, 
+   gasUsed, 
+   cause?): RunnerError;
+```
 
-Defined in: [packages/runner/src/errors.ts:104](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/runner/src/errors.ts#L104)
+Defined in: [packages/runner/src/errors.ts:104](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/runner/src/errors.ts#L104)
 
 Create error for reverted transactions
 

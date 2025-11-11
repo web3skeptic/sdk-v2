@@ -28,5 +28,7 @@
   "visibilityFilters": {
     "protected": true,
     "private": false
-  }
+  },
+  "flattenOutputFiles": false,
+  "useCodeBlocks": true
 }

@@ -6,7 +6,7 @@
 
 # Interface: GroupMembershipRow
 
-Defined in: [packages/types/src/group.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L35)
+Defined in: [packages/types/src/group.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L35)
 
 Group membership row
 
@@ -14,62 +14,78 @@ Group membership row
 
 ### blockNumber
 
-> **blockNumber**: `number`
+```ts
+blockNumber: number;
+```
 
-Defined in: [packages/types/src/group.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L36)
+Defined in: [packages/types/src/group.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L36)
 
 ***
 
 ### timestamp
 
-> **timestamp**: `number`
+```ts
+timestamp: number;
+```
 
-Defined in: [packages/types/src/group.ts:37](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L37)
+Defined in: [packages/types/src/group.ts:37](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L37)
 
 ***
 
 ### transactionIndex
 
-> **transactionIndex**: `number`
+```ts
+transactionIndex: number;
+```
 
-Defined in: [packages/types/src/group.ts:38](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L38)
+Defined in: [packages/types/src/group.ts:38](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L38)
 
 ***
 
 ### logIndex
 
-> **logIndex**: `number`
+```ts
+logIndex: number;
+```
 
-Defined in: [packages/types/src/group.ts:39](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L39)
+Defined in: [packages/types/src/group.ts:39](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L39)
 
 ***
 
 ### transactionHash
 
-> **transactionHash**: `string`
+```ts
+transactionHash: string;
+```
 
-Defined in: [packages/types/src/group.ts:40](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L40)
+Defined in: [packages/types/src/group.ts:40](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L40)
 
 ***
 
 ### group
 
-> **group**: `` `0x${string}` ``
+```ts
+group: `0x${string}`;
+```
 
-Defined in: [packages/types/src/group.ts:41](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L41)
+Defined in: [packages/types/src/group.ts:41](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L41)
 
 ***
 
 ### member
 
-> **member**: `` `0x${string}` ``
+```ts
+member: `0x${string}`;
+```
 
-Defined in: [packages/types/src/group.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L42)
+Defined in: [packages/types/src/group.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L42)
 
 ***
 
 ### expiryTime
 
-> **expiryTime**: `number`
+```ts
+expiryTime: number;
+```
 
-Defined in: [packages/types/src/group.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/group.ts#L43)
+Defined in: [packages/types/src/group.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/group.ts#L43)

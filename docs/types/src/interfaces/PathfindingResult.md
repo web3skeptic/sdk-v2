@@ -6,7 +6,7 @@
 
 # Interface: PathfindingResult
 
-Defined in: [packages/types/src/pathfinding.ts:47](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L47)
+Defined in: [packages/types/src/pathfinding.ts:47](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L47)
 
 Result of pathfinding computation
 
@@ -14,14 +14,18 @@ Result of pathfinding computation
 
 ### maxFlow
 
-> **maxFlow**: `bigint`
+```ts
+maxFlow: bigint;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:48](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L48)
+Defined in: [packages/types/src/pathfinding.ts:48](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L48)
 
 ***
 
 ### transfers
 
-> **transfers**: [`TransferStep`](TransferStep.md)[]
+```ts
+transfers: TransferStep[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:49](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L49)
+Defined in: [packages/types/src/pathfinding.ts:49](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L49)

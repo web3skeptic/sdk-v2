@@ -6,7 +6,7 @@
 
 # Class: RpcClient
 
-Defined in: [packages/rpc/src/client.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L10)
+Defined in: [packages/rpc/src/client.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L10)
 
 Base RPC client for making JSON-RPC calls to Circles RPC endpoints
 Supports both HTTP requests and WebSocket subscriptions
@@ -15,9 +15,11 @@ Supports both HTTP requests and WebSocket subscriptions
 
 ### Constructor
 
-> **new RpcClient**(`rpcUrl`): `RpcClient`
+```ts
+new RpcClient(rpcUrl): RpcClient;
+```
 
-Defined in: [packages/rpc/src/client.ts:27](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L27)
+Defined in: [packages/rpc/src/client.ts:27](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L27)
 
 #### Parameters
 
@@ -33,9 +35,11 @@ Defined in: [packages/rpc/src/client.ts:27](https://github.com/aboutcircles/sdk-
 
 ### call()
 
-> **call**\<`TParams`, `TResult`\>(`method`, `params`): `Promise`\<`TResult`\>
+```ts
+call<TParams, TResult>(method, params): Promise<TResult>;
+```
 
-Defined in: [packages/rpc/src/client.ts:34](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L34)
+Defined in: [packages/rpc/src/client.ts:34](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L34)
 
 Make a JSON-RPC call
 
@@ -67,9 +71,11 @@ Make a JSON-RPC call
 
 ### setRpcUrl()
 
-> **setRpcUrl**(`rpcUrl`): `void`
+```ts
+setRpcUrl(rpcUrl): void;
+```
 
-Defined in: [packages/rpc/src/client.ts:85](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L85)
+Defined in: [packages/rpc/src/client.ts:85](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L85)
 
 Update the RPC URL
 
@@ -87,9 +93,11 @@ Update the RPC URL
 
 ### getRpcUrl()
 
-> **getRpcUrl**(): `string`
+```ts
+getRpcUrl(): string;
+```
 
-Defined in: [packages/rpc/src/client.ts:92](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L92)
+Defined in: [packages/rpc/src/client.ts:92](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L92)
 
 Get the current RPC URL
 
@@ -101,9 +109,11 @@ Get the current RPC URL
 
 ### subscribe()
 
-> **subscribe**(`address?`): `Promise`\<[`Observable`](Observable.md)\<`CirclesEvent`\>\>
+```ts
+subscribe(address?): Promise<Observable<CirclesEvent>>;
+```
 
-Defined in: [packages/rpc/src/client.ts:217](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/client.ts#L217)
+Defined in: [packages/rpc/src/client.ts:217](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/client.ts#L217)
 
 Subscribe to Circles events via WebSocket
 

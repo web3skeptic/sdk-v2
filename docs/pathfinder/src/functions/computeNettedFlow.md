@@ -6,9 +6,11 @@
 
 # Function: computeNettedFlow()
 
-> **computeNettedFlow**(`path`): `Map`\<`string`, `bigint`\>
+```ts
+function computeNettedFlow(path): Map<string, bigint>;
+```
 
-Defined in: [packages/pathfinder/src/path.ts:212](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/pathfinder/src/path.ts#L212)
+Defined in: [packages/pathfinder/src/path.ts:212](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/pathfinder/src/path.ts#L212)
 
 ## Parameters
 

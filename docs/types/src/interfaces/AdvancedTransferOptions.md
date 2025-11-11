@@ -6,7 +6,7 @@
 
 # Interface: AdvancedTransferOptions
 
-Defined in: [packages/types/src/pathfinding.ts:87](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L87)
+Defined in: [packages/types/src/pathfinding.ts:87](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L87)
 
 Advanced transfer options
 Extends FindPathParams to add transfer-specific options
@@ -19,9 +19,11 @@ Extends FindPathParams to add transfer-specific options
 
 ### useWrappedBalances?
 
-> `optional` **useWrappedBalances**: `boolean`
+```ts
+optional useWrappedBalances: boolean;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:25](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L25)
+Defined in: [packages/types/src/pathfinding.ts:25](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L25)
 
 #### Inherited from
 
@@ -31,9 +33,11 @@ Defined in: [packages/types/src/pathfinding.ts:25](https://github.com/aboutcircl
 
 ### fromTokens?
 
-> `optional` **fromTokens**: `` `0x${string}` ``[]
+```ts
+optional fromTokens: `0x${string}`[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:26](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L26)
+Defined in: [packages/types/src/pathfinding.ts:26](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L26)
 
 #### Inherited from
 
@@ -43,9 +47,11 @@ Defined in: [packages/types/src/pathfinding.ts:26](https://github.com/aboutcircl
 
 ### toTokens?
 
-> `optional` **toTokens**: `` `0x${string}` ``[]
+```ts
+optional toTokens: `0x${string}`[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:27](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L27)
+Defined in: [packages/types/src/pathfinding.ts:27](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L27)
 
 #### Inherited from
 
@@ -55,9 +61,11 @@ Defined in: [packages/types/src/pathfinding.ts:27](https://github.com/aboutcircl
 
 ### excludeFromTokens?
 
-> `optional` **excludeFromTokens**: `` `0x${string}` ``[]
+```ts
+optional excludeFromTokens: `0x${string}`[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:28](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L28)
+Defined in: [packages/types/src/pathfinding.ts:28](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L28)
 
 #### Inherited from
 
@@ -67,9 +75,11 @@ Defined in: [packages/types/src/pathfinding.ts:28](https://github.com/aboutcircl
 
 ### excludeToTokens?
 
-> `optional` **excludeToTokens**: `` `0x${string}` ``[]
+```ts
+optional excludeToTokens: `0x${string}`[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:29](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L29)
+Defined in: [packages/types/src/pathfinding.ts:29](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L29)
 
 #### Inherited from
 
@@ -79,9 +89,11 @@ Defined in: [packages/types/src/pathfinding.ts:29](https://github.com/aboutcircl
 
 ### simulatedBalances?
 
-> `optional` **simulatedBalances**: [`SimulatedBalance`](SimulatedBalance.md)[]
+```ts
+optional simulatedBalances: SimulatedBalance[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:30](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L30)
+Defined in: [packages/types/src/pathfinding.ts:30](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L30)
 
 #### Inherited from
 
@@ -91,9 +103,11 @@ Defined in: [packages/types/src/pathfinding.ts:30](https://github.com/aboutcircl
 
 ### maxTransfers?
 
-> `optional` **maxTransfers**: `number`
+```ts
+optional maxTransfers: number;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:31](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L31)
+Defined in: [packages/types/src/pathfinding.ts:31](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L31)
 
 #### Inherited from
 
@@ -103,8 +117,10 @@ Defined in: [packages/types/src/pathfinding.ts:31](https://github.com/aboutcircl
 
 ### txData?
 
-> `optional` **txData**: `Uint8Array`\<`ArrayBufferLike`\>
+```ts
+optional txData: Uint8Array<ArrayBufferLike>;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:91](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L91)
+Defined in: [packages/types/src/pathfinding.ts:91](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L91)
 
 Custom data to attach to the transfer (optional)

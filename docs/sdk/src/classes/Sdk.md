@@ -6,7 +6,7 @@
 
 # Class: Sdk
 
-Defined in: [packages/sdk/src/Sdk.ts:50](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L50)
+Defined in: [packages/sdk/src/Sdk.ts:50](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L50)
 
 Simplified Circles SDK
 Provides a user-friendly API for non-crypto users with low entrance barrier
@@ -36,9 +36,11 @@ await avatar.personalToken.mint();
 
 ### Constructor
 
-> **new Sdk**(`config`, `contractRunner?`): `Sdk`
+```ts
+new Sdk(config, contractRunner?): Sdk;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:77](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L77)
+Defined in: [packages/sdk/src/Sdk.ts:77](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L77)
 
 Create a new Sdk instance
 
@@ -68,63 +70,79 @@ Error if contractRunner is provided but doesn't support sendTransaction or has n
 
 ### circlesConfig
 
-> `readonly` **circlesConfig**: `CirclesConfig`
+```ts
+readonly circlesConfig: CirclesConfig;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:51](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L51)
+Defined in: [packages/sdk/src/Sdk.ts:51](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L51)
 
 ***
 
 ### contractRunner?
 
-> `readonly` `optional` **contractRunner**: `ContractRunner`
+```ts
+readonly optional contractRunner: ContractRunner;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:52](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L52)
+Defined in: [packages/sdk/src/Sdk.ts:52](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L52)
 
 ***
 
 ### senderAddress?
 
-> `readonly` `optional` **senderAddress**: `` `0x${string}` ``
+```ts
+readonly optional senderAddress: `0x${string}`;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:53](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L53)
+Defined in: [packages/sdk/src/Sdk.ts:53](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L53)
 
 ***
 
 ### core
 
-> `readonly` **core**: `Core`
+```ts
+readonly core: Core;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:54](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L54)
+Defined in: [packages/sdk/src/Sdk.ts:54](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L54)
 
 ***
 
 ### rpc
 
-> `readonly` **rpc**: `CirclesRpc`
+```ts
+readonly rpc: CirclesRpc;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:55](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L55)
+Defined in: [packages/sdk/src/Sdk.ts:55](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L55)
 
 ***
 
 ### data
 
-> `readonly` **data**: [`CirclesData`](../interfaces/CirclesData.md)
+```ts
+readonly data: CirclesData;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:58](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L58)
+Defined in: [packages/sdk/src/Sdk.ts:58](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L58)
 
 ***
 
 ### register
 
-> `readonly` **register**: `object`
+```ts
+readonly register: object;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:129](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L129)
+Defined in: [packages/sdk/src/Sdk.ts:129](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L129)
 
 Registration methods for creating new Circles identities
 
 #### asHuman()
 
-> **asHuman**: (`inviter`, `profile`) => `Promise`\<[`HumanAvatar`](HumanAvatar.md)\>
+```ts
+asHuman: (inviter, profile) => Promise<HumanAvatar>;
+```
 
 Register as a human in the Circles ecosystem
 
@@ -171,7 +189,9 @@ const avatar = await sdk.register.asHuman('0xInviter', {
 
 #### asOrganization()
 
-> **asOrganization**: (`profile`) => `Promise`\<[`OrganisationAvatar`](OrganisationAvatar.md)\>
+```ts
+asOrganization: (profile) => Promise<OrganisationAvatar>;
+```
 
 Register as an organization
 Organizations can participate in Circles without minting personal tokens
@@ -202,7 +222,9 @@ const orgAvatar = await sdk.register.asOrganization({
 
 #### asGroup()
 
-> **asGroup**: (`owner`, `service`, `feeCollection`, `initialConditions`, `name`, `symbol`, `profile`) => `Promise`\<[`BaseGroupAvatar`](BaseGroupAvatar.md)\>
+```ts
+asGroup: (owner, service, feeCollection, initialConditions, name, symbol, profile) => Promise<BaseGroupAvatar>;
+```
 
 Register a base group
 Creates a new base group using the BaseGroupFactory and registers it in the Circles ecosystem
@@ -278,15 +300,19 @@ const groupAvatar = await sdk.register.asGroup(
 
 ### profiles
 
-> `readonly` **profiles**: `object`
+```ts
+readonly profiles: object;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:426](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L426)
+Defined in: [packages/sdk/src/Sdk.ts:426](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L426)
 
 Profile management methods
 
 #### create()
 
-> **create**: (`profile`) => `Promise`\<`string`\>
+```ts
+create: (profile) => Promise<string>;
+```
 
 Create and pin a profile to IPFS
 
@@ -306,7 +332,9 @@ CID of the pinned profile
 
 #### get()
 
-> **get**: (`cid`) => `Promise`\<`Profile` \| `undefined`\>
+```ts
+get: (cid) => Promise<Profile | undefined>;
+```
 
 Get a profile by CID
 
@@ -328,15 +356,19 @@ Profile data or undefined if not found
 
 ### tokens
 
-> `readonly` **tokens**: `object`
+```ts
+readonly tokens: object;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:449](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L449)
+Defined in: [packages/sdk/src/Sdk.ts:449](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L449)
 
 Token utilities
 
 #### getInflationaryWrapper()
 
-> **getInflationaryWrapper**: (`address`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+getInflationaryWrapper: (address) => Promise<`0x${string}`>;
+```
 
 Get an inflationary wrapper for a token
 
@@ -356,7 +388,9 @@ The ERC20 inflationary wrapper address, or zero address if not deployed
 
 #### getDemurragedWrapper()
 
-> **getDemurragedWrapper**: (`address`) => `Promise`\<`` `0x${string}` ``\>
+```ts
+getDemurragedWrapper: (address) => Promise<`0x${string}`>;
+```
 
 Get a demurraged wrapper for a token
 
@@ -376,7 +410,9 @@ The ERC20 demurraged wrapper address, or zero address if not deployed
 
 #### getHolders()
 
-> **getHolders**: (`tokenAddress`, `limit`, `sortOrder`) => `PagedQuery`\<`TokenHolder`\>
+```ts
+getHolders: (tokenAddress, limit, sortOrder) => PagedQuery<TokenHolder>;
+```
 
 Get token holders for a specific token address with pagination
 
@@ -424,15 +460,19 @@ while (await holdersQuery.queryNextPage()) {
 
 ### groups
 
-> `readonly` **groups**: `object`
+```ts
+readonly groups: object;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:500](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L500)
+Defined in: [packages/sdk/src/Sdk.ts:500](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L500)
 
 Group utilities
 
 #### getType()
 
-> **getType**: (`avatar`) => `Promise`\<`GroupType` \| `undefined`\>
+```ts
+getType: (avatar) => Promise<GroupType | undefined>;
+```
 
 Get the type of a group
 
@@ -452,7 +492,9 @@ Group type or undefined if not a group
 
 #### getMembers()
 
-> **getMembers**: (`groupAddress`, `limit`, `sortOrder`) => `PagedQuery`\<`GroupMembershipRow`\>
+```ts
+getMembers: (groupAddress, limit, sortOrder) => PagedQuery<GroupMembershipRow>;
+```
 
 Get all members of a specific group using cursor-based pagination
 
@@ -505,7 +547,9 @@ while (await query.queryNextPage()) {
 
 #### getCollateral()
 
-> **getCollateral**: (`groupAddress`) => `Promise`\<`TokenBalance`[]\>
+```ts
+getCollateral: (groupAddress) => Promise<TokenBalance[]>;
+```
 
 Get collateral tokens in a group's treasury
 
@@ -540,7 +584,9 @@ collateral.forEach(balance => {
 
 #### getHolders()
 
-> **getHolders**: (`groupAddress`, `limit`) => `PagedQuery`\<`GroupTokenHolderRow`\>
+```ts
+getHolders: (groupAddress, limit) => PagedQuery<GroupTokenHolderRow>;
+```
 
 Get all holders of a group token using cursor-based pagination
 
@@ -592,9 +638,14 @@ while (await query.queryNextPage()) {
 
 ### getAvatar()
 
-> **getAvatar**(`avatarAddress`): `Promise`\<[`HumanAvatar`](HumanAvatar.md) \| [`OrganisationAvatar`](OrganisationAvatar.md) \| [`BaseGroupAvatar`](BaseGroupAvatar.md)\>
+```ts
+getAvatar(avatarAddress): Promise<
+  | HumanAvatar
+  | OrganisationAvatar
+| BaseGroupAvatar>;
+```
 
-Defined in: [packages/sdk/src/Sdk.ts:104](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/Sdk.ts#L104)
+Defined in: [packages/sdk/src/Sdk.ts:104](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/Sdk.ts#L104)
 
 Get an avatar by address
 Automatically detects the avatar type and returns the appropriate avatar instance
@@ -607,6 +658,9 @@ Automatically detects the avatar type and returns the appropriate avatar instanc
 
 #### Returns
 
-`Promise`\<[`HumanAvatar`](HumanAvatar.md) \| [`OrganisationAvatar`](OrganisationAvatar.md) \| [`BaseGroupAvatar`](BaseGroupAvatar.md)\>
+`Promise`\<
+  \| [`HumanAvatar`](HumanAvatar.md)
+  \| [`OrganisationAvatar`](OrganisationAvatar.md)
+  \| [`BaseGroupAvatar`](BaseGroupAvatar.md)\>
 
 HumanAvatar, OrganisationAvatar, or BaseGroupAvatar depending on type

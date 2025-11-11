@@ -6,9 +6,11 @@
 
 # Function: bytesToHex()
 
-> **bytesToHex**(`bytes`): `string`
+```ts
+function bytesToHex(bytes): string;
+```
 
-Defined in: [packages/utils/src/bytes.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/bytes.ts#L10)
+Defined in: [packages/utils/src/bytes.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/bytes.ts#L10)
 
 Convert a Uint8Array to a hex string with 0x prefix
 

@@ -6,7 +6,7 @@
 
 # Interface: FlowMatrix
 
-Defined in: [packages/types/src/pathfinding.ts:75](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L75)
+Defined in: [packages/types/src/pathfinding.ts:75](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L75)
 
 Flow matrix for ABI encoding
 Used with the operateFlowMatrix function in Hub V2
@@ -15,38 +15,48 @@ Used with the operateFlowMatrix function in Hub V2
 
 ### flowVertices
 
-> **flowVertices**: `string`[]
+```ts
+flowVertices: string[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:76](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L76)
+Defined in: [packages/types/src/pathfinding.ts:76](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L76)
 
 ***
 
 ### flowEdges
 
-> **flowEdges**: [`FlowEdgeStruct`](FlowEdgeStruct.md)[]
+```ts
+flowEdges: FlowEdgeStruct[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:77](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L77)
+Defined in: [packages/types/src/pathfinding.ts:77](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L77)
 
 ***
 
 ### streams
 
-> **streams**: [`StreamStruct`](StreamStruct.md)[]
+```ts
+streams: StreamStruct[];
+```
 
-Defined in: [packages/types/src/pathfinding.ts:78](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L78)
+Defined in: [packages/types/src/pathfinding.ts:78](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L78)
 
 ***
 
 ### packedCoordinates
 
-> **packedCoordinates**: `string`
+```ts
+packedCoordinates: string;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:79](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L79)
+Defined in: [packages/types/src/pathfinding.ts:79](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L79)
 
 ***
 
 ### sourceCoordinate
 
-> **sourceCoordinate**: `number`
+```ts
+sourceCoordinate: number;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:80](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L80)
+Defined in: [packages/types/src/pathfinding.ts:80](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L80)

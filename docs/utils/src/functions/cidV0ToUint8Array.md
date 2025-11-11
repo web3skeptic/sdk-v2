@@ -6,9 +6,11 @@
 
 # Function: cidV0ToUint8Array()
 
-> **cidV0ToUint8Array**(`cidV0`): `Uint8Array`
+```ts
+function cidV0ToUint8Array(cidV0): Uint8Array;
+```
 
-Defined in: [packages/utils/src/cid.ts:61](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/cid.ts#L61)
+Defined in: [packages/utils/src/cid.ts:61](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/cid.ts#L61)
 
 Convert a CIDv0 string to a Uint8Array of the hash digest
 

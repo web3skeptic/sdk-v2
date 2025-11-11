@@ -6,9 +6,14 @@
 
 # Function: transformToFlowVertices()
 
-> **transformToFlowVertices**(`transfers`, `from`, `to`): `object`
+```ts
+function transformToFlowVertices(
+   transfers, 
+   from, 
+   to): object;
+```
 
-Defined in: [packages/pathfinder/src/packing.ts:22](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/pathfinder/src/packing.ts#L22)
+Defined in: [packages/pathfinder/src/packing.ts:22](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/pathfinder/src/packing.ts#L22)
 
 Build a sorted vertex list plus index lookup for quick coordinate mapping.
 
@@ -32,8 +37,12 @@ Build a sorted vertex list plus index lookup for quick coordinate mapping.
 
 ### sorted
 
-> **sorted**: `string`[]
+```ts
+sorted: string[];
+```
 
 ### idx
 
-> **idx**: `Record`\<`string`, `number`\>
+```ts
+idx: Record<string, number>;
+```

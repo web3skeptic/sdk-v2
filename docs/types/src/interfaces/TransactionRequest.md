@@ -6,7 +6,7 @@
 
 # Interface: TransactionRequest
 
-Defined in: [packages/types/src/base.ts:34](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L34)
+Defined in: [packages/types/src/base.ts:34](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L34)
 
 Transaction request object
 Contains all data needed to send a transaction
@@ -15,54 +15,68 @@ Contains all data needed to send a transaction
 
 ### from?
 
-> `optional` **from**: `` `0x${string}` ``
+```ts
+optional from: `0x${string}`;
+```
 
-Defined in: [packages/types/src/base.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L35)
+Defined in: [packages/types/src/base.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L35)
 
 ***
 
 ### to
 
-> **to**: `` `0x${string}` ``
+```ts
+to: `0x${string}`;
+```
 
-Defined in: [packages/types/src/base.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L36)
+Defined in: [packages/types/src/base.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L36)
 
 ***
 
 ### data
 
-> **data**: `` `0x${string}` ``
+```ts
+data: `0x${string}`;
+```
 
-Defined in: [packages/types/src/base.ts:37](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L37)
+Defined in: [packages/types/src/base.ts:37](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L37)
 
 ***
 
 ### value?
 
-> `optional` **value**: `bigint`
+```ts
+optional value: bigint;
+```
 
-Defined in: [packages/types/src/base.ts:38](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L38)
+Defined in: [packages/types/src/base.ts:38](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L38)
 
 ***
 
 ### gas?
 
-> `optional` **gas**: `bigint`
+```ts
+optional gas: bigint;
+```
 
-Defined in: [packages/types/src/base.ts:39](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L39)
+Defined in: [packages/types/src/base.ts:39](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L39)
 
 ***
 
 ### gasPrice?
 
-> `optional` **gasPrice**: `bigint`
+```ts
+optional gasPrice: bigint;
+```
 
-Defined in: [packages/types/src/base.ts:40](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L40)
+Defined in: [packages/types/src/base.ts:40](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L40)
 
 ***
 
 ### nonce?
 
-> `optional` **nonce**: `number`
+```ts
+optional nonce: number;
+```
 
-Defined in: [packages/types/src/base.ts:41](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/base.ts#L41)
+Defined in: [packages/types/src/base.ts:41](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/base.ts#L41)

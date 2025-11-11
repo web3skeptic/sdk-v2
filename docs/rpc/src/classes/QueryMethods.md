@@ -6,7 +6,7 @@
 
 # Class: QueryMethods
 
-Defined in: [packages/rpc/src/methods/query.ts:8](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/query.ts#L8)
+Defined in: [packages/rpc/src/methods/query.ts:8](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/query.ts#L8)
 
 Query and table RPC methods
 
@@ -14,9 +14,11 @@ Query and table RPC methods
 
 ### Constructor
 
-> **new QueryMethods**(`client`): `QueryMethods`
+```ts
+new QueryMethods(client): QueryMethods;
+```
 
-Defined in: [packages/rpc/src/methods/query.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/query.ts#L9)
+Defined in: [packages/rpc/src/methods/query.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/query.ts#L9)
 
 #### Parameters
 
@@ -32,9 +34,11 @@ Defined in: [packages/rpc/src/methods/query.ts:9](https://github.com/aboutcircle
 
 ### query()
 
-> **query**\<`T`\>(`params`): `Promise`\<`T`[]\>
+```ts
+query<T>(params): Promise<T[]>;
+```
 
-Defined in: [packages/rpc/src/methods/query.ts:45](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/query.ts#L45)
+Defined in: [packages/rpc/src/methods/query.ts:45](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/query.ts#L45)
 
 Query tables with filters
 
@@ -91,9 +95,11 @@ const results = await rpc.query.query({
 
 ### tables()
 
-> **tables**(): `Promise`\<`TableInfo`[]\>
+```ts
+tables(): Promise<TableInfo[]>;
+```
 
-Defined in: [packages/rpc/src/methods/query.ts:61](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/query.ts#L61)
+Defined in: [packages/rpc/src/methods/query.ts:61](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/query.ts#L61)
 
 Return all available namespaces and tables which can be queried
 
@@ -114,9 +120,16 @@ console.log(tables);
 
 ### events()
 
-> **events**\<`T`\>(`fromBlock`, `toBlock`, `eventTypes`, `address`, `includeTransactionData`): `Promise`\<`T`[]\>
+```ts
+events<T>(
+   fromBlock, 
+   toBlock, 
+   eventTypes, 
+   address, 
+includeTransactionData): Promise<T[]>;
+```
 
-Defined in: [packages/rpc/src/methods/query.ts:86](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/query.ts#L86)
+Defined in: [packages/rpc/src/methods/query.ts:86](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/query.ts#L86)
 
 Query events of specific types within a block range
 

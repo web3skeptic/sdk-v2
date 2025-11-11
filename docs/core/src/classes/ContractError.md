@@ -6,7 +6,7 @@
 
 # Class: ContractError
 
-Defined in: [packages/core/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L20)
+Defined in: [packages/core/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L20)
 
 Contract and transaction errors
 
@@ -18,9 +18,11 @@ Contract and transaction errors
 
 ### Constructor
 
-> **new ContractError**(`message`, `options?`): `ContractError`
+```ts
+new ContractError(message, options?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:21](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L21)
+Defined in: [packages/core/src/errors.ts:21](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L21)
 
 #### Parameters
 
@@ -52,15 +54,22 @@ Defined in: [packages/core/src/errors.ts:21](https://github.com/aboutcircles/sdk
 
 #### Overrides
 
-`CirclesError<CoreErrorSource>.constructor`
+```ts
+CirclesError<CoreErrorSource>.constructor
+```
 
 ## Methods
 
 ### transactionFailed()
 
-> `static` **transactionFailed**(`txHash`, `reason`, `cause?`): `ContractError`
+```ts
+static transactionFailed(
+   txHash, 
+   reason, 
+   cause?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L36)
+Defined in: [packages/core/src/errors.ts:36](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L36)
 
 Create error for transaction failures
 
@@ -86,9 +95,14 @@ Create error for transaction failures
 
 ### revert()
 
-> `static` **revert**(`method`, `reason?`, `cause?`): `ContractError`
+```ts
+static revert(
+   method, 
+   reason?, 
+   cause?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:48](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L48)
+Defined in: [packages/core/src/errors.ts:48](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L48)
 
 Create error for contract reverts
 
@@ -114,9 +128,11 @@ Create error for contract reverts
 
 ### insufficientGas()
 
-> `static` **insufficientGas**(`estimated`, `provided?`): `ContractError`
+```ts
+static insufficientGas(estimated, provided?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:63](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L63)
+Defined in: [packages/core/src/errors.ts:63](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L63)
 
 Create error for insufficient gas
 
@@ -138,9 +154,11 @@ Create error for insufficient gas
 
 ### gasEstimationFailed()
 
-> `static` **gasEstimationFailed**(`method`, `cause?`): `ContractError`
+```ts
+static gasEstimationFailed(method, cause?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:74](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L74)
+Defined in: [packages/core/src/errors.ts:74](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L74)
 
 Create error for gas estimation failures
 
@@ -162,9 +180,11 @@ Create error for gas estimation failures
 
 ### encodingError()
 
-> `static` **encodingError**(`method`, `cause?`): `ContractError`
+```ts
+static encodingError(method, cause?): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:86](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L86)
+Defined in: [packages/core/src/errors.ts:86](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L86)
 
 Create error for encoding failures
 
@@ -186,9 +206,11 @@ Create error for encoding failures
 
 ### notFound()
 
-> `static` **notFound**(`address`, `contractType`): `ContractError`
+```ts
+static notFound(address, contractType): ContractError;
+```
 
-Defined in: [packages/core/src/errors.ts:98](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/errors.ts#L98)
+Defined in: [packages/core/src/errors.ts:98](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/errors.ts#L98)
 
 Create error for contract not found
 

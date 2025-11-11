@@ -6,7 +6,7 @@
 
 # Class: TokenMethods
 
-Defined in: [packages/rpc/src/methods/token.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/token.ts#L9)
+Defined in: [packages/rpc/src/methods/token.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/token.ts#L9)
 
 Token information RPC methods
 
@@ -14,9 +14,11 @@ Token information RPC methods
 
 ### Constructor
 
-> **new TokenMethods**(`client`): `TokenMethods`
+```ts
+new TokenMethods(client): TokenMethods;
+```
 
-Defined in: [packages/rpc/src/methods/token.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/token.ts#L10)
+Defined in: [packages/rpc/src/methods/token.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/token.ts#L10)
 
 #### Parameters
 
@@ -32,9 +34,11 @@ Defined in: [packages/rpc/src/methods/token.ts:10](https://github.com/aboutcircl
 
 ### getTokenInfo()
 
-> **getTokenInfo**(`address`): `Promise`\<`TokenInfo` \| `undefined`\>
+```ts
+getTokenInfo(address): Promise<TokenInfo | undefined>;
+```
 
-Defined in: [packages/rpc/src/methods/token.ts:24](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/token.ts#L24)
+Defined in: [packages/rpc/src/methods/token.ts:24](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/token.ts#L24)
 
 Get token information for a specific token address
 
@@ -63,9 +67,11 @@ console.log(tokenInfo);
 
 ### getTokenInfoBatch()
 
-> **getTokenInfoBatch**(`addresses`): `Promise`\<`TokenInfo`[]\>
+```ts
+getTokenInfoBatch(addresses): Promise<TokenInfo[]>;
+```
 
-Defined in: [packages/rpc/src/methods/token.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/token.ts#L43)
+Defined in: [packages/rpc/src/methods/token.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/token.ts#L43)
 
 Get token information for multiple token addresses in batch
 
@@ -96,9 +102,14 @@ const tokenInfos = await rpc.token.getTokenInfoBatch([
 
 ### getTokenHolders()
 
-> **getTokenHolders**(`tokenAddress`, `limit`, `sortOrder`): [`PagedQuery`](PagedQuery.md)\<`TokenHolder`\>
+```ts
+getTokenHolders(
+   tokenAddress, 
+   limit, 
+sortOrder): PagedQuery<TokenHolder>;
+```
 
-Defined in: [packages/rpc/src/methods/token.ts:79](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/token.ts#L79)
+Defined in: [packages/rpc/src/methods/token.ts:79](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/token.ts#L79)
 
 Get token holders for a specific token address with pagination
 

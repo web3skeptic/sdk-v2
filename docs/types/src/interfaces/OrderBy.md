@@ -6,7 +6,7 @@
 
 # Interface: OrderBy
 
-Defined in: [packages/types/src/query.ts:54](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L54)
+Defined in: [packages/types/src/query.ts:54](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L54)
 
 Order by clause
 
@@ -14,14 +14,18 @@ Order by clause
 
 ### Column
 
-> **Column**: `string`
+```ts
+Column: string;
+```
 
-Defined in: [packages/types/src/query.ts:55](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L55)
+Defined in: [packages/types/src/query.ts:55](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L55)
 
 ***
 
 ### SortOrder
 
-> **SortOrder**: [`SortOrder`](../type-aliases/SortOrder.md)
+```ts
+SortOrder: SortOrder;
+```
 
-Defined in: [packages/types/src/query.ts:56](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L56)
+Defined in: [packages/types/src/query.ts:56](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L56)

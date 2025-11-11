@@ -6,7 +6,7 @@
 
 # Class: Core
 
-Defined in: [packages/core/src/core.ts:40](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L40)
+Defined in: [packages/core/src/core.ts:40](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L40)
 
 Core SDK class for managing Circles protocol contract interactions
 
@@ -47,9 +47,11 @@ const createGroupTx = core.baseGroupFactory.createBaseGroup(
 
 ### Constructor
 
-> **new Core**(`config`): `Core`
+```ts
+new Core(config): Core;
+```
 
-Defined in: [packages/core/src/core.ts:54](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L54)
+Defined in: [packages/core/src/core.ts:54](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L54)
 
 Create a new Core SDK instance
 
@@ -69,54 +71,68 @@ Circles configuration (defaults to Gnosis Chain mainnet)
 
 ### config
 
-> `readonly` **config**: `CirclesConfig`
+```ts
+readonly config: CirclesConfig;
+```
 
-Defined in: [packages/core/src/core.ts:41](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L41)
+Defined in: [packages/core/src/core.ts:41](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L41)
 
 ***
 
 ### rpcUrl
 
-> `readonly` **rpcUrl**: `string`
+```ts
+readonly rpcUrl: string;
+```
 
-Defined in: [packages/core/src/core.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L42)
+Defined in: [packages/core/src/core.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L42)
 
 ***
 
 ### hubV2
 
-> `readonly` **hubV2**: [`HubV2Contract`](HubV2Contract.md)
+```ts
+readonly hubV2: HubV2Contract;
+```
 
-Defined in: [packages/core/src/core.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L43)
+Defined in: [packages/core/src/core.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L43)
 
 ***
 
 ### baseGroupFactory
 
-> `readonly` **baseGroupFactory**: [`BaseGroupFactoryContract`](BaseGroupFactoryContract.md)
+```ts
+readonly baseGroupFactory: BaseGroupFactoryContract;
+```
 
-Defined in: [packages/core/src/core.ts:44](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L44)
+Defined in: [packages/core/src/core.ts:44](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L44)
 
 ***
 
 ### nameRegistry
 
-> `readonly` **nameRegistry**: [`NameRegistryContract`](NameRegistryContract.md)
+```ts
+readonly nameRegistry: NameRegistryContract;
+```
 
-Defined in: [packages/core/src/core.ts:45](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L45)
+Defined in: [packages/core/src/core.ts:45](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L45)
 
 ***
 
 ### liftERC20
 
-> `readonly` **liftERC20**: [`LiftERC20Contract`](LiftERC20Contract.md)
+```ts
+readonly liftERC20: LiftERC20Contract;
+```
 
-Defined in: [packages/core/src/core.ts:46](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L46)
+Defined in: [packages/core/src/core.ts:46](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L46)
 
 ***
 
 ### invitationEscrow
 
-> `readonly` **invitationEscrow**: [`InvitationEscrowContract`](InvitationEscrowContract.md)
+```ts
+readonly invitationEscrow: InvitationEscrowContract;
+```
 
-Defined in: [packages/core/src/core.ts:47](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/core/src/core.ts#L47)
+Defined in: [packages/core/src/core.ts:47](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/core/src/core.ts#L47)

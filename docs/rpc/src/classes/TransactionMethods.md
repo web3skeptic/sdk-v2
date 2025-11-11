@@ -6,7 +6,7 @@
 
 # Class: TransactionMethods
 
-Defined in: [packages/rpc/src/methods/transaction.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/transaction.ts#L42)
+Defined in: [packages/rpc/src/methods/transaction.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/transaction.ts#L42)
 
 Transaction history RPC methods
 
@@ -14,9 +14,11 @@ Transaction history RPC methods
 
 ### Constructor
 
-> **new TransactionMethods**(`client`): `TransactionMethods`
+```ts
+new TransactionMethods(client): TransactionMethods;
+```
 
-Defined in: [packages/rpc/src/methods/transaction.ts:43](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/transaction.ts#L43)
+Defined in: [packages/rpc/src/methods/transaction.ts:43](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/transaction.ts#L43)
 
 #### Parameters
 
@@ -32,9 +34,14 @@ Defined in: [packages/rpc/src/methods/transaction.ts:43](https://github.com/abou
 
 ### getTransactionHistory()
 
-> **getTransactionHistory**(`avatar`, `limit`, `sortOrder`): [`PagedQuery`](PagedQuery.md)\<[`TransactionHistoryRow`](../interfaces/TransactionHistoryRow.md)\>
+```ts
+getTransactionHistory(
+   avatar, 
+   limit, 
+sortOrder): PagedQuery<TransactionHistoryRow>;
+```
 
-Defined in: [packages/rpc/src/methods/transaction.ts:73](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/transaction.ts#L73)
+Defined in: [packages/rpc/src/methods/transaction.ts:73](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/transaction.ts#L73)
 
 Get transaction history for an address using cursor-based pagination
 

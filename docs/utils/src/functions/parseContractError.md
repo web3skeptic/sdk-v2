@@ -6,9 +6,13 @@
 
 # Function: parseContractError()
 
-> **parseContractError**(`error`, `abi`): [`DecodedContractError`](../../../types/src/interfaces/DecodedContractError.md) \| `null`
+```ts
+function parseContractError(error, abi): 
+  | DecodedContractError
+  | null;
+```
 
-Defined in: [packages/utils/src/contractErrors.ts:153](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/utils/src/contractErrors.ts#L153)
+Defined in: [packages/utils/src/contractErrors.ts:153](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/utils/src/contractErrors.ts#L153)
 
 Parse contract error from a transaction error
 
@@ -28,7 +32,8 @@ The contract ABI to use for decoding
 
 ## Returns
 
-[`DecodedContractError`](../../../types/src/interfaces/DecodedContractError.md) \| `null`
+  \| [`DecodedContractError`](../../../types/src/interfaces/DecodedContractError.md)
+  \| `null`
 
 Decoded error information or null if cannot be parsed
 

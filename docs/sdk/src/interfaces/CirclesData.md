@@ -6,7 +6,7 @@
 
 # Interface: CirclesData
 
-Defined in: [packages/sdk/src/types.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/types.ts#L13)
+Defined in: [packages/sdk/src/types.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/types.ts#L13)
 
 Circles data access layer
 Provides read access to Circles protocol data
@@ -15,9 +15,11 @@ Provides read access to Circles protocol data
 
 ### getAvatar()
 
-> **getAvatar**(`address`): `Promise`\<`AvatarInfo` \| `undefined`\>
+```ts
+getAvatar(address): Promise<AvatarInfo | undefined>;
+```
 
-Defined in: [packages/sdk/src/types.ts:14](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/types.ts#L14)
+Defined in: [packages/sdk/src/types.ts:14](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/types.ts#L14)
 
 #### Parameters
 
@@ -33,9 +35,11 @@ Defined in: [packages/sdk/src/types.ts:14](https://github.com/aboutcircles/sdk-v
 
 ### getTrustRelations()
 
-> **getTrustRelations**(`address`): `Promise`\<`AggregatedTrustRelation`[]\>
+```ts
+getTrustRelations(address): Promise<AggregatedTrustRelation[]>;
+```
 
-Defined in: [packages/sdk/src/types.ts:15](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/types.ts#L15)
+Defined in: [packages/sdk/src/types.ts:15](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/types.ts#L15)
 
 #### Parameters
 
@@ -51,9 +55,11 @@ Defined in: [packages/sdk/src/types.ts:15](https://github.com/aboutcircles/sdk-v
 
 ### getBalances()
 
-> **getBalances**(`address`): `Promise`\<`TokenBalance`[]\>
+```ts
+getBalances(address): Promise<TokenBalance[]>;
+```
 
-Defined in: [packages/sdk/src/types.ts:16](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/types.ts#L16)
+Defined in: [packages/sdk/src/types.ts:16](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/types.ts#L16)
 
 #### Parameters
 

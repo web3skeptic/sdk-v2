@@ -6,7 +6,7 @@
 
 # Class: PathfinderMethods
 
-Defined in: [packages/rpc/src/methods/pathfinder.ts:8](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/pathfinder.ts#L8)
+Defined in: [packages/rpc/src/methods/pathfinder.ts:8](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/pathfinder.ts#L8)
 
 Circles V1 and V2 balance and pathfinding methods
 
@@ -14,9 +14,11 @@ Circles V1 and V2 balance and pathfinding methods
 
 ### Constructor
 
-> **new PathfinderMethods**(`client`): `PathfinderMethods`
+```ts
+new PathfinderMethods(client): PathfinderMethods;
+```
 
-Defined in: [packages/rpc/src/methods/pathfinder.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/pathfinder.ts#L9)
+Defined in: [packages/rpc/src/methods/pathfinder.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/pathfinder.ts#L9)
 
 #### Parameters
 
@@ -32,9 +34,11 @@ Defined in: [packages/rpc/src/methods/pathfinder.ts:9](https://github.com/aboutc
 
 ### findPath()
 
-> **findPath**(`params`): `Promise`\<`PathfindingResult`\>
+```ts
+findPath(params): Promise<PathfindingResult>;
+```
 
-Defined in: [packages/rpc/src/methods/pathfinder.ts:26](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/pathfinder.ts#L26)
+Defined in: [packages/rpc/src/methods/pathfinder.ts:26](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/pathfinder.ts#L26)
 
 Calculate a path between two addresses with a target flow
 
@@ -66,9 +70,11 @@ const path = await rpc.pathfinder.findPath({
 
 ### findMaxFlow()
 
-> **findMaxFlow**(`params`): `Promise`\<`bigint`\>
+```ts
+findMaxFlow(params): Promise<bigint>;
+```
 
-Defined in: [packages/rpc/src/methods/pathfinder.ts:52](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/pathfinder.ts#L52)
+Defined in: [packages/rpc/src/methods/pathfinder.ts:52](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/pathfinder.ts#L52)
 
 Find the maximum flow between two addresses
 

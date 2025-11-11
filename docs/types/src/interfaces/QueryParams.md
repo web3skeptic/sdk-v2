@@ -6,7 +6,7 @@
 
 # Interface: QueryParams
 
-Defined in: [packages/types/src/query.ts:62](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L62)
+Defined in: [packages/types/src/query.ts:62](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L62)
 
 Query parameters for circles_query
 
@@ -14,46 +14,58 @@ Query parameters for circles_query
 
 ### Namespace
 
-> **Namespace**: `string`
+```ts
+Namespace: string;
+```
 
-Defined in: [packages/types/src/query.ts:63](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L63)
+Defined in: [packages/types/src/query.ts:63](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L63)
 
 ***
 
 ### Table
 
-> **Table**: `string`
+```ts
+Table: string;
+```
 
-Defined in: [packages/types/src/query.ts:64](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L64)
+Defined in: [packages/types/src/query.ts:64](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L64)
 
 ***
 
 ### Columns
 
-> **Columns**: `string`[]
+```ts
+Columns: string[];
+```
 
-Defined in: [packages/types/src/query.ts:65](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L65)
+Defined in: [packages/types/src/query.ts:65](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L65)
 
 ***
 
 ### Filter
 
-> **Filter**: [`Filter`](../type-aliases/Filter.md)[]
+```ts
+Filter: Filter[];
+```
 
-Defined in: [packages/types/src/query.ts:66](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L66)
+Defined in: [packages/types/src/query.ts:66](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L66)
 
 ***
 
 ### Order
 
-> **Order**: [`OrderBy`](OrderBy.md)[]
+```ts
+Order: OrderBy[];
+```
 
-Defined in: [packages/types/src/query.ts:67](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L67)
+Defined in: [packages/types/src/query.ts:67](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L67)
 
 ***
 
 ### Limit?
 
-> `optional` **Limit**: `number`
+```ts
+optional Limit: number;
+```
 
-Defined in: [packages/types/src/query.ts:68](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/query.ts#L68)
+Defined in: [packages/types/src/query.ts:68](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/query.ts#L68)

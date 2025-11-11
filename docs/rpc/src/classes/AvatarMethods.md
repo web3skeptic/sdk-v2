@@ -6,7 +6,7 @@
 
 # Class: AvatarMethods
 
-Defined in: [packages/rpc/src/methods/avatar.ts:8](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/avatar.ts#L8)
+Defined in: [packages/rpc/src/methods/avatar.ts:8](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/avatar.ts#L8)
 
 Avatar and network RPC methods
 
@@ -14,9 +14,11 @@ Avatar and network RPC methods
 
 ### Constructor
 
-> **new AvatarMethods**(`client`): `AvatarMethods`
+```ts
+new AvatarMethods(client): AvatarMethods;
+```
 
-Defined in: [packages/rpc/src/methods/avatar.ts:9](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/avatar.ts#L9)
+Defined in: [packages/rpc/src/methods/avatar.ts:9](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/avatar.ts#L9)
 
 #### Parameters
 
@@ -32,9 +34,11 @@ Defined in: [packages/rpc/src/methods/avatar.ts:9](https://github.com/aboutcircl
 
 ### getAvatarInfo()
 
-> **getAvatarInfo**(`address`): `Promise`\<`AvatarInfo` \| `undefined`\>
+```ts
+getAvatarInfo(address): Promise<AvatarInfo | undefined>;
+```
 
-Defined in: [packages/rpc/src/methods/avatar.ts:23](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/avatar.ts#L23)
+Defined in: [packages/rpc/src/methods/avatar.ts:23](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/avatar.ts#L23)
 
 Get information about a specific avatar
 
@@ -63,9 +67,11 @@ console.log(info);
 
 ### getAvatarInfoBatch()
 
-> **getAvatarInfoBatch**(`addresses`): `Promise`\<`AvatarInfo`[]\>
+```ts
+getAvatarInfoBatch(addresses): Promise<AvatarInfo[]>;
+```
 
-Defined in: [packages/rpc/src/methods/avatar.ts:42](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/avatar.ts#L42)
+Defined in: [packages/rpc/src/methods/avatar.ts:42](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/avatar.ts#L42)
 
 Get information about multiple avatars in batch
 
@@ -96,9 +102,11 @@ const infos = await rpc.avatar.getAvatarInfoBatch([
 
 ### getNetworkSnapshot()
 
-> **getNetworkSnapshot**(): `Promise`\<`NetworkSnapshot`\>
+```ts
+getNetworkSnapshot(): Promise<NetworkSnapshot>;
+```
 
-Defined in: [packages/rpc/src/methods/avatar.ts:68](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/rpc/src/methods/avatar.ts#L68)
+Defined in: [packages/rpc/src/methods/avatar.ts:68](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/rpc/src/methods/avatar.ts#L68)
 
 Download a full snapshot of the Circles network state
 (current trust relations and balances)

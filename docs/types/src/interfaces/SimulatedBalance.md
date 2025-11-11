@@ -6,7 +6,7 @@
 
 # Interface: SimulatedBalance
 
-Defined in: [packages/types/src/pathfinding.ts:10](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L10)
+Defined in: [packages/types/src/pathfinding.ts:10](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L10)
 
 Simulated balance for path finding
 
@@ -14,38 +14,48 @@ Simulated balance for path finding
 
 ### holder
 
-> **holder**: `` `0x${string}` ``
+```ts
+holder: `0x${string}`;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:11](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L11)
+Defined in: [packages/types/src/pathfinding.ts:11](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L11)
 
 ***
 
 ### token
 
-> **token**: `` `0x${string}` ``
+```ts
+token: `0x${string}`;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:12](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L12)
+Defined in: [packages/types/src/pathfinding.ts:12](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L12)
 
 ***
 
 ### amount
 
-> **amount**: `bigint`
+```ts
+amount: bigint;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:13](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L13)
+Defined in: [packages/types/src/pathfinding.ts:13](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L13)
 
 ***
 
 ### isWrapped
 
-> **isWrapped**: `boolean`
+```ts
+isWrapped: boolean;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:14](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L14)
+Defined in: [packages/types/src/pathfinding.ts:14](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L14)
 
 ***
 
 ### isStatic
 
-> **isStatic**: `boolean`
+```ts
+isStatic: boolean;
+```
 
-Defined in: [packages/types/src/pathfinding.ts:15](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/pathfinding.ts#L15)
+Defined in: [packages/types/src/pathfinding.ts:15](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/pathfinding.ts#L15)

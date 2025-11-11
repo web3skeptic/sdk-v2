@@ -6,7 +6,7 @@
 
 # Class: SdkError
 
-Defined in: [packages/sdk/src/errors.ts:19](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L19)
+Defined in: [packages/sdk/src/errors.ts:19](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L19)
 
 SDK-related errors
 
@@ -18,9 +18,11 @@ SDK-related errors
 
 ### Constructor
 
-> **new SdkError**(`message`, `options?`): `SdkError`
+```ts
+new SdkError(message, options?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L20)
+Defined in: [packages/sdk/src/errors.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L20)
 
 #### Parameters
 
@@ -52,15 +54,19 @@ Defined in: [packages/sdk/src/errors.ts:20](https://github.com/aboutcircles/sdk-
 
 #### Overrides
 
-`CirclesError<SdkErrorSource>.constructor`
+```ts
+CirclesError<SdkErrorSource>.constructor
+```
 
 ## Methods
 
 ### notInitialized()
 
-> `static` **notInitialized**(`component`): `SdkError`
+```ts
+static notInitialized(component): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L35)
+Defined in: [packages/sdk/src/errors.ts:35](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L35)
 
 Create error for uninitialized components
 
@@ -78,9 +84,11 @@ Create error for uninitialized components
 
 ### unsupportedOperation()
 
-> `static` **unsupportedOperation**(`operation`, `reason?`): `SdkError`
+```ts
+static unsupportedOperation(operation, reason?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:46](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L46)
+Defined in: [packages/sdk/src/errors.ts:46](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L46)
 
 Create error for unsupported operations
 
@@ -102,9 +110,11 @@ Create error for unsupported operations
 
 ### configError()
 
-> `static` **configError**(`message`, `context?`): `SdkError`
+```ts
+static configError(message, context?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:60](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L60)
+Defined in: [packages/sdk/src/errors.ts:60](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L60)
 
 Create error for configuration issues
 
@@ -126,9 +136,14 @@ Create error for configuration issues
 
 ### operationFailed()
 
-> `static` **operationFailed**(`operation`, `reason`, `cause?`): `SdkError`
+```ts
+static operationFailed(
+   operation, 
+   reason, 
+   cause?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:71](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L71)
+Defined in: [packages/sdk/src/errors.ts:71](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L71)
 
 Create error for failed operations
 
@@ -154,9 +169,11 @@ Create error for failed operations
 
 ### missingContractRunner()
 
-> `static` **missingContractRunner**(`operation?`): `SdkError`
+```ts
+static missingContractRunner(operation?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:83](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L83)
+Defined in: [packages/sdk/src/errors.ts:83](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L83)
 
 Create error for missing contract runner
 
@@ -174,9 +191,11 @@ Create error for missing contract runner
 
 ### avatarNotFound()
 
-> `static` **avatarNotFound**(`address`): `SdkError`
+```ts
+static avatarNotFound(address): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:99](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L99)
+Defined in: [packages/sdk/src/errors.ts:99](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L99)
 
 Create error for avatar not found
 
@@ -194,9 +213,11 @@ Create error for avatar not found
 
 ### invalidProfile()
 
-> `static` **invalidProfile**(`reason`, `context?`): `SdkError`
+```ts
+static invalidProfile(reason, context?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:110](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L110)
+Defined in: [packages/sdk/src/errors.ts:110](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L110)
 
 Create error for invalid profile
 
@@ -218,9 +239,14 @@ Create error for invalid profile
 
 ### profileOperationFailed()
 
-> `static` **profileOperationFailed**(`operation`, `reason`, `cause?`): `SdkError`
+```ts
+static profileOperationFailed(
+   operation, 
+   reason, 
+   cause?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:121](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L121)
+Defined in: [packages/sdk/src/errors.ts:121](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L121)
 
 Create error for profile operation failures
 
@@ -246,9 +272,14 @@ Create error for profile operation failures
 
 ### insufficientBalance()
 
-> `static` **insufficientBalance**(`required`, `available`, `token?`): `SdkError`
+```ts
+static insufficientBalance(
+   required, 
+   available, 
+   token?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:133](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L133)
+Defined in: [packages/sdk/src/errors.ts:133](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L133)
 
 Create error for insufficient balance
 
@@ -274,9 +305,11 @@ Create error for insufficient balance
 
 ### transactionDataExtractionFailed()
 
-> `static` **transactionDataExtractionFailed**(`dataType`, `reason?`): `SdkError`
+```ts
+static transactionDataExtractionFailed(dataType, reason?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:149](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L149)
+Defined in: [packages/sdk/src/errors.ts:149](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L149)
 
 Create error for transaction extraction failures
 
@@ -298,9 +331,14 @@ Create error for transaction extraction failures
 
 ### registrationFailed()
 
-> `static` **registrationFailed**(`avatarType`, `reason`, `cause?`): `SdkError`
+```ts
+static registrationFailed(
+   avatarType, 
+   reason, 
+   cause?): SdkError;
+```
 
-Defined in: [packages/sdk/src/errors.ts:165](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/sdk/src/errors.ts#L165)
+Defined in: [packages/sdk/src/errors.ts:165](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/sdk/src/errors.ts#L165)
 
 Create error for registration failures
 

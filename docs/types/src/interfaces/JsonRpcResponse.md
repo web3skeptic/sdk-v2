@@ -6,7 +6,7 @@
 
 # Interface: JsonRpcResponse\<TResult\>
 
-Defined in: [packages/types/src/rpc.ts:18](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/rpc.ts#L18)
+Defined in: [packages/types/src/rpc.ts:18](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/rpc.ts#L18)
 
 JSON-RPC response structure
 
@@ -20,42 +20,56 @@ JSON-RPC response structure
 
 ### jsonrpc
 
-> **jsonrpc**: `"2.0"`
+```ts
+jsonrpc: "2.0";
+```
 
-Defined in: [packages/types/src/rpc.ts:19](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/rpc.ts#L19)
+Defined in: [packages/types/src/rpc.ts:19](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/rpc.ts#L19)
 
 ***
 
 ### id
 
-> **id**: `string` \| `number`
+```ts
+id: string | number;
+```
 
-Defined in: [packages/types/src/rpc.ts:20](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/rpc.ts#L20)
+Defined in: [packages/types/src/rpc.ts:20](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/rpc.ts#L20)
 
 ***
 
 ### result?
 
-> `optional` **result**: `TResult`
+```ts
+optional result: TResult;
+```
 
-Defined in: [packages/types/src/rpc.ts:21](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/rpc.ts#L21)
+Defined in: [packages/types/src/rpc.ts:21](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/rpc.ts#L21)
 
 ***
 
 ### error?
 
-> `optional` **error**: `object`
+```ts
+optional error: object;
+```
 
-Defined in: [packages/types/src/rpc.ts:22](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/types/src/rpc.ts#L22)
+Defined in: [packages/types/src/rpc.ts:22](https://github.com/aboutcircles/sdk-v2/blob/aed3c8bf419f1e90d91722752d3f29c8257367c2/packages/types/src/rpc.ts#L22)
 
 #### code
 
-> **code**: `number`
+```ts
+code: number;
+```
 
 #### message
 
-> **message**: `string`
+```ts
+message: string;
+```
 
 #### data?
 
-> `optional` **data**: `unknown`
+```ts
+optional data: unknown;
+```
