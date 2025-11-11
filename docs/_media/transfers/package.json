@@ -1,0 +1,41 @@
+{
+  "name": "@aboutcircles/sdk-transfers",
+  "version": "0.1.0",
+  "description": "Transfer data construction for Circles SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo",
+    "test": "bun test"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "transfers",
+    "pathfinding",
+    "web3"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-core": "*",
+    "@aboutcircles/sdk-rpc": "*",
+    "@aboutcircles/sdk-utils": "*",
+    "@aboutcircles/sdk-pathfinder": "*",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

@@ -1,0 +1,75 @@
+[**Circles SDK**](../../../README.md)
+
+***
+
+[Circles SDK](../../../modules.md) / [profiles/src](../README.md) / Profiles
+
+# Class: Profiles
+
+Defined in: [packages/profiles/src/index.ts:5](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/profiles/src/index.ts#L5)
+
+## Constructors
+
+### Constructor
+
+> **new Profiles**(`profileServiceUrl`): `Profiles`
+
+Defined in: [packages/profiles/src/index.ts:6](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/profiles/src/index.ts#L6)
+
+#### Parameters
+
+##### profileServiceUrl
+
+`string`
+
+#### Returns
+
+`Profiles`
+
+## Methods
+
+### create()
+
+> **create**(`profile`): `Promise`\<`string`\>
+
+Defined in: [packages/profiles/src/index.ts:19](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/profiles/src/index.ts#L19)
+
+Creates and pins a new profile, returning its CID.
+
+#### Parameters
+
+##### profile
+
+`Profile`
+
+The profile data to pin.
+
+#### Returns
+
+`Promise`\<`string`\>
+
+The CID of the pinned profile.
+
+***
+
+### get()
+
+> **get**(`cid`): `Promise`\<`Profile` \| `undefined`\>
+
+Defined in: [packages/profiles/src/index.ts:41](https://github.com/aboutcircles/sdk-v2/blob/71cffbae585b19dfb4a8e752b25f9afcf9e11b66/packages/profiles/src/index.ts#L41)
+
+Retrieves a profile by its CID.
+
+#### Parameters
+
+##### cid
+
+`string`
+
+The CID of the profile to retrieve.
+
+#### Returns
+
+`Promise`\<`Profile` \| `undefined`\>
+
+The profile data, or undefined if not found.

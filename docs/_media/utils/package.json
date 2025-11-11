@@ -1,0 +1,33 @@
+{
+  "name": "@aboutcircles/sdk-utils",
+  "version": "0.1.0",
+  "description": "Utility functions for Circles SDK including demurrage calculations and conversions",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "demurrage",
+    "converter",
+    "utils"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@aboutcircles/sdk-types": "*",
+    "multiformats": "^13.4.1"
+  }
+}

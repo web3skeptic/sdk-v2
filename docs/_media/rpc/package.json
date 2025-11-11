@@ -1,0 +1,32 @@
+{
+  "name": "@aboutcircles/sdk-rpc",
+  "version": "0.1.0",
+  "description": "Circles RPC wrapper",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-utils": "*"
+  },
+  "devDependencies": {
+    "@esbuild-kit/esm-loader": "^2.6.5",
+    "@types/bun": "^1.2.23",
+    "esbuild": "^0.25.10",
+    "typescript": "^5.0.4"
+  }
+}

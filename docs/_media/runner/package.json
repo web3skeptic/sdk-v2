@@ -1,0 +1,38 @@
+{
+  "name": "@aboutcircles/sdk-runner",
+  "version": "0.1.0",
+  "description": "Contract runner implementations for Circles SDK",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist  --format esm && tsc --emitDeclarationOnly",
+    "dev": "tsc --build --watch",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "circles",
+    "runner",
+    "ethereum",
+    "viem"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@aboutcircles/sdk-types": "*",
+    "@safe-global/protocol-kit": "^5.1.1",
+    "@safe-global/safe-core-sdk-types": "^5.1.0",
+    "viem": "^2.38.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

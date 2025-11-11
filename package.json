@@ -2,6 +2,7 @@
   "devDependencies": {
     "@types/node": "^20.11.19",
     "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.0.4"
   },
   "license": "MIT",

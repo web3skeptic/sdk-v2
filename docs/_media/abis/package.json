@@ -1,0 +1,28 @@
+{
+  "name": "@aboutcircles/sdk-abis",
+  "version": "0.1.0",
+  "description": "Circles Contract ABIs",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build ./src/index.ts --outdir ./dist --format esm --splitting && tsc --emitDeclarationOnly",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "abitype": "^1.1.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}

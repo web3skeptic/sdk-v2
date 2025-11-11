@@ -2,36 +2,40 @@
 
 A comprehensive TypeScript SDK for the Circles protocol.
 
-## Overview
+## 📚 API Documentation
 
-The Circles SDK consists of two main packages:
+**[View Complete API Documentation →](./docs/README.md)**
 
-- **[@circles-sdk/core](./packages/core/)** - Contract wrappers for direct blockchain interaction
-- **[@circles-sdk/rpc](./packages/rpc/)** - RPC client for querying Circles data and finding transfer paths
+Package documentation:
+- [@aboutcircles/sdk](./docs/sdk/src/README.md) - Main SDK package
+- [@aboutcircles/sdk-core](./docs/core/src/README.md) - Contract wrappers
+- [@aboutcircles/sdk-rpc](./docs/rpc/src/README.md) - RPC client
+- [@aboutcircles/sdk-types](./docs/types/src/README.md) - TypeScript types
+- [@aboutcircles/sdk-abis](./docs/abis/src/README.md) - Contract ABIs
+- [@aboutcircles/sdk-utils](./docs/utils/src/README.md) - Utilities
+- [@aboutcircles/sdk-profiles](./docs/profiles/src/README.md) - Profile management
+- [@aboutcircles/sdk-pathfinder](./docs/pathfinder/src/README.md) - Transfer pathfinding
+- [@aboutcircles/sdk-transfers](./docs/transfers/src/README.md) - Transitive transfer operations
+- [@aboutcircles/sdk-runner](./docs/runner/src/README.md) - Transaction execution
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Installation
 
 ```bash
-# Install dependencies
 bun install
-
-# Build all packages
 bun run build
 ```
 
 ### Basic Usage
 
-#### Core SDK - Contract Interaction
+**Core SDK - Contract Interaction**
 
 ```typescript
-import { Core } from '@circles-sdk/core';
+import { Core } from '@aboutcircles/sdk-core';
 
-// Initialize with default Gnosis Chain configuration
 const core = new Core();
 
-// Create a group mint transaction
 const tx = core.hubV2.groupMint(
   '0x1234567890123456789012345678901234567890',
   ['0xRecipient1', '0xRecipient2'],
@@ -40,18 +44,17 @@ const tx = core.hubV2.groupMint(
 );
 ```
 
-#### RPC SDK - Data Queries
+**RPC SDK - Data Queries**
 
 ```typescript
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
 
-// Initialize RPC client
 const rpc = new CirclesRpc('https://rpc.circlesubi.network/');
 
-// Get total balance
+// Get balance
 const balance = await rpc.circlesV2.getTotalBalance('0xYourAddress');
 
-// Find a transfer path
+// Find transfer path
 const path = await rpc.circlesV2.findPath({
   from: '0xSenderAddress',
   to: '0xRecipientAddress',
@@ -59,136 +62,65 @@ const path = await rpc.circlesV2.findPath({
 });
 ```
 
-## Examples
+## 📦 Packages
 
-Comprehensive examples are available in the [`examples/`](./examples/) directory:
+- **[@aboutcircles/sdk](./packages/sdk/)** - Main SDK package
+- **[@aboutcircles/sdk-core](./packages/core/)** - Contract wrappers for direct blockchain interaction
+- **[@aboutcircles/sdk-rpc](./packages/rpc/)** - RPC client for querying Circles data and pathfinding
+- **[@aboutcircles/sdk-types](./packages/types/)** - Shared TypeScript types
+- **[@aboutcircles/sdk-abis](./packages/abis/)** - Contract ABIs
+- **[@aboutcircles/sdk-utils](./packages/utils/)** - Utility functions
+- **[@aboutcircles/sdk-profiles](./packages/profiles/)** - Profile management
+- **[@aboutcircles/sdk-pathfinder](./packages/pathfinder/)** - Transfer pathfinding algorithms
+- **[@aboutcircles/sdk-transfers](./packages/transfers/)** - Transfer operations
+- **[@aboutcircles/sdk-runner](./packages/runner/)** - Transaction execution
 
-### Core SDK Examples
+## 💡 Examples
 
-- **[01-basic-usage.ts](./examples/core/01-basic-usage.ts)** - SDK initialization and configuration
-- **[02-hubv2-examples.ts](./examples/core/02-hubv2-examples.ts)** - HubV2 contract operations
-- **[03-basegroup-examples.ts](./examples/core/03-basegroup-examples.ts)** - BaseGroup creation and management
+Explore comprehensive examples in the [`examples/`](./examples/) directory:
 
-### RPC SDK Examples
+**Core SDK:**
+- [Basic Usage](./examples/core/01-basic-usage.ts) - SDK initialization
+- [HubV2 Operations](./examples/core/02-hubv2-examples.ts) - Contract operations
+- [BaseGroup Management](./examples/core/03-basegroup-examples.ts) - Group creation
 
-- **[01-basic-rpc.ts](./examples/rpc/01-basic-rpc.ts)** - RPC client configuration
-- **[02-circlesv2-balance-and-pathfinding.ts](./examples/rpc/02-circlesv2-balance-and-pathfinding.ts)** - Balance queries and pathfinding
-- **[03-query-examples.ts](./examples/rpc/03-query-examples.ts)** - Advanced query operations
-- **[04-trust-examples.ts](./examples/rpc/04-trust-examples.ts)** - Trust relationship queries
-- **[05-balance-examples.ts](./examples/rpc/05-balance-examples.ts)** - Token balance operations
-- **[06-avatar-examples.ts](./examples/rpc/06-avatar-examples.ts)** - Avatar information queries
-- **[07-profile-examples.ts](./examples/rpc/07-profile-examples.ts)** - Profile operations
+**RPC SDK:**
+- [RPC Client](./examples/rpc/01-basic-rpc.ts) - Client configuration
+- [Balance & Pathfinding](./examples/rpc/02-circlesv2-balance-and-pathfinding.ts)
+- [Trust Relations](./examples/rpc/04-trust-examples.ts)
+- [Avatar Info](./examples/rpc/06-avatar-examples.ts)
+- [Profiles](./examples/rpc/07-profile-examples.ts)
 
-### Running Examples
+[View all examples →](./examples/README.md)
+
+**Run examples:**
+```bash
+bun run examples                           # All examples
+bun run examples/core/01-basic-usage.ts    # Specific example
+```
+
+## 🛠️ Development
 
 ```bash
-# Run all examples
-bun run examples
+# Build
+bun run build              # All packages
+bun run build:core         # Core package
+bun run build:rpc          # RPC package
 
-# Run core examples only
-bun run example:core
+# Development (watch mode)
+bun run dev               # All packages
+bun run dev:core          # Core package
 
-# Run RPC examples only
-bun run example:rpc
+# Documentation
+bun run docs              # Generate API docs
 
-# Run individual example
-bun run examples/core/01-basic-usage.ts
+# Publishing
+bun run publish           # Build and publish all packages
+
+# Clean
+bun run clean             # Remove build artifacts
 ```
 
-See the [Examples README](./examples/README.md) for detailed documentation.
-
-## Packages
-
-### @circles-sdk/core
-
-Contract wrappers for direct blockchain interaction with the Circles protocol.
-
-**Features:**
-- Full TypeScript type safety with abitype
-- HubV2 contract wrapper (singleton)
-- BaseGroup contract wrapper (multiple instances)
-- BaseGroupFactory for creating groups
-- Custom RPC URL support
-
-[View Core SDK Documentation →](./packages/core/README.md)
-
-### @circles-sdk/rpc
-
-RPC client for querying Circles data and finding transfer paths.
-
-**Features:**
-- CirclesV2 methods (balance, pathfinding)
-- Query operations (tables, events, custom queries)
-- Trust relationship operations
-- Balance operations
-- Avatar information queries
-- Profile operations
-- All numeric values returned as `bigint` for safe handling
-
-[View RPC SDK Documentation →](./packages/rpc/README.md)
-
-## Development
-
-### Building
-
-```bash
-# Build all packages
-bun run build
-
-# Build specific package
-bun run build:core
-bun run build:rpc
-```
-
-### Development Mode
-
-```bash
-# Watch mode for all packages
-bun run dev
-
-# Watch mode for specific package
-bun run dev:core
-bun run dev:rpc
-```
-
-### Clean
-
-```bash
-# Remove all build artifacts and node_modules
-bun run clean
-```
-
-## Project Structure
-
-```
-new-sdk/
-├── examples/              # Comprehensive SDK examples
-│   ├── core/             # Core SDK examples
-│   └── rpc/              # RPC SDK examples
-├── packages/
-│   ├── core/             # Contract wrapper package
-│   └── rpc/              # RPC client package
-├── package.json          # Workspace configuration
-└── tsconfig.json         # TypeScript configuration
-```
-
-## Scripts
-
-- `bun run build` - Build all packages
-- `bun run build:core` - Build core package
-- `bun run build:rpc` - Build RPC package
-- `bun run dev` - Watch mode for all packages
-- `bun run dev:core` - Watch mode for core package
-- `bun run dev:rpc` - Watch mode for RPC package
-- `bun run examples` - Run all examples
-- `bun run example:core` - Run core examples
-- `bun run example:rpc` - Run RPC examples
-- `bun run clean` - Clean build artifacts and node_modules
-
-## TypeScript
-
-This project uses TypeScript with strict type checking. Type definitions are automatically generated during the build process.
-
-## License
+## 📄 License
 
 MIT

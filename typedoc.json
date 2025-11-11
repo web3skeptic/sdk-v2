@@ -14,6 +14,7 @@
   "out": "docs",
   "readme": "README.md",
   "name": "Circles SDK",
+  "plugin": ["typedoc-plugin-markdown"],
   "includeVersion": true,
   "categorizeByGroup": true,
   "exclude": [
@@ -23,8 +24,6 @@
     "**/dist/**"
   ],
   "sort": ["source-order"],
-  "theme": "default",
-  "titleLink": "https://github.com/aboutcircles/sdk",
   "logLevel": "Info",
   "visibilityFilters": {
     "protected": true,
