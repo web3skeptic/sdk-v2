@@ -15,9 +15,17 @@ export { SdkError } from './errors';
 export type { SdkErrorSource } from './errors';
 
 // Re-export types from other packages for convenience
-export type { AggregatedTrustRelation, TrustRelationType, CirclesEvent, CirclesEventType, Observable } from '@circles-sdk-v2/rpc';
-export type { TransactionHistoryRow, AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery, GroupType } from '@circles-sdk-v2/types';
-export type { ContractRunner } from '@circles-sdk-v2/runner';
+export type {
+  AggregatedTrustRelation,
+  TrustRelationType,
+  CirclesEvent,
+  CirclesEventType,
+  Observable,
+  TransactionHistoryRow,
+  SearchResultProfile,
+  GroupTokenHolderRow,
+} from '@circles-sdk-v2/rpc';
+export type { AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery, GroupType, ContractRunner } from '@circles-sdk-v2/types';
 
 // SDK-specific types
 export type { CirclesData } from './types';

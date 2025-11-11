@@ -1,14 +1,6 @@
 import { Contract } from './contract';
 import { invitationEscrowAbi } from '@circles-sdk-v2/abis';
-import type { Address, TransactionRequest } from '@circles-sdk-v2/types';
-
-/**
- * Escrowed Amount and Days Result
- */
-export interface EscrowedAmountAndDays {
-  escrowedAmount: bigint;
-  days_: bigint;
-}
+import type { Address, TransactionRequest, EscrowedAmountAndDays } from '@circles-sdk-v2/types';
 
 /**
  * InvitationEscrow Contract Wrapper

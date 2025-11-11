@@ -1,17 +1,7 @@
 import type { RpcClient } from '../client';
 import type { Address, Profile } from '@circles-sdk-v2/types';
+import type { SearchResultProfile } from '../types';
 import { normalizeAddress } from '../utils';
-
-/**
- * Search result profile with additional metadata
- */
-export interface SearchResultProfile extends Profile {
-  address: Address;
-  avatarType?: string;
-  CID?: string;
-  lastUpdatedAt?: number;
-  registeredName?: string | null;
-}
 
 /**
  * Profile RPC methods

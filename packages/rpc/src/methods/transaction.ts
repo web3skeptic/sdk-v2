@@ -1,5 +1,6 @@
 import type { RpcClient } from '../client';
-import type { Address, TransactionHistoryRow, Filter } from '@circles-sdk-v2/types';
+import type { Address, Filter } from '@circles-sdk-v2/types';
+import type { TransactionHistoryRow } from '../types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { CirclesConverter } from '@circles-sdk-v2/utils';
 import { PagedQuery } from '../pagedQuery';

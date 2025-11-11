@@ -18,9 +18,17 @@ export {
   GroupMethods,
 } from './methods';
 
-// Types
-export type { TrustRelationType, AggregatedTrustRelation, GroupTokenHolderRow, SearchResultProfile } from './methods';
-export type { TransactionHistoryRow } from '@circles-sdk-v2/types';
+// RPC-specific types
+export type {
+  TransactionHistoryRow,
+  SearchResultProfile,
+  GroupTokenHolderRow,
+  CursorColumn,
+  FlexiblePagedResult,
+} from './types';
+
+// Re-export shared types from @circles-sdk-v2/types for convenience
+export type { TrustRelationType, AggregatedTrustRelation } from '@circles-sdk-v2/types';
 
 // Error handling
 export { RpcError } from './errors';

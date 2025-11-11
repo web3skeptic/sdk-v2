@@ -1,20 +1,18 @@
 import type {
   Address,
+  ContractRunner,
   Profile,
   AdvancedTransferOptions,
   FindPathParams,
   AvatarRow,
   TokenBalanceRow,
-  TransactionHistoryRow,
-} from '@circles-sdk-v2/types';
+  AggregatedTrustRelation } from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk-v2/core';
-import type { ContractRunner } from '@circles-sdk-v2/runner';
-import type { Observable, CirclesEvent } from '@circles-sdk-v2/rpc';
-import { Observable as ObservableClass } from '@circles-sdk-v2/rpc';
+import type { CirclesEvent, Observable } from '@circles-sdk-v2/rpc';
+import { Observable as ObservableClass, CirclesRpc } from '@circles-sdk-v2/rpc';
 import { cidV0ToHex, bytesToHex, ValidationError } from '@circles-sdk-v2/utils';
 import { Profiles } from '@circles-sdk-v2/profiles';
-import { CirclesRpc, type AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 import { SdkError } from '../errors';
 import {
   CirclesType,

@@ -1,14 +1,9 @@
 import type { RpcClient } from '../client';
-import type { Address, AvatarInfo, TokenBalance } from '@circles-sdk-v2/types';
+import type { Address, AvatarInfo, TokenBalance, CirclesQueryResponse } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface InviterRow {
   inviter: Address;
-}
-
-interface QueryResponse {
-  columns: string[];
-  rows: any[][];
 }
 
 /**
@@ -17,7 +12,7 @@ interface QueryResponse {
 export class InvitationMethods {
   constructor(private client: RpcClient) {}
 
-  private transformQueryResponse<T>(response: QueryResponse): T[] {
+  private transformQueryResponse<T>(response: CirclesQueryResponse): T[] {
     const { columns, rows } = response;
     return rows.map((row) => {
       const obj: any = {};
@@ -103,7 +98,7 @@ export class InvitationMethods {
     }
 
     // Get trust relations where others trust this avatar
-    const response = await this.client.call<[any], QueryResponse>('circles_query', [
+    const response = await this.client.call<[any], CirclesQueryResponse>('circles_query', [
       {
         Namespace: 'V_Crc',
         Table: 'TrustRelations',
@@ -197,7 +192,7 @@ export class InvitationMethods {
 
     if (accepted) {
       // Query for accounts that have registered using this avatar as inviter
-      const response = await this.client.call<[any], QueryResponse>('circles_query', [
+      const response = await this.client.call<[any], CirclesQueryResponse>('circles_query', [
         {
           Namespace: 'CrcV2',
           Table: 'RegisterHuman',
@@ -224,7 +219,7 @@ export class InvitationMethods {
       return checksumAddresses(avatars);
     } else {
       // Find accounts that this avatar trusts without mutual trust
-      const response = await this.client.call<[any], QueryResponse>('circles_query', [
+      const response = await this.client.call<[any], CirclesQueryResponse>('circles_query', [
         {
           Namespace: 'V_Crc',
           Table: 'TrustRelations',

@@ -1,21 +1,7 @@
 import type { RpcClient } from '../client';
-import type { Address, TrustRelation, Filter } from '@circles-sdk-v2/types';
+import type { Address, TrustRelation, Filter, CirclesQueryResponse, TrustRelationType, AggregatedTrustRelation } from '@circles-sdk-v2/types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { PagedQuery } from '../pagedQuery';
-
-interface QueryResponse {
-  columns: string[];
-  rows: any[][];
-}
-
-export type TrustRelationType = 'trusts' | 'trustedBy' | 'mutuallyTrusts';
-
-export interface AggregatedTrustRelation {
-  subjectAvatar: Address;
-  relation: TrustRelationType;
-  objectAvatar: Address;
-  timestamp: number;
-}
 
 /**
  * Trust relation RPC methods
@@ -23,7 +9,7 @@ export interface AggregatedTrustRelation {
 export class TrustMethods {
   constructor(private client: RpcClient) {}
 
-  private transformQueryResponse<T>(response: QueryResponse): T[] {
+  private transformQueryResponse<T>(response: CirclesQueryResponse): T[] {
     const { columns, rows } = response;
     return rows.map((row) => {
       const obj: any = {};

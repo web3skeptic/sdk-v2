@@ -1,21 +1,23 @@
 import type {
   Address,
   CirclesConfig,
+  ContractRunner,
   Profile,
   AvatarInfo,
   TokenBalance,
-  SortOrder
+  SortOrder,
+  AggregatedTrustRelation
 } from '@circles-sdk-v2/types';
+import type { GroupTokenHolderRow } from '@circles-sdk-v2/rpc';
 import { circlesConfig, Core, CirclesType, BaseGroupContract } from '@circles-sdk-v2/core';
-import { CirclesRpc, type AggregatedTrustRelation, PagedQuery, type GroupTokenHolderRow } from '@circles-sdk-v2/rpc';
 import { Profiles } from '@circles-sdk-v2/profiles';
+import { CirclesRpc, PagedQuery } from '@circles-sdk-v2/rpc';
 import { cidV0ToHex } from '@circles-sdk-v2/utils';
 import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 import { SdkError } from './errors';
 import { decodeEventLog } from 'viem';
 import { baseGroupFactoryAbi } from '@circles-sdk-v2/abis';
 import type { GroupType } from '@circles-sdk-v2/types';
-import type { ContractRunner } from '@circles-sdk-v2/runner';
 import type { CirclesData } from './types';
 
 

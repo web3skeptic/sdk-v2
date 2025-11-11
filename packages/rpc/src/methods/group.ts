@@ -1,18 +1,8 @@
 import type { RpcClient } from '../client';
 import type { Address, GroupRow, GroupMembershipRow, GroupQueryParams, Filter } from '@circles-sdk-v2/types';
+import type { GroupTokenHolderRow } from '../types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { PagedQuery } from '../pagedQuery';
-
-/**
- * Row type for GroupTokenHoldersBalance view table
- */
-export interface GroupTokenHolderRow {
-  group: Address;
-  holder: Address;
-  totalBalance: bigint;
-  demurragedTotalBalance: bigint;
-  fractionOwnership: number;
-}
 
 /**
  * Group query RPC methods

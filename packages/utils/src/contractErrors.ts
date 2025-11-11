@@ -4,19 +4,9 @@
  */
 
 import type { Abi } from 'abitype';
+import type { DecodedContractError } from '@circles-sdk-v2/types';
 import { decodeErrorResult } from './abi';
 import { CirclesError } from './errors';
-
-/**
- * Decoded contract error information
- */
-export interface DecodedContractError {
-  errorName: string;
-  args?: any[];
-  selector: string;
-  rawData: string;
-  formattedMessage: string;
-}
 
 /**
  * Contract error codes mapping

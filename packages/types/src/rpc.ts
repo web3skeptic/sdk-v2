@@ -25,3 +25,21 @@ export interface JsonRpcResponse<TResult = unknown> {
     data?: unknown;
   };
 }
+
+/**
+ * Circles query response format
+ * Used for circles_query RPC method results
+ */
+export interface CirclesQueryResponse {
+  columns: string[];
+  rows: any[][];
+}
+
+/**
+ * Generic query response wrapper
+ * Used for internal query transformations and type-safe responses
+ */
+export interface QueryResponse<T = unknown> {
+  result: T;
+  error?: unknown;
+}

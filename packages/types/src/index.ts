@@ -15,7 +15,7 @@ export type {
 } from './base';
 
 // JSON-RPC types
-export type { JsonRpcRequest, JsonRpcResponse } from './rpc';
+export type { JsonRpcRequest, JsonRpcResponse, CirclesQueryResponse, QueryResponse } from './rpc';
 
 // Query and filter types
 export type {
@@ -41,10 +41,7 @@ export type { AvatarInfo, Profile, GroupProfile } from './avatar';
 export type { TokenBalance, TokenInfo, TokenHolder } from './token';
 
 // Trust relation types
-export type { TrustRelation } from './trust';
-
-// Transaction types
-export type { TransactionHistoryRow } from './transaction';
+export type { TrustRelation, TrustRelationType, AggregatedTrustRelation } from './trust';
 
 // Group types
 export type { GroupRow, GroupMembershipRow, GroupQueryParams } from './group';
@@ -74,3 +71,16 @@ export type { WrappedTokenInfo, WrappedTokensRecord } from './wrapper';
 // SDK types
 export { GroupType } from './sdk';
 export type { AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery } from './sdk';
+
+// Event types
+export type { CirclesBaseEvent, CirclesEventType, CirclesEvent, CirclesEventOfType, RpcSubscriptionEvent } from './events';
+
+
+// Runner types
+export type { BatchRun, ContractRunner } from './runner';
+
+// Contract types
+export type { EscrowedAmountAndDays } from './contracts';
+
+// Error types
+export type { DecodedContractError } from './errors';

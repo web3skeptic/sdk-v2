@@ -1,16 +1,16 @@
 import type {
   Address,
   AvatarRow,
+  ContractRunner,
   TokenBalanceRow,
+  AggregatedTrustRelation
 } from '@circles-sdk-v2/types';
 import type { TransactionReceipt } from 'viem';
 import type { Core } from '@circles-sdk-v2/core';
-import type { ContractRunner } from '@circles-sdk-v2/runner';
 import { ValidationError } from '@circles-sdk-v2/utils';
 import { SdkError } from '../errors';
 import { BaseGroupContract } from '@circles-sdk-v2/core';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
-import type { AggregatedTrustRelation } from '@circles-sdk-v2/rpc';
 
 /**
  * OrganisationAvatar class implementation

@@ -1,39 +1,12 @@
 import type { RpcClient } from './client';
 import type {
-  Cursor,
   PagedQueryParams,
   Filter,
   OrderBy,
   QueryParams,
-  SortOrder,
+  CirclesQueryResponse,
 } from '@circles-sdk-v2/types';
-
-interface QueryResponse {
-  columns: string[];
-  rows: any[][];
-}
-
-/**
- * Configuration for a cursor column in pagination
- */
-export interface CursorColumn {
-  name: string;
-  sortOrder: SortOrder;
-  toValue?: (value: any) => string | number | boolean;
-}
-
-/**
- * Flexible paged result that works with both event-based and custom cursors
- */
-export interface FlexiblePagedResult<TRow> {
-  limit: number;
-  size: number;
-  firstCursor?: Cursor | Record<string, any>;
-  lastCursor?: Cursor | Record<string, any>;
-  sortOrder: SortOrder;
-  hasMore: boolean;
-  results: TRow[];
-}
+import type { CursorColumn, FlexiblePagedResult } from './types';
 
 /**
  * Cursor configuration for different table types
@@ -252,7 +225,7 @@ export class PagedQuery<TRow = any> {
   /**
    * Converts query response rows to typed objects
    */
-  private rowsToObjects(response: QueryResponse): TRow[] {
+  private rowsToObjects(response: CirclesQueryResponse): TRow[] {
     const { columns, rows } = response;
 
     return rows.map(row => {
@@ -308,7 +281,7 @@ export class PagedQuery<TRow = any> {
       Limit: this.params.limit,
     };
 
-    const response = await this.client.call<[QueryParams], QueryResponse>('circles_query', [queryParams]);
+    const response = await this.client.call<[QueryParams], CirclesQueryResponse>('circles_query', [queryParams]);
     const results = this.rowsToObjects(response);
     const cursors = this.getCursors(results);
 

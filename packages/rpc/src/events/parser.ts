@@ -1,12 +1,4 @@
-import type { CirclesEvent } from './types';
-
-/**
- * RPC subscription event structure from the WebSocket
- */
-export type RpcSubscriptionEvent = {
-  event: string;
-  values: Record<string, string>;
-};
+import type { CirclesEvent, RpcSubscriptionEvent } from './types';
 
 /**
  * Helper to convert hex string to bigint

@@ -17,3 +17,12 @@ export interface TrustRelation {
   trustee: Address;
   expiryTime: number;
 }
+
+export type TrustRelationType = 'trusts' | 'trustedBy' | 'mutuallyTrusts';
+
+export interface AggregatedTrustRelation {
+  subjectAvatar: Address;
+  relation: TrustRelationType;
+  objectAvatar: Address;
+  timestamp: number;
+}

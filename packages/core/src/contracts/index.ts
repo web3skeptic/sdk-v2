@@ -9,5 +9,5 @@ export { InflationaryCirclesContract } from './inflationaryCircles';
 export { DemurrageCirclesContract } from './demurrageCircles';
 export { LiftERC20Contract } from './liftERC20';
 export { CirclesType } from '@circles-sdk-v2/types';
-export { InvitationEscrowContract, type EscrowedAmountAndDays } from './invitationEscrow';
+export { InvitationEscrowContract } from './invitationEscrow';
 export { Contract } from './contract';

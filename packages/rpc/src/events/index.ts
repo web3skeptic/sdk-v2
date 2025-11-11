@@ -8,12 +8,12 @@ export type {
   CirclesEventType,
   CirclesBaseEvent,
   CirclesEventOfType,
+  RpcSubscriptionEvent,
 } from './types';
 
 export { isCirclesEvent } from './types';
 
 // Parser
-export type { RpcSubscriptionEvent } from './parser';
 export { parseRpcEvent, parseRpcSubscriptionMessage } from './parser';
 
 // Observable
