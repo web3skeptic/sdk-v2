@@ -37,7 +37,9 @@
     "dev:sdk": "bun run --filter '@aboutcircles/sdk' dev",
     "docs": "typedoc",
     "docs:watch": "typedoc --watch",
-    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules packages/*/tsconfig.tsbuildinfo tsconfig.tsbuildinfo docs"
+    "clean": "rm -rf packages/*/dist packages/*/node_modules node_modules packages/*/tsconfig.tsbuildinfo tsconfig.tsbuildinfo docs",
+    "publish": "bun run build && bun run publish:all",
+    "publish:all": "bun scripts/publish.ts"
   },
   "workspaces": [
     "packages/types",
