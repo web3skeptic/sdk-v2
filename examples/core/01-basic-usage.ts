@@ -1,4 +1,4 @@
-import { Core, circlesConfig } from '@circles-sdk/core';
+import { Core, circlesConfig } from '@aboutcircles/sdk-core';
 
 /**
  * Basic Usage Examples

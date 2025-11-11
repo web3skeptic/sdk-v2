@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/runner",
+  "name": "@aboutcircles/sdk-runner",
   "version": "0.1.0",
   "description": "Contract runner implementations for Circles SDK",
   "type": "module",
@@ -27,7 +27,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/types": "*",
+    "@aboutcircles/sdk-types": "*",
     "@safe-global/protocol-kit": "^5.1.1",
     "@safe-global/safe-core-sdk-types": "^5.1.0",
     "viem": "^2.38.0"

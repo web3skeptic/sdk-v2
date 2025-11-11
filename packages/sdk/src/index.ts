@@ -24,8 +24,8 @@ export type {
   TransactionHistoryRow,
   SearchResultProfile,
   GroupTokenHolderRow,
-} from '@circles-sdk-v2/rpc';
-export type { AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery, GroupType, ContractRunner } from '@circles-sdk-v2/types';
+} from '@aboutcircles/sdk-rpc';
+export type { AvatarRow, TokenBalanceRow, TrustRelationRow, CirclesQuery, GroupType, ContractRunner } from '@aboutcircles/sdk-types';
 
 // SDK-specific types
 export type { CirclesData } from './types';

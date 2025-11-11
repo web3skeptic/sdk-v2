@@ -4,7 +4,7 @@
  */
 
 import type { Abi } from 'abitype';
-import type { DecodedContractError } from '@circles-sdk-v2/types';
+import type { DecodedContractError } from '@aboutcircles/sdk-types';
 import { decodeErrorResult } from './abi';
 import { CirclesError } from './errors';
 

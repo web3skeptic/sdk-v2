@@ -1,6 +1,6 @@
-import type { PathfindingResult, TransferStep, Address, TokenInfo, WrappedTokenInfo, WrappedTokensRecord } from '@circles-sdk-v2/types';
-import { CirclesRpc } from '@circles-sdk-v2/rpc';
-import { CirclesConverter } from '@circles-sdk-v2/utils';
+import type { PathfindingResult, TransferStep, Address, TokenInfo, WrappedTokenInfo, WrappedTokensRecord } from '@aboutcircles/sdk-types';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
+import { CirclesConverter } from '@aboutcircles/sdk-utils';
 
 export async function getTokenInfoMapFromPath(
   currentAvatar: Address,

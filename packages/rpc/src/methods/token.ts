@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, TokenInfo, TokenHolder, SortOrder } from '@circles-sdk-v2/types';
+import type { Address, TokenInfo, TokenHolder, SortOrder } from '@aboutcircles/sdk-types';
 import { normalizeAddress, parseStringsToBigInt, checksumAddresses } from '../utils';
 import { PagedQuery } from '../pagedQuery';
 

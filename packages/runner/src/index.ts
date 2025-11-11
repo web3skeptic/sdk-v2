@@ -1,5 +1,5 @@
 /**
- * @circles-sdk-v2/runner
+ * @aboutcircles/sdk-runner
  *
  * Contract runner implementations for executing blockchain operations.
  * Provides Safe multisig wallet integration for transaction execution.

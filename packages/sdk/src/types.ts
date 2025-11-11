@@ -3,7 +3,7 @@ import type {
   AvatarInfo,
   TokenBalance,
   AggregatedTrustRelation
-} from '@circles-sdk-v2/types';
+} from '@aboutcircles/sdk-types';
 
 
 /**

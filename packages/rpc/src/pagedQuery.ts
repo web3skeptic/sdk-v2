@@ -5,7 +5,7 @@ import type {
   OrderBy,
   QueryParams,
   CirclesQueryResponse,
-} from '@circles-sdk-v2/types';
+} from '@aboutcircles/sdk-types';
 import type { CursorColumn, FlexiblePagedResult } from './types';
 
 /**

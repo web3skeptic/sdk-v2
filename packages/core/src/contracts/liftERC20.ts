@@ -1,7 +1,7 @@
 import { Contract } from './contract';
-import { liftERC20Abi } from '@circles-sdk-v2/abis';
-import type { Address, TransactionRequest, Hex } from '@circles-sdk-v2/types';
-import { CirclesType } from '@circles-sdk-v2/types';
+import { liftERC20Abi } from '@aboutcircles/sdk-abis';
+import type { Address, TransactionRequest, Hex } from '@aboutcircles/sdk-types';
+import { CirclesType } from '@aboutcircles/sdk-types';
 
 /**
  * LiftERC20 Contract Wrapper

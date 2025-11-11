@@ -1,6 +1,6 @@
 import { Contract } from './contract';
-import { hubV2Abi } from '@circles-sdk-v2/abis';
-import type { Address, TransactionRequest, Hex } from '@circles-sdk-v2/types';
+import { hubV2Abi } from '@aboutcircles/sdk-abis';
+import type { Address, TransactionRequest, Hex } from '@aboutcircles/sdk-types';
 
 /**
  * HubV2 Contract Wrapper

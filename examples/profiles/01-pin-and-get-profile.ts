@@ -1,4 +1,4 @@
-import { Profiles, type Profile } from '@circles-sdk/profiles';
+import { Profiles, type Profile } from '@aboutcircles/sdk-profiles';
 
 /**
  * Profile Pinning Example

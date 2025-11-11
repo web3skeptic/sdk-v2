@@ -1,4 +1,4 @@
-import type { Address } from '@circles-sdk-v2/types';
+import type { Address } from '@aboutcircles/sdk-types';
 
 /**
  * Common constants used across the SDK

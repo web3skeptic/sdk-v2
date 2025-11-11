@@ -4,7 +4,7 @@
  * Demonstrates how to query transaction history for an address
  */
 
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
 
 const TEST_ADDRESS = '0xc7d3dF890952a327Af94D5Ba6fdC1Bf145188a1b';
 

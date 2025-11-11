@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/profiles",
+  "name": "@aboutcircles/sdk-profiles",
   "version": "0.1.0",
   "description": "Minimal IPFS/CID pinning service for Circles profiles",
   "type": "module",
@@ -28,7 +28,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/types": "*"
+    "@aboutcircles/sdk-types": "*"
   },
   "devDependencies": {
     "typescript": "^5.0.4"

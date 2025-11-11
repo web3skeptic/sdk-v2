@@ -1,4 +1,4 @@
-# @circles-sdk-v2/sdk
+# @aboutcircles/sdk
 
 Simplified Circles SDK for non-crypto users with a low entrance barrier. This package provides user-friendly abstractions over the Circles protocol, making it easier for developers to build applications without deep blockchain knowledge.
 
@@ -12,9 +12,9 @@ The SDK package provides two main models:
 ## Installation
 
 ```bash
-npm install @circles-sdk-v2/sdk
+npm install @aboutcircles/sdk
 # or
-bun add @circles-sdk-v2/sdk
+bun add @aboutcircles/sdk
 ```
 
 ## Usage
@@ -22,13 +22,13 @@ bun add @circles-sdk-v2/sdk
 ### Basic Setup
 
 ```typescript
-import { Sdk } from '@circles-sdk-v2/sdk';
+import { Sdk } from '@aboutcircles/sdk';
 
 // Create SDK instance with default configuration (Gnosis Chain)
 const sdk = new Sdk();
 
 // Or with custom configuration
-import { circlesConfig } from '@circles-sdk-v2/core';
+import { circlesConfig } from '@aboutcircles/sdk-core';
 const sdk = new Sdk(circlesConfig[100], 'https://custom-rpc.com');
 ```
 
@@ -229,11 +229,11 @@ Most features are marked with TODO and will throw errors:
 
 The SDK package wraps and simplifies the following packages:
 
-- `@circles-sdk-v2/core` - Core contract interactions
-- `@circles-sdk-v2/rpc` - RPC client for Circles-specific methods
-- `@circles-sdk-v2/profiles` - Profile management
-- `@circles-sdk-v2/types` - TypeScript type definitions
-- `@circles-sdk-v2/utils` - Utility functions
+- `@aboutcircles/sdk-core` - Core contract interactions
+- `@aboutcircles/sdk-rpc` - RPC client for Circles-specific methods
+- `@aboutcircles/sdk-profiles` - Profile management
+- `@aboutcircles/sdk-types` - TypeScript type definitions
+- `@aboutcircles/sdk-utils` - Utility functions
 
 ## Contributing
 

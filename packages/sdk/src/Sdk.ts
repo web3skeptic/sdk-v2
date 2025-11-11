@@ -7,17 +7,17 @@ import type {
   TokenBalance,
   SortOrder,
   AggregatedTrustRelation
-} from '@circles-sdk-v2/types';
-import type { GroupTokenHolderRow } from '@circles-sdk-v2/rpc';
-import { circlesConfig, Core, CirclesType, BaseGroupContract } from '@circles-sdk-v2/core';
-import { Profiles } from '@circles-sdk-v2/profiles';
-import { CirclesRpc, PagedQuery } from '@circles-sdk-v2/rpc';
-import { cidV0ToHex } from '@circles-sdk-v2/utils';
+} from '@aboutcircles/sdk-types';
+import type { GroupTokenHolderRow } from '@aboutcircles/sdk-rpc';
+import { circlesConfig, Core, CirclesType, BaseGroupContract } from '@aboutcircles/sdk-core';
+import { Profiles } from '@aboutcircles/sdk-profiles';
+import { CirclesRpc, PagedQuery } from '@aboutcircles/sdk-rpc';
+import { cidV0ToHex } from '@aboutcircles/sdk-utils';
 import { HumanAvatar, OrganisationAvatar, BaseGroupAvatar } from './avatars';
 import { SdkError } from './errors';
 import { decodeEventLog } from 'viem';
-import { baseGroupFactoryAbi } from '@circles-sdk-v2/abis';
-import type { GroupType } from '@circles-sdk-v2/types';
+import { baseGroupFactoryAbi } from '@aboutcircles/sdk-abis';
+import type { GroupType } from '@aboutcircles/sdk-types';
 import type { CirclesData } from './types';
 
 

@@ -1,4 +1,4 @@
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
 // @todo update the naming `getTotalBalance` is moved to a different place
 /**
  * CirclesV2 Balance and Pathfinding Examples

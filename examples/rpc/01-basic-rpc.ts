@@ -1,4 +1,4 @@
-import { CirclesRpc } from '@circles-sdk/rpc';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
 
 /**
  * Basic RPC Configuration Examples

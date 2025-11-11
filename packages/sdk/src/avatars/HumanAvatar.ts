@@ -6,12 +6,12 @@ import type {
   GroupMembershipRow,
   GroupRow,
   AggregatedTrustRelation
-} from '@circles-sdk-v2/types';
+} from '@aboutcircles/sdk-types';
 import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk-v2/core';
-import { ValidationError } from '@circles-sdk-v2/utils';
+import type { Core } from '@aboutcircles/sdk-core';
+import { ValidationError } from '@aboutcircles/sdk-utils';
 import { SdkError } from '../errors';
-import { BaseGroupContract } from '@circles-sdk-v2/core';
+import { BaseGroupContract } from '@aboutcircles/sdk-core';
 import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import { CommonAvatar, type PathfindingOptions } from './CommonAvatar';
 

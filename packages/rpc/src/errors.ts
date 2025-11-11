@@ -2,7 +2,7 @@
  * RPC Package Error Types
  */
 
-import { CirclesError } from '@circles-sdk-v2/utils';
+import { CirclesError } from '@aboutcircles/sdk-utils';
 
 /**
  * RPC-specific error sources

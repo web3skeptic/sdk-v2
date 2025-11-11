@@ -1,4 +1,4 @@
-import { Core } from '@circles-sdk/core';
+import { Core } from '@aboutcircles/sdk-core';
 
 /**
  * Check isHuman Example

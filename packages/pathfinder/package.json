@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/pathfinder",
+  "name": "@aboutcircles/sdk-pathfinder",
   "version": "0.1.0",
   "description": "Pathfinding utilities for Circles SDK",
   "type": "module",
@@ -25,9 +25,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@circles-sdk-v2/rpc": "*",
-    "@circles-sdk-v2/types": "*",
-    "@circles-sdk-v2/utils": "*",
+    "@aboutcircles/sdk-rpc": "*",
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-utils": "*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

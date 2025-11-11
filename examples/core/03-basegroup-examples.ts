@@ -1,4 +1,4 @@
-import { Core, BaseGroupContract } from '@circles-sdk/core';
+import { Core, BaseGroupContract } from '@aboutcircles/sdk-core';
 
 /**
  * BaseGroup Contract Examples

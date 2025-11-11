@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/rpc",
+  "name": "@aboutcircles/sdk-rpc",
   "version": "0.1.0",
   "description": "Circles RPC wrapper",
   "type": "module",
@@ -20,8 +20,8 @@
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@circles-sdk-v2/types": "*",
-    "@circles-sdk-v2/utils": "*"
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-utils": "*"
   },
   "devDependencies": {
     "@esbuild-kit/esm-loader": "^2.6.5",

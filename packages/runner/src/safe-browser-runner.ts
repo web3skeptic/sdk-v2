@@ -1,4 +1,4 @@
-import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
+import type { Address, Hex, TransactionRequest } from '@aboutcircles/sdk-types';
 import type { ContractRunner, BatchRun } from './runner';
 import type { PublicClient, TransactionReceipt, Chain } from 'viem';
 import type { EIP1193Provider } from 'viem';
@@ -38,7 +38,7 @@ export class SafeBrowserRunner implements ContractRunner {
    * ```typescript
    * import { createPublicClient, http } from 'viem';
    * import { gnosis } from 'viem/chains';
-   * import { SafeBrowserRunner } from '@circles-sdk-v2/runner';
+   * import { SafeBrowserRunner } from '@aboutcircles/sdk-runner';
    *
    * const publicClient = createPublicClient({
    *   chain: gnosis,
@@ -75,7 +75,7 @@ export class SafeBrowserRunner implements ContractRunner {
    * @example
    * ```typescript
    * import { gnosis } from 'viem/chains';
-   * import { SafeBrowserRunner } from '@circles-sdk-v2/runner';
+   * import { SafeBrowserRunner } from '@aboutcircles/sdk-runner';
    *
    * const runner = await SafeBrowserRunner.create(
    *   'https://rpc.gnosischain.com',

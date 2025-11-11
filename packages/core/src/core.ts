@@ -1,5 +1,5 @@
 import { HubV2Contract, BaseGroupFactoryContract, NameRegistryContract, LiftERC20Contract, InvitationEscrowContract } from './contracts';
-import type { CirclesConfig } from '@circles-sdk-v2/types';
+import type { CirclesConfig } from '@aboutcircles/sdk-types';
 import { circlesConfig } from './config';
 
 /**

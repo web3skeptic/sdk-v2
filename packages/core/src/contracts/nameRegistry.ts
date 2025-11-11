@@ -1,6 +1,6 @@
 import { Contract } from './contract';
-import { nameRegistryAbi } from '@circles-sdk-v2/abis';
-import type { Address, TransactionRequest, Hex } from '@circles-sdk-v2/types';
+import { nameRegistryAbi } from '@aboutcircles/sdk-abis';
+import type { Address, TransactionRequest, Hex } from '@aboutcircles/sdk-types';
 
 /**
  * NameRegistry Contract Wrapper

@@ -1,4 +1,4 @@
-import type { Address, Hex, TransactionRequest } from '@circles-sdk-v2/types';
+import type { Address, Hex, TransactionRequest } from '@aboutcircles/sdk-types';
 import type { ContractRunner, BatchRun } from './runner';
 import type { PublicClient, TransactionReceipt, Chain } from 'viem';
 import type { SafeTransaction } from '@safe-global/types-kit';
@@ -125,7 +125,7 @@ export class SafeContractRunner implements ContractRunner {
    * @example
    * ```typescript
    * import { gnosis } from 'viem/chains';
-   * import { SafeContractRunner } from '@circles-sdk-v2/runner';
+   * import { SafeContractRunner } from '@aboutcircles/sdk-runner';
    *
    * const runner = await SafeContractRunner.create(
    *   'https://rpc.gnosischain.com',

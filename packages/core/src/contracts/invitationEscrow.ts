@@ -1,6 +1,6 @@
 import { Contract } from './contract';
-import { invitationEscrowAbi } from '@circles-sdk-v2/abis';
-import type { Address, TransactionRequest, EscrowedAmountAndDays } from '@circles-sdk-v2/types';
+import { invitationEscrowAbi } from '@aboutcircles/sdk-abis';
+import type { Address, TransactionRequest, EscrowedAmountAndDays } from '@aboutcircles/sdk-types';
 
 /**
  * InvitationEscrow Contract Wrapper

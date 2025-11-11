@@ -16,8 +16,8 @@
  */
 
 import 'dotenv/config';
-import { Core } from '@circles-sdk/core';
-import { SafeContractRunner } from '@circles-sdk/runner';
+import { Core } from '@aboutcircles/sdk-core';
+import { SafeContractRunner } from '@aboutcircles/sdk-runner';
 import { createPublicClient, http } from 'viem';
 import { gnosis } from 'viem/chains';
 

@@ -1,14 +1,14 @@
-import type { Address, AdvancedTransferOptions, PathfindingResult } from '@circles-sdk-v2/types';
-import type { Core } from '@circles-sdk-v2/core';
+import type { Address, AdvancedTransferOptions, PathfindingResult } from '@aboutcircles/sdk-types';
+import type { Core } from '@aboutcircles/sdk-core';
 import {
   createFlowMatrix as createFlowMatrixUtil,
   getTokenInfoMapFromPath,
   getWrappedTokensFromPath,
   replaceWrappedTokensWithAvatars,
-} from '@circles-sdk-v2/pathfinder';
-import { CirclesRpc } from '@circles-sdk-v2/rpc';
-import { bytesToHex, CirclesConverter, encodeFunctionData, ZERO_ADDRESS } from '@circles-sdk-v2/utils';
-import { InflationaryCirclesContract, DemurrageCirclesContract, CirclesType } from '@circles-sdk-v2/core';
+} from '@aboutcircles/sdk-pathfinder';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
+import { bytesToHex, CirclesConverter, encodeFunctionData, ZERO_ADDRESS } from '@aboutcircles/sdk-utils';
+import { InflationaryCirclesContract, DemurrageCirclesContract, CirclesType } from '@aboutcircles/sdk-core';
 import { TransferError } from './errors';
 
 /**

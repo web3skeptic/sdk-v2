@@ -1,4 +1,4 @@
-import type { Address } from '@circles-sdk-v2/types';
+import type { Address } from '@aboutcircles/sdk-types';
 
 /**
  * Converts a uint256 value to an Ethereum address

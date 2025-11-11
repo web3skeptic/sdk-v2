@@ -1,5 +1,5 @@
-import { CirclesRpc } from '@circles-sdk/rpc';
-import { createFlowMatrix } from '@circles-sdk/pathfinder';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
+import { createFlowMatrix } from '@aboutcircles/sdk-pathfinder';
 
 /**
  * Pathfinder Example: Find Path and Create Flow Matrix

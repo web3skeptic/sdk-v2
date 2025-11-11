@@ -27,8 +27,8 @@ export type {
   FlexiblePagedResult,
 } from './types';
 
-// Re-export shared types from @circles-sdk-v2/types for convenience
-export type { TrustRelationType, AggregatedTrustRelation } from '@circles-sdk-v2/types';
+// Re-export shared types from @aboutcircles/sdk-types for convenience
+export type { TrustRelationType, AggregatedTrustRelation } from '@aboutcircles/sdk-types';
 
 // Error handling
 export { RpcError } from './errors';

@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/abis",
+  "name": "@aboutcircles/sdk-abis",
   "version": "0.1.0",
   "description": "Circles Contract ABIs",
   "type": "module",

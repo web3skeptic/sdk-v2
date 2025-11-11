@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'bun:test';
 import { checksumAddresses, normalizeAddress, checksumAddress } from '../utils';
-import type { Address } from '@circles-sdk-v2/types';
+import type { Address } from '@aboutcircles/sdk-types';
 
 describe('normalizeAddress', () => {
   test('normalizes checksummed address to lowercase', () => {

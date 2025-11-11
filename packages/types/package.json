@@ -1,5 +1,5 @@
 {
-  "name": "@circles-sdk-v2/types",
+  "name": "@aboutcircles/sdk-types",
   "version": "0.1.0",
   "description": "TypeScript type definitions for Circles SDK",
   "type": "module",

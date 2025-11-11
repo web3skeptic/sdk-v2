@@ -1,5 +1,5 @@
-import { CirclesError } from '@circles-sdk-v2/utils';
-import type { Address } from '@circles-sdk-v2/types';
+import { CirclesError } from '@aboutcircles/sdk-utils';
+import type { Address } from '@aboutcircles/sdk-types';
 
 /**
  * Transfers package error source

@@ -4,11 +4,11 @@ import type {
   Profile,
   AvatarRow,
   TokenBalanceRow,
-  AggregatedTrustRelation } from '@circles-sdk-v2/types';
+  AggregatedTrustRelation } from '@aboutcircles/sdk-types';
 import type { TransactionReceipt } from 'viem';
-import type { Core } from '@circles-sdk-v2/core';
-import { BaseGroupContract } from '@circles-sdk-v2/core';
-import { cidV0ToHex, ValidationError } from '@circles-sdk-v2/utils';
+import type { Core } from '@aboutcircles/sdk-core';
+import { BaseGroupContract } from '@aboutcircles/sdk-core';
+import { cidV0ToHex, ValidationError } from '@aboutcircles/sdk-utils';
 import { SdkError } from '../errors';
 import { CommonAvatar } from './CommonAvatar';
 

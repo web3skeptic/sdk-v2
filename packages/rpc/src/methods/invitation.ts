@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, AvatarInfo, TokenBalance, CirclesQueryResponse } from '@circles-sdk-v2/types';
+import type { Address, AvatarInfo, TokenBalance, CirclesQueryResponse } from '@aboutcircles/sdk-types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 
 interface InviterRow {

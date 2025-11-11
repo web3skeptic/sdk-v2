@@ -1,0 +1,33 @@
+{
+  "entryPoints": [
+    "packages/sdk/src/index.ts",
+    "packages/rpc/src/index.ts",
+    "packages/types/src/index.ts",
+    "packages/core/src/index.ts",
+    "packages/runner/src/index.ts",
+    "packages/utils/src/index.ts",
+    "packages/profiles/src/index.ts",
+    "packages/pathfinder/src/index.ts",
+    "packages/transfers/src/index.ts",
+    "packages/abis/src/index.ts"
+  ],
+  "out": "docs",
+  "readme": "README.md",
+  "name": "Circles SDK",
+  "includeVersion": true,
+  "categorizeByGroup": true,
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/node_modules/**",
+    "**/dist/**"
+  ],
+  "sort": ["source-order"],
+  "theme": "default",
+  "titleLink": "https://github.com/aboutcircles/sdk",
+  "logLevel": "Info",
+  "visibilityFilters": {
+    "protected": true,
+    "private": false
+  }
+}

@@ -1,5 +1,5 @@
 import type { RpcClient } from '../client';
-import type { Address, TrustRelation, Filter, CirclesQueryResponse, TrustRelationType, AggregatedTrustRelation } from '@circles-sdk-v2/types';
+import type { Address, TrustRelation, Filter, CirclesQueryResponse, TrustRelationType, AggregatedTrustRelation } from '@aboutcircles/sdk-types';
 import { normalizeAddress, checksumAddresses } from '../utils';
 import { PagedQuery } from '../pagedQuery';
 

@@ -1,6 +1,6 @@
 import { CID } from 'multiformats/cid';
 import { base58btc } from 'multiformats/bases/base58';
-import type { Hex } from '@circles-sdk-v2/types';
+import type { Hex } from '@aboutcircles/sdk-types';
 
 /**
  * Convert a CIDv0 string to a bytes32 hex string for on-chain storage

@@ -1,4 +1,4 @@
-import type { CirclesEvent } from '@circles-sdk-v2/types';
+import type { CirclesEvent } from '@aboutcircles/sdk-types';
 
 /**
  * Type guard to check if an object is a CirclesEvent
@@ -14,5 +14,5 @@ export function isCirclesEvent(obj: any): obj is CirclesEvent {
   );
 }
 
-// Re-export types from @circles-sdk-v2/types for convenience
-export type { CirclesBaseEvent, CirclesEventType, CirclesEvent, CirclesEventOfType, RpcSubscriptionEvent } from '@circles-sdk-v2/types';
+// Re-export types from @aboutcircles/sdk-types for convenience
+export type { CirclesBaseEvent, CirclesEventType, CirclesEvent, CirclesEventOfType, RpcSubscriptionEvent } from '@aboutcircles/sdk-types';

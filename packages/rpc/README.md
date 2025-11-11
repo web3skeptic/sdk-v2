@@ -1,4 +1,4 @@
-# @circles-sdk-v2/rpc
+# @aboutcircles/sdk-rpc
 
 TypeScript wrapper for Circles RPC methods.
 
@@ -11,7 +11,7 @@ bun install
 ## Usage
 
 ```typescript
-import { CirclesRpc } from '@circles-sdk-v2/rpc';
+import { CirclesRpc } from '@aboutcircles/sdk-rpc';
 
 // Create RPC instance with default endpoint (https://rpc.circlesubi.network/)
 const rpc = new CirclesRpc();

@@ -1,6 +1,6 @@
 import type { Abi } from 'abitype';
-import { encodeFunctionData, decodeFunctionResult } from '@circles-sdk-v2/utils';
-import type { Address, Hex } from '@circles-sdk-v2/types';
+import { encodeFunctionData, decodeFunctionResult } from '@aboutcircles/sdk-utils';
+import type { Address, Hex } from '@aboutcircles/sdk-types';
 
 /**
  * Generic Contract class for type-safe contract interactions
