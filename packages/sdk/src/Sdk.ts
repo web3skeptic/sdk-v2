@@ -99,25 +99,38 @@ export class Sdk {
   /**
    * Get an avatar by address
    * Automatically detects the avatar type and returns the appropriate avatar instance
+   *
+   * @param avatarAddress The address of the avatar to fetch
+   * @param autoSubscribeEvents Whether to automatically subscribe to events for this avatar (default: false)
+   *                            If true, waits for event subscription to complete before returning
    * @returns HumanAvatar, OrganisationAvatar, or BaseGroupAvatar depending on type
    */
-  async getAvatar(avatarAddress: Address): Promise<HumanAvatar | OrganisationAvatar | BaseGroupAvatar> {
+  async getAvatar(avatarAddress: Address, autoSubscribeEvents: boolean = false): Promise<HumanAvatar | OrganisationAvatar | BaseGroupAvatar> {
     try {
       const avatarInfo = await this.rpc.avatar.getAvatarInfo(avatarAddress);
 
       // Detect avatar type and return appropriate avatar class
       const avatarType = (avatarInfo as any)?.type;
 
+      let avatar: HumanAvatar | OrganisationAvatar | BaseGroupAvatar;
+
       if (avatarType === 'CrcV2_RegisterGroup') {
-        return new BaseGroupAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+        avatar = new BaseGroupAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      } else if (avatarType === 'CrcV2_RegisterOrganization') {
+        avatar = new OrganisationAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      } else {
+        // Default to HumanAvatar for human type
+        avatar = new HumanAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
       }
 
-      if (avatarType === 'CrcV2_RegisterOrganization') {
-        return new OrganisationAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      // If auto-subscription is enabled, wait for it to complete before returning
+      // This prevents race conditions where stores subscribe to avatar.events before it's ready
+      if (autoSubscribeEvents) {
+        console.log('🔔 Sdk.getAvatar: Auto-subscribing to events for', avatarAddress);
+        await avatar.subscribeToEvents();
       }
 
-      // Default to HumanAvatar for human type
-      return new HumanAvatar(avatarAddress, this.core, this.contractRunner, avatarInfo as any);
+      return avatar;
     } catch (error) {
       throw SdkError.avatarNotFound(avatarAddress);
     }
