@@ -1,6 +1,6 @@
 {
   "name": "@aboutcircles/sdk-core",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Circles Contracts wrapper",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,14 +16,19 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aboutcircles/sdk"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "bun build ./src/index.ts --outdir ./dist --format esm --minify && tsc --emitDeclarationOnly",
     "dev": "tsc --watch"
   },
   "dependencies": {
-    "@aboutcircles/sdk-abis": "*",
-    "@aboutcircles/sdk-types": "*",
-    "@aboutcircles/sdk-utils": "*",
+    "@aboutcircles/sdk-abis": "workspace:*",
+    "@aboutcircles/sdk-types": "workspace:*",
+    "@aboutcircles/sdk-utils": "workspace:*",
     "abitype": "^1.1.1"
   },
   "devDependencies": {

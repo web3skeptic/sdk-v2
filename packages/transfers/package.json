@@ -1,6 +1,6 @@
 {
   "name": "@aboutcircles/sdk-transfers",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Transfer data construction for Circles SDK",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,13 +26,17 @@
     "pathfinding",
     "web3"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aboutcircles/sdk"
+  },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "*",
-    "@aboutcircles/sdk-core": "*",
-    "@aboutcircles/sdk-rpc": "*",
-    "@aboutcircles/sdk-utils": "*",
-    "@aboutcircles/sdk-pathfinder": "*",
+    "@aboutcircles/sdk-types": "workspace:*",
+    "@aboutcircles/sdk-core": "workspace:*",
+    "@aboutcircles/sdk-rpc": "workspace:*",
+    "@aboutcircles/sdk-utils": "workspace:*",
+    "@aboutcircles/sdk-pathfinder": "workspace:*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

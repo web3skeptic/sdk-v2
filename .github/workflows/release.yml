@@ -1,0 +1,88 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build packages
+        run: bun run build
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump versions
+        run: |
+          VERSION_TYPE="${{ github.event.inputs.version_type }}"
+          bun run version:$VERSION_TYPE
+
+      - name: Setup Node.js for npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Debug OIDC token
+        run: |
+          echo "=== GitHub Context ==="
+          echo "Repository: ${{ github.repository }}"
+          echo "Workflow: release.yml"
+          echo "Ref: ${{ github.ref }}"
+          echo "Actor: ${{ github.actor }}"
+          echo ""
+          echo "=== OIDC Token Check ==="
+          echo "NODE_AUTH_TOKEN is set: $([[ -n "$NODE_AUTH_TOKEN" ]] && echo "YES" || echo "NO")"
+          if [ -n "$NODE_AUTH_TOKEN" ]; then
+            echo "Token length: ${#NODE_AUTH_TOKEN}"
+            echo "Token prefix: ${NODE_AUTH_TOKEN:0:20}..."
+          fi
+          echo ""
+          echo "=== npm Authentication ==="
+          npm whoami 2>&1 || echo "npm whoami failed - this is expected with OIDC"
+          echo ""
+          echo "=== .npmrc content ==="
+          cat ~/.npmrc 2>/dev/null || echo "No .npmrc in home"
+          cat .npmrc 2>/dev/null || echo "No .npmrc in current dir"
+          cat $NPM_CONFIG_USERCONFIG 2>/dev/null || echo "No NPM_CONFIG_USERCONFIG file"
+
+      - name: Upgrade npm to latest for OIDC support
+        run: npm install -g npm@latest
+
+      - name: Verify npm version
+        run: |
+          echo "npm version: $(npm --version)"
+          echo "node version: $(node --version)"
+
+      - name: Publish to npm with provenance
+        run: bun run publish:all
+
+      - name: Push version changes
+        run: |
+          git push
+          git push --tags

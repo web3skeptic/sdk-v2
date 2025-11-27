@@ -1,6 +1,6 @@
 {
   "name": "@aboutcircles/sdk-runner",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Contract runner implementations for Circles SDK",
   "type": "module",
   "main": "./dist/index.js",
@@ -25,9 +25,13 @@
     "ethereum",
     "viem"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aboutcircles/sdk"
+  },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-types": "workspace:*",
     "@safe-global/protocol-kit": "^5.1.1",
     "@safe-global/safe-core-sdk-types": "^5.1.0",
     "viem": "^2.38.0"
