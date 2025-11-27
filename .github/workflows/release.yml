@@ -48,36 +48,9 @@ jobs:
         with:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org'
-      - name: Debug OIDC token
-        run: |
-          echo "=== GitHub Context ==="
-          echo "Repository: ${{ github.repository }}"
-          echo "Workflow: release.yml"
-          echo "Ref: ${{ github.ref }}"
-          echo "Actor: ${{ github.actor }}"
-          echo ""
-          echo "=== OIDC Token Check ==="
-          echo "NODE_AUTH_TOKEN is set: $([[ -n "$NODE_AUTH_TOKEN" ]] && echo "YES" || echo "NO")"
-          if [ -n "$NODE_AUTH_TOKEN" ]; then
-            echo "Token length: ${#NODE_AUTH_TOKEN}"
-            echo "Token prefix: ${NODE_AUTH_TOKEN:0:20}..."
-          fi
-          echo ""
-          echo "=== npm Authentication ==="
-          npm whoami 2>&1 || echo "npm whoami failed - this is expected with OIDC"
-          echo ""
-          echo "=== .npmrc content ==="
-          cat ~/.npmrc 2>/dev/null || echo "No .npmrc in home"
-          cat .npmrc 2>/dev/null || echo "No .npmrc in current dir"
-          cat $NPM_CONFIG_USERCONFIG 2>/dev/null || echo "No NPM_CONFIG_USERCONFIG file"
 
       - name: Upgrade npm to latest for OIDC support
         run: npm install -g npm@latest
-
-      - name: Verify npm version
-        run: |
-          echo "npm version: $(npm --version)"
-          echo "node version: $(node --version)"
 
       - name: Publish to npm with provenance
         run: bun run publish:all

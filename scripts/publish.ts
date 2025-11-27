@@ -32,35 +32,24 @@ async function publishPackage(pkg: string): Promise<boolean> {
   const pkgJson = JSON.parse(await $`cat ${pkgJsonPath}`.text());
   const version = pkgJson.version;
 
-  console.log(`   Version: ${version}`);
-
   try {
     // Use npm publish for provenance support (Bun doesn't support --provenance yet)
-    const result = await $`cd ${pkgPath} && npm publish --access public --provenance 2>&1`;
+    await $`cd ${pkgPath} && npm publish --access public --provenance 2>&1`;
     console.log(`✅ Published ${pkgName}@${version}`);
     return true;
   } catch (error) {
-    // Check if it's a version conflict
     const errorStr = String(error);
-    console.log(`Error details: ${errorStr}`);
 
     if (errorStr.includes('EPUBLISHCONFLICT') || errorStr.includes('cannot publish over previously published version')) {
       console.log(`⚠️  Version ${version} already published, skipping...`);
       return true;
     }
 
-    if (errorStr.includes('E404') || errorStr.includes('404')) {
-      console.log(`⚠️  E404 error - this usually means:`);
-      console.log(`   1. Package exists but OIDC token is rejected`);
-      console.log(`   2. Trusted publisher not configured correctly`);
-      console.log(`   3. Check: https://www.npmjs.com/package/${pkgName}/access`);
-    }
-
     // If provenance fails, try without it
-    console.log(`⚠️  Provenance failed, retrying without provenance...`);
+    console.log(`⚠️  Retrying without provenance...`);
     try {
       await $`cd ${pkgPath} && npm publish --access public 2>&1`;
-      console.log(`✅ Published ${pkgName}@${version} (without provenance)`);
+      console.log(`✅ Published ${pkgName}@${version}`);
       return true;
     } catch (retryError) {
       const retryErrorStr = String(retryError);
@@ -69,7 +58,7 @@ async function publishPackage(pkg: string): Promise<boolean> {
         return true;
       }
       console.error(`❌ Failed to publish ${pkgName}`);
-      console.error(`Full error details: ${retryErrorStr}`);
+      console.error(`Error: ${retryErrorStr}`);
       return false;
     }
   }
@@ -77,9 +66,6 @@ async function publishPackage(pkg: string): Promise<boolean> {
 
 async function main() {
   console.log('🚀 Starting publication of all packages...\n');
-  console.log('Packages will be published in dependency order:\n');
-  console.log(packages.map((p, i) => `  ${i + 1}. @aboutcircles/sdk-${p}`).join('\n'));
-  console.log('\n' + '='.repeat(60) + '\n');
 
   for (const pkg of packages) {
     const success = await publishPackage(pkg);
@@ -89,7 +75,6 @@ async function main() {
     }
   }
 
-  console.log('\n' + '='.repeat(60));
   console.log('\n🎉 All packages published successfully!');
 }
 

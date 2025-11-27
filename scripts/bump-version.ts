@@ -50,7 +50,7 @@ for (const pkg of packages) {
   pkgJson.version = newVersion;
 
   writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2) + "\n");
-  console.log(`  ✓ Updated ${pkg} to ${newVersion}`);
+  console.log(`  ✓ Updated ${pkg}`);
 }
 
 // Commit changes
@@ -58,5 +58,4 @@ await $`git add packages/*/package.json`;
 await $`git commit -m "chore: bump version to ${newVersion}"`;
 await $`git tag v${newVersion}`;
 
-console.log(`\n✓ Version bumped to ${newVersion}`);
-console.log(`✓ Created tag v${newVersion}`);
+console.log(`\n✓ Version bumped and tagged: v${newVersion}`);
