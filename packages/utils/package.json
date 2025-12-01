@@ -31,7 +31,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "workspace:*",
+    "@aboutcircles/sdk-types": "*",
     "multiformats": "^13.4.1"
   }
 }

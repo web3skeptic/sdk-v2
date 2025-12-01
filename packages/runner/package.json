@@ -31,7 +31,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "workspace:*",
+    "@aboutcircles/sdk-types": "*",
     "@safe-global/protocol-kit": "^5.1.1",
     "@safe-global/safe-core-sdk-types": "^5.1.0",
     "viem": "^2.38.0"

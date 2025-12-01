@@ -32,7 +32,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "workspace:*"
+    "@aboutcircles/sdk-types": "*"
   },
   "devDependencies": {
     "typescript": "^5.0.4"

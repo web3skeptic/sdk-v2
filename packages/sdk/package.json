@@ -32,14 +32,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-types": "workspace:*",
-    "@aboutcircles/sdk-core": "workspace:*",
-    "@aboutcircles/sdk-rpc": "workspace:*",
-    "@aboutcircles/sdk-profiles": "workspace:*",
-    "@aboutcircles/sdk-utils": "workspace:*",
-    "@aboutcircles/sdk-runner": "workspace:*",
-    "@aboutcircles/sdk-pathfinder": "workspace:*",
-    "@aboutcircles/sdk-transfers": "workspace:*",
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-core": "*",
+    "@aboutcircles/sdk-rpc": "*",
+    "@aboutcircles/sdk-profiles": "*",
+    "@aboutcircles/sdk-utils": "*",
+    "@aboutcircles/sdk-runner": "*",
+    "@aboutcircles/sdk-pathfinder": "*",
+    "@aboutcircles/sdk-transfers": "*",
     "viem": "^2.38.0"
   },
   "devDependencies": {

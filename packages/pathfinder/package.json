@@ -29,9 +29,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@aboutcircles/sdk-rpc": "workspace:*",
-    "@aboutcircles/sdk-types": "workspace:*",
-    "@aboutcircles/sdk-utils": "workspace:*",
+    "@aboutcircles/sdk-rpc": "*",
+    "@aboutcircles/sdk-types": "*",
+    "@aboutcircles/sdk-utils": "*",
     "viem": "^2.38.0"
   },
   "devDependencies": {
